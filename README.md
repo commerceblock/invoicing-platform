@@ -1,7 +1,8 @@
 # CommerceBlock Invoicing Platform - simple, smart, and transparent invoices #
 
 > Faith is the bird that feels the light when the dawn is still dark.
-> - Tagore
+>
+> -- Tagore
 
 ### Setup AWS account ###
 Setup AWS profile (Ask your administrator for AWS credentials)
