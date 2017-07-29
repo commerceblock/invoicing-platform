@@ -9,7 +9,7 @@
 - type: event type name. (e.g. `invoice_created`).
 
 ### Trade Domain ###
-- trader_id: sha256 hash of the following public key, `m/0'/0'/1' (hardened deviation)`, in base58 format.
+- trader_id: sha256 hash of the following public key in base58 format: `m/0'/0'/1' (hardened deviation)`.
 - invoice_id: a universally unique identifier (UUID), a 128-bit number in base58 format.
 
 
