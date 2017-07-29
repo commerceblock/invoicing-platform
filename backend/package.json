@@ -1,0 +1,16 @@
+{
+  "name": "invoices-backend",
+  "version": "0.1.0",
+  "dependencies": {
+    "bunyan": "^1.8.10",
+    "dynamoose": "^0.8.3",
+    "lodash": "^4.17.4",
+    "uuid": "^2.0.3"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.63.0",
+    "serverless-cors-plugin": "^0.4.2",
+    "serverless-dynamodb-local": "^0.2.18",
+    "serverless-offline": "^3.8.3"
+  }
+}

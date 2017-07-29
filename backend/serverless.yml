@@ -1,0 +1,74 @@
+service: invoices
+
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+provider:
+  name: aws
+  stage: prod
+  region: us-east-1
+  runtime: nodejs6.10
+  memorySize: 256
+  timeout: 5
+  versionFunctions: true
+  environment:
+    ENV_NAME: ${self:service}-${self:custom.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}-${self:custom.stage}-*"
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  dynamodbThroughput:
+    events:
+      read: 50
+      write: 10
+  cors:
+    allowOrigin: "*"
+    allowHeaders: ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
+
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: false
+
+functions:
+
+resources:
+  Resources:
+    EventsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.ENV_NAME}-events
+        AttributeDefinitions:
+          -
+            AttributeName: trader_id
+            AttributeType: S
+          -
+            AttributeName: event_id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: trader_id
+            KeyType: HASH
+          -
+            AttributeName: event_id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.dynamodbThroughput.events.read}
+          WriteCapacityUnits: ${self:custom.dynamodbThroughput.events.write}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE

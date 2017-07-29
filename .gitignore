@@ -1,0 +1,9 @@
+logs/*
+.idea
+native-libs
+.DS_Store
+*.tfstate
+*.tfstate.backup
+.terraform
+.serverless
+node_modules
