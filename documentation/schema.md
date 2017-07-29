@@ -17,18 +17,19 @@
 
 #### Create Invoice ####
 Request:
-- trader_id (required)
-- title (required)
-- contract url
-- contract encryption key
-- invoice amount in btc
+- trader_id (required) (max length 100)
+- title (required) (max length 100)
+- contract id (required) (valid range: 0 - 2^31-1)
+- contract url (required) (Max 5MB) (max length 300)
+- contract encryption key (required) (max length 100)
+- invoice amount in btc (required)
 - external reference id (optional)
 
 #### Redeem receipt (by invoice id and trader_id) ####
 Request:
-- invoice_id (required)
-- trader_id (required)
-- contract url
+- invoice_id (required) (max length 50)
+- trader_id (required) (max length 100)
+- contract url (required) (max length 300)
 
 #### Upload Contract File ####
 
@@ -36,8 +37,8 @@ Request:
 
 #### List invoices (by trader id) ####
 Request:
-- trader_id (required)
+- trader_id (required) (max length 100)
 
 #### Get invoice (by invoice id) ####
 Request:
-- invoice_id (required)
+- invoice_id (required) (max length 50)
