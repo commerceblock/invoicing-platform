@@ -1,6 +1,5 @@
 # Schema #
 
-
 ## Fields ##
 
 ### System Domain ###
@@ -8,37 +7,79 @@
 - timestamp: event timestamp in ISO 8601 format (e.g. `20170729T083603Z`).
 - type: event type name. (e.g. `invoice_created`).
 
-### Trade Domain ###
+### Application Domain Definitions ###
 - trader_id: sha256 hash of the following public key in base58 format: `m/0'/0'/1' (hardened deviation)`.
+- master_contract_base: extend public key `m/200'/0'`
 - invoice_id: a universally unique identifier (UUID), a 128-bit number in base58 format.
+- file_id:  a universally unique identifier (UUID), a 128-bit number in base58 format.
+- contract_number: a BIP32 node index (valid range: 0 - 2^31-1)
+- contract_master_key: extend public key `m/200'/0'/<contract_number>`
+- contract_encryption_key: TBD
 
+## Storage Restful API ##
 
-## Mutation ##
+#### Get File ####
+GET api.commerceblock.com/storage/<file_id>
+
+#### Store File ####
+PUT api.commerceblock.com/storage/<file_id>
+
+Response:
+302 - to s3 unique link
+
+Error Response:
+409 -- resource already exists
+
+## Market GraphQL API ##
+
+### Mutation ###
+
+POST api.commerceblock.com/graphql
+
+#### Create Account ####
+Request:
+- trader_id (required) (max length 300)
+- master_contract_base (required) (max length 300)
+
+Response:
+
+Error Response:
+409 - resource already exists
 
 #### Create Invoice ####
 Request:
-- trader_id (required) (max length 100)
-- title (required) (max length 100)
-- contract id (required) (valid range: 0 - 2^31-1)
-- contract url (required) (Max 5MB) (max length 300)
-- contract encryption key (required) (max length 100)
-- invoice amount in btc (required)
-- external reference id (optional)
+- trader_id - (required) (max length 300)
+- contract_number - (required) (valid range: 0 - 2^31-1)
+- file_ids - List of contract file ids (required)
+- contract_encryption_key - contract encryption key (required) (max length 300)
+- btc_amount - invoice amount in btc (required)
+- title - (required) (max length 100)
+- external_reference_id - external reference id (optional)
 
 #### Redeem receipt (by invoice id and trader_id) ####
 Request:
 - invoice_id (required) (max length 50)
 - trader_id (required) (max length 100)
-- contract url (required) (max length 300)
+- contract_file_ids - List of contract_file_ids (required)
 
-#### Upload Contract File ####
+### Query ###
 
-## Query ##
+#### List profile ####
+Request:
+- trader_id - (required) (max length 300)
+
+Response:
+- trader_id
+- master_contract_base
 
 #### List invoices (by trader id) ####
 Request:
-- trader_id (required) (max length 100)
+- trader_id - (required) (max length 100)
+
+Response:
 
 #### Get invoice (by invoice id) ####
 Request:
-- invoice_id (required) (max length 50)
+- invoice_id - (required) (max length 50)
+
+Response:
