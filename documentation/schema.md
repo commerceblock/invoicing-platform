@@ -21,14 +21,22 @@
 #### Get File ####
 GET api.commerceblock.com/storage/<file_id>
 
+Response:
+302 - s3 unique link
+
+Error Response:
+400 - invalid file id
+404 - file not found
+
 #### Store File ####
 PUT api.commerceblock.com/storage/<file_id>
 
 Response:
-302 - to s3 unique link
+302 - s3 unique link
 
 Error Response:
-409 -- resource already exists
+400 - invalid file id
+409 - resource already exists
 
 ## Market GraphQL API ##
 

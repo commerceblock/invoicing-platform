@@ -4,7 +4,7 @@
 const _ = require('lodash');
 
 
-const isValid = exports.isValid = (param) => !_.isEmpty(param) && param.length <= 50;
+const isValid = exports.isValid = (param) => !_.isEmpty(param) && param.length <= 300;
 
 exports.isNotValid = (param) => !isValid(param);
 

@@ -33,6 +33,10 @@ custom:
     events:
       read: 50
       write: 10
+    storage:
+      read: 50
+      write: 10
+
   cors:
     allowOrigin: "*"
     allowHeaders: ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
@@ -45,9 +49,45 @@ custom:
       seed: false
 
 functions:
+  ### storage service
+
+  # API functions
+  storage-api-put:
+    handler: lambda/storage-api-put.put
+    events:
+      - http:
+          path: /v0.1/storage/{file_id}
+          method: put
+          cors: true
+
+  storage-api-get:
+    handler: lambda/storage-api-get.get
+    events:
+      - http:
+          path: /v0.1/storage/{file_id}
+          method: get
+          cors: true
 
 resources:
   Resources:
+    StorageDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.ENV_NAME}-storage
+        AttributeDefinitions:
+          -
+            AttributeName: file_id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: file_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.dynamodbThroughput.storage.read}
+          WriteCapacityUnits: ${self:custom.dynamodbThroughput.storage.write}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
     EventsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain

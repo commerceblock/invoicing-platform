@@ -5,14 +5,14 @@ const bs58 = require('bs58');
 
 exports.createId = () => {
   // random uuid
-  const orderId = uuid.v4();
-  return toBase58(orderId);
+  const id = uuid.v4();
+  return toBase58(id);
 }
 
 exports.createOrderedId = () => {
   // time ordered uuid
-  const eventId = uuid.v1();
-  return toBase58(eventId);
+  const orderedId = uuid.v1();
+  return toBase58(orderedId);
 }
 
 function toBase58(uuidStr) {
