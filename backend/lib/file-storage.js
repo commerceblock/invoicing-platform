@@ -14,7 +14,7 @@ const bunyan = require('bunyan'),
   });
 
 exports.generateSingedUrl = () => {
-
+  // TODO: implement
 };
 
 exports.saveFile = (payload) => {

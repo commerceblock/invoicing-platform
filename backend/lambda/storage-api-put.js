@@ -53,10 +53,10 @@ exports.put = (event, context, callback) => {
         }
       })
       .then(file => {
-        // redirect to s3 path
+        // TODO: return signed request
       })
       .catch(error => {
-
+        // TODO: return error
       });
   }
 };
