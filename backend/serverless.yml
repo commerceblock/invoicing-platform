@@ -17,8 +17,8 @@ provider:
   versionFunctions: true
   environment:
     CB_ENV_NAME: ${self:service}-${self:custom.stage}
-    CB_STORAGE_ACCESS_KEY: 'FooFighter'
-    CB_STORAGE_SECRET_KEY: 'FooFighter'
+    CB_STORAGE_ACCESS_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_ACCESS_KEY}
+    CB_STORAGE_SECRET_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_SECRET_KEY}
   iamRoleStatements:
     - Effect: Allow
       Action:
