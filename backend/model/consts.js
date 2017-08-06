@@ -17,6 +17,7 @@ exports.default_token_duration_ms = 15 * 60 * 1000;
 // generic consts
 const utf_8_encoding = exports.utf_8_encoding = 'utf-8';
 exports.base64_encoding = 'base64';
+exports.sha1_hash = 'sha1';
 exports.default_encoding = utf_8_encoding;
 
 // event columns

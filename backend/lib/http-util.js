@@ -39,7 +39,8 @@ exports.toRedirectResponse = (url) => {
 };
 
 exports.parseExtension = (fname) => {
-  return fname.slice((fname.lastIndexOf(".") - 1 >>> 0) + 2);
+  const ext = fname.slice((fname.lastIndexOf(".") - 1 >>> 0) + 2) || '';
+  return ext.toLowerCase();
 };
 
 exports.resolveMimeType = (extension) => {
@@ -52,6 +53,10 @@ exports.resolveMimeType = (extension) => {
       return 'image/jpeg';
     case 'gif':
       return 'image/gif';
+    case 'htm':
+      return 'text/html';
+    case 'html':
+      return 'text/html';
     default:
       return 'application/octet-stream';
   }

@@ -23,4 +23,4 @@ const FileSchema = new Schema({
 });
 
 const File = dynamoose.model('storage', FileSchema);
-module.exports = Event;
+module.exports = File;

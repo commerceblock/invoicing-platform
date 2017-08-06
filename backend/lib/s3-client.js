@@ -20,7 +20,7 @@ exports.getPresignedUrl = function (bucket, key) {
 
 exports.getPolicy = function (bucket, key, acl, content_type, success_action_status) {
   const expiration = new Date(Date.now() + consts.default_token_duration_ms).toISOString();
-  return policy = {
+  return {
     expiration,
     conditions: [
       { bucket },
@@ -34,13 +34,13 @@ exports.getPolicy = function (bucket, key, acl, content_type, success_action_sta
 
 exports.policyToBase64 = function (policy) {
   const polictStr = JSON.stringify(policy);
-  return new Buffer(polictStr, consts.default_encoding).toString('base64');
+  return new Buffer(polictStr, consts.default_encoding).toString(consts.base64_encoding);
 };
 
 exports.signPolicyB64 = function (policyB64) {
-  const hmac = crypto.createHmac('sha1', consts.storage_secret_key);
+  const hmac = crypto.createHmac(consts.sha1_hash, consts.storage_secret_key);
   hmac.update(new Buffer(policyB64, consts.default_encoding));
-  return hmac.digest('base64');
+  return hmac.digest(consts.base64_encoding);
 };
 
 exports.getBucketUrl = function (bucket) {

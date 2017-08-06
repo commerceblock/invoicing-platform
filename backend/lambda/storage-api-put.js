@@ -26,7 +26,8 @@ exports.put = (event, context, callback) => {
     event
   }, 'start');
   const file_id = event.pathParameters && event.pathParameters[storage_columns.file_id],
-    file_name = event.pathParameters && event.pathParameters[storage_columns.file_name];
+    request = JSON.parse(event.body) || {},
+    file_name = request[storage_columns.file_name];
   if (itemUtil.isNotValid(file_id) || itemUtil.isNotValid(file_name)) {
     const response = httpUtil.toResponse(httpStatus.BAD_REQUEST);
     log.warn({
@@ -47,9 +48,9 @@ exports.put = (event, context, callback) => {
           }, 'Failed to save file, file already exists - end');
           return callback(null, response);
         } else {
-          const file_extention = httpUtil.parseExtension(file_name),
+          const file_s3_bucket = consts.storage_bucket,
             file_s3_key = `${uuid.createId()}-${file_name}`,
-            file_s3_bucket = consts.storage_bucket,
+            file_extention = httpUtil.parseExtension(file_name),
             content_type = httpUtil.resolveMimeType(file_extention);
           const payload = {
             file_id,
@@ -64,25 +65,26 @@ exports.put = (event, context, callback) => {
       })
       .then(fileItem => {
         const acl = consts.default_acl,
-            success_action_status = consts.default_success_action_status,
-            policy = s3Client.getPolicy(
-              fileItem.file_s3_bucket, 
-              fileItem.file_s3_key, 
-              acl, 
-              fileItem.content_type, 
-              success_action_status
-            ),
-            policy_base64 = s3Client.policyToBase64(policy),
-            signature = s3Client.signPolicyB64(policy_base64);
-            url = s3Client.getBucketUrl(fileItem.file_s3_bucket);
-        const response = Object.assign({
-          aws_access_key_id: consts.storage_access_key,
-          acl,
-          success_action_status,
-          policy_base64,
-          signature,
-          url
-        }, payload);
+          success_action_status = consts.default_success_action_status,
+          policy = s3Client.getPolicy(
+            fileItem.file_s3_bucket,
+            fileItem.file_s3_key,
+            acl,
+            fileItem.content_type,
+            success_action_status
+          ),
+          policy_base64 = s3Client.policyToBase64(policy),
+          signature = s3Client.signPolicyB64(policy_base64),
+          url = s3Client.getBucketUrl(fileItem.file_s3_bucket),
+          body = Object.assign({
+            aws_access_key_id: consts.storage_access_key,
+            acl,
+            success_action_status,
+            policy_base64,
+            signature,
+            url
+          }, fileItem),
+          response = httpUtil.toResponse(httpStatus.CREATED, body);
         log.info({
           request_id,
           http_response: response
@@ -95,7 +97,7 @@ exports.put = (event, context, callback) => {
           request_id,
           error,
           http_response: response
-        }, 'Failed to load file - end');
+        }, 'Failed to process file - end');
         return callback(null, response);
       });
   }
