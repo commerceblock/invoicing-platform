@@ -1,10 +1,11 @@
 'use strict';
 
 // imports
-const _ = require('lodash');
+const _ = require('lodash'),
+  httpStatus = require('http-status-codes');
 
 // local imports
-const eventUtil = require('./event-util'),
+const item = require('./item-util'),
   event_columns = require('../model/consts').event_columns;
 
 // logging
@@ -13,14 +14,46 @@ const bunyan = require('bunyan'),
     name: 'http-util'
   });
 
+const DEFAULT_CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Credentials": true
+};
+
 exports.toResponse = (status, body) => {
+  body = body || {};
   return {
     statusCode: status,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
-    },
+    headers: DEFAULT_CORS_HEADERS,
     body: JSON.stringify(body)
+  }
+};
+
+exports.toRedirectResponse = (url) => {
+  const headers = Object.assign({
+    "Location": url
+  }, DEFAULT_CORS_HEADERS);
+  return {
+    statusCode: httpStatus.MOVED_TEMPORARILY,
+    headers
+  };
+};
+
+exports.parseExtension = (fname) => {
+  return fname.slice((fname.lastIndexOf(".") - 1 >>> 0) + 2);
+};
+
+exports.resolveMimeType = (extension) => {
+  switch (extension) {
+    case 'png':
+      return 'image/png';
+    case 'jpeg':
+    case 'jpg':
+    case 'jpe':
+      return 'image/jpeg';
+    case 'gif':
+      return 'image/gif';
+    default:
+      return 'application/octet-stream';
   }
 };
 

@@ -16,6 +16,9 @@ const FileSchema = new Schema({
   },
   [storage_columns.file_s3_key]: {
     type: String
+  },
+  [storage_columns.file_s3_bucket]: {
+    type: String
   }
 });
 

@@ -15,7 +15,9 @@ provider:
   timeout: 5
   versionFunctions: true
   environment:
-    ENV_NAME: ${self:service}-${self:custom.stage}
+    CB_ENV_NAME: ${self:service}-${self:custom.stage}
+    CB_STORAGE_ACCESS_KEY: 'FooFighter'
+    CB_STORAGE_SECRET_KEY: 'FooFighter'
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -70,11 +72,24 @@ functions:
 
 resources:
   Resources:
+    StorageBucket:
+      Type: 'AWS::S3::Bucket'
+      DeletionPolicy: Retain
+      Properties:
+        BucketName: ${self:provider.environment.CB_ENV_NAME}-storage
+        CorsConfiguration:
+          CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, POST, PUT]
+            AllowedOrigins: ['*']
+            ExposedHeaders: [Date]
+            Id: FirstRule
+            MaxAge: '3600'
     StorageDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
-        TableName: ${self:provider.environment.ENV_NAME}-storage
+        TableName: ${self:provider.environment.CB_ENV_NAME}-storage
         AttributeDefinitions:
           -
             AttributeName: file_id
@@ -92,7 +107,7 @@ resources:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
-        TableName: ${self:provider.environment.ENV_NAME}-events
+        TableName: ${self:provider.environment.CB_ENV_NAME}-events
         AttributeDefinitions:
           -
             AttributeName: trader_id

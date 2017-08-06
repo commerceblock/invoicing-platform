@@ -13,10 +13,6 @@ const bunyan = require('bunyan'),
     name: 'file-storage'
   });
 
-exports.generateSingedUrl = () => {
-  // TODO: implement
-};
-
 exports.saveFile = (payload) => {
   return new Promise((resolve, reject) => {
     try {
