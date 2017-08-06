@@ -5,6 +5,7 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 plugins:
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-kms-secrets
 
 provider:
   name: aws
@@ -28,9 +29,17 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}-${self:custom.stage}-*"
+    - Effect: Allow
+      Action:
+        - KMS:Decrypt
+      Resource: ${self:custom.kmsSecrets.keyArn}
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  kmsSecrets: ${file(kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
+  cors:
+    allowOrigin: "*"
+    allowHeaders: ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
   dynamodbThroughput:
     events:
       read: 50
@@ -38,11 +47,6 @@ custom:
     storage:
       read: 50
       write: 10
-
-  cors:
-    allowOrigin: "*"
-    allowHeaders: ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
-
   dynamodb:
     start:
       port: 8000
