@@ -7,11 +7,15 @@ const AWS = require('aws-sdk'),
 // local imports
 const consts = require('../model/consts');
 
-const s3 = new AWS.S3({
-  accessKeyId: consts.storage_access_key,
-  secretAccessKey: consts.storage_secret_key,
-  region: consts.region
-});
+// TODO: workaround - refresh manually
+var s3;
+exports.init = function () {
+  s3 = new AWS.S3({
+    accessKeyId: consts.storage_access_key,
+    secretAccessKey: consts.storage_secret_key,
+    region: consts.region
+  });
+};
 
 exports.getPresignedUrl = function (bucket, key) {
   const params = { Bucket: bucket, Key: key };

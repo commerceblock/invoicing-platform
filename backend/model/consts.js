@@ -1,12 +1,15 @@
 'use strict';
 
+// local imports
+const envUtil = require('../lib/env-util');
+
 // env variables
 const env_name = exports.env_name = process.env.CB_ENV_NAME;
 exports.region = process.env.CB_REGION || 'us-east-1';
 
 // storage env variables
-exports.storage_access_key = process.env.CB_STORAGE_ACCESS_KEY;
-exports.storage_secret_key = process.env.CB_STORAGE_SECRET_KEY;
+envUtil.initEnvVar(exports, 'CB_STORAGE_ACCESS_KEY', 'storage_access_key');
+envUtil.initEnvVar(exports, 'CB_STORAGE_SECRET_KEY', 'storage_secret_key');
 exports.storage_bucket = `${env_name}-storage`;
 
 // storage settings

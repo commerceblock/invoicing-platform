@@ -88,7 +88,7 @@ exports.put = (event, context, callback) => {
         log.info({
           request_id,
           http_response: response
-        }, "success - end");
+        }, 'success - end');
         return callback(null, response);
       })
       .catch(error => {

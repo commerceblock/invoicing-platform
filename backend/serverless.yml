@@ -77,20 +77,20 @@ functions:
 resources:
   Resources:
     StorageBucket:
-      Type: 'AWS::S3::Bucket'
+      Type: "AWS::S3::Bucket"
       DeletionPolicy: Retain
       Properties:
         BucketName: ${self:provider.environment.CB_ENV_NAME}-storage
         CorsConfiguration:
           CorsRules:
-          - AllowedHeaders: ['*']
+          - AllowedHeaders: ["*"]
             AllowedMethods: [GET, POST, PUT]
-            AllowedOrigins: ['*']
+            AllowedOrigins: ["*"]
             ExposedHeaders: [Date]
             Id: FirstRule
-            MaxAge: '3600'
+            MaxAge: "3600"
     StorageDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain
       Properties:
         TableName: ${self:provider.environment.CB_ENV_NAME}-storage
@@ -108,7 +108,7 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_IMAGE
     EventsDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain
       Properties:
         TableName: ${self:provider.environment.CB_ENV_NAME}-events

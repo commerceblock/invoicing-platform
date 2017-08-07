@@ -15,8 +15,8 @@ const bunyan = require('bunyan'),
   });
 
 const DEFAULT_CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Credentials": true
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true
 };
 
 exports.toResponse = (status, body) => {
@@ -30,7 +30,7 @@ exports.toResponse = (status, body) => {
 
 exports.toRedirectResponse = (url) => {
   const headers = Object.assign({
-    "Location": url
+    'Location': url
   }, DEFAULT_CORS_HEADERS);
   return {
     statusCode: httpStatus.MOVED_TEMPORARILY,
@@ -39,7 +39,7 @@ exports.toRedirectResponse = (url) => {
 };
 
 exports.parseExtension = (fname) => {
-  const ext = fname.slice((fname.lastIndexOf(".") - 1 >>> 0) + 2) || '';
+  const ext = fname.slice((fname.lastIndexOf('.') - 1 >>> 0) + 2) || '';
   return ext.toLowerCase();
 };
 
