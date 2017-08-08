@@ -1,10 +1,11 @@
-logs/*
-.idea
-native-libs
 .DS_Store
-*.tfstate
-*.tfstate.backup
-.terraform
-.serverless
 node_modules
-backend/kms-secrets.*.yml
+npm-debug.log
+
+# serverless zip
+.serverless
+
+coverage/
+
+build/
+kms-secrets*.yml
