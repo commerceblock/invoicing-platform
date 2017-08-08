@@ -8,10 +8,8 @@ import { toResponse } from '../lib/http-util';
 const handle = require('./graphql/index').default;
 
 // logging
-const bunyan = require('bunyan'),
-  log = bunyan.createLogger({
-    name: 'graphql'
-  });
+import { createLogger } from 'bunyan';
+const log = createLogger({ name: 'graphql-api' });
 
 exports.post = (event, context, callback) => {
   const request_id = uuid.createOrderedId();

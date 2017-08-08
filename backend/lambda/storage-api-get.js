@@ -11,7 +11,7 @@ import { getPresignedUrl } from '../lib/s3-client';
 
 // logging
 import { createLogger } from 'bunyan';
-const log = bunyan.createLogger({ name: 'storage-api-get' });
+const log = createLogger({ name: 'storage-api-get' });
 
 exports.get = (event, context, callback) => {
   const request_id = uuid.createOrderedId();

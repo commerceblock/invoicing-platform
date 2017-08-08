@@ -9,7 +9,7 @@ import { event_columns } from '../model/consts';
 
 // logging
 import { createLogger } from 'bunyan';
-const log = bunyan.createLogger({ name: 'http-util' });
+const log = createLogger({ name: 'http-util' });
 
 const DEFAULT_CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',

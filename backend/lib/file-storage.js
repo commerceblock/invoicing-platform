@@ -4,7 +4,7 @@ import { storage_columns } from '../model/consts';
 
 // logging
 import { createLogger } from 'bunyan';
-const log = bunyan.createLogger({ name: 'file-storage' });
+const log = createLogger({ name: 'file-storage' });
 
 exports.saveFile = (payload) => {
   return new Promise((resolve, reject) => {

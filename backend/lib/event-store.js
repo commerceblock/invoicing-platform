@@ -8,7 +8,7 @@ import { formatPQN } from './http-util';
 
 // logging
 import { createLogger } from 'bunyan';
-const log = bunyan.createLogger({ name: 'event-store' });
+const log = createLogger({ name: 'event-store' });
 
 exports.saveEvent = (payload) => {
   return new Promise((resolve, reject) => {

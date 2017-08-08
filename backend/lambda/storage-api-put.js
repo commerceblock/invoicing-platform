@@ -11,7 +11,7 @@ import { loadFile, saveFile } from '../lib/file-storage';
 
 // logging
 import { createLogger } from 'bunyan';
-const log = bunyan.createLogger({ name: 'storage-api-put' });
+const log = createLogger({ name: 'storage-api-put' });
 
 exports.put = (event, context, callback) => {
   const request_id = createOrderedId();
