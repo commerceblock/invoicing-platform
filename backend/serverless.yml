@@ -55,9 +55,9 @@ custom:
       seed: false
 
 functions:
-  ### storage service
+  # storage service
 
-  # API functions
+  ### API functions
   storage-api-put:
     handler: lambda/storage-api-put.put
     events:

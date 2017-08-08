@@ -45,7 +45,7 @@ exports.get = (event, context, callback) => {
         return callback(null, response);
       })
       .catch(error => {
-        const response = httpUtil.toResponse(httpStatus.SERVICE_UNAVAILABLE);
+        const response = httpUtil.toResponse(httpStatus.INTERNAL_SERVER_ERROR);
         log.error({
           request_id,
           error,

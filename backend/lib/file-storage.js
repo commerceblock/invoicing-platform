@@ -1,7 +1,5 @@
 'use strict';
 
-// imports
-
 // local imports
 const File = require('../model/file'),
   consts = require('../model/consts'),

@@ -9,7 +9,7 @@ const consts = require('../model/consts');
 
 // TODO: workaround - refresh manually
 var s3;
-exports.init = function () {
+exports.refresh = function () {
   s3 = new AWS.S3({
     accessKeyId: consts.storage_access_key,
     secretAccessKey: consts.storage_secret_key,
