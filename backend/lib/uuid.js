@@ -1,7 +1,7 @@
 'use strict';
 
-const uuid = require('uuid');
-const bs58 = require('bs58');
+import uuid from 'uuid';
+import { encode } from 'bs58';
 
 exports.createId = () => {
   // random uuid

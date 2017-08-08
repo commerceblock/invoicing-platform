@@ -1,7 +1,8 @@
-'use strict';
+// imports
+import dynamoose from 'dynamoose';
 
-const dynamoose = require('dynamoose');
-const modelConsts = require('../model/consts')
+// local imports
+import { env_name  } from '../model/consts';
 
 if (process.env.IS_OFFLINE) {
   // dev env

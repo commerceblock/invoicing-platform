@@ -1,11 +1,9 @@
-'use strict';
-
 // imports
-const AWS = require('aws-sdk'),
-  crypto = require('crypto');
+import AWS from 'aws-sdk';
+import { createHmac } from 'crypto';
 
 // local imports
-const consts = require('../model/consts');
+import consts from '../model/consts';
 
 // TODO: workaround - refresh manually
 var s3;

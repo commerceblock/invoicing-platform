@@ -1,12 +1,11 @@
-'use strict';
-
 // imports
-const httpStatus = require('http-status-codes');
+import httpStatus from 'http-status-codes';
 
 // local imports
-const uuid = require('../lib/uuid'),
-  httpUtil = require('../lib/http-util'),
-  handle = require('../lib/graphql/index').default;
+import { createOrderedId} from '../lib/uuid';
+import { toResponse } from '../lib/http-util';
+
+const handle = require('./graphql/index').default;
 
 // logging
 const bunyan = require('bunyan'),

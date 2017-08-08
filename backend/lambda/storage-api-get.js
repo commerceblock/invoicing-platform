@@ -1,23 +1,17 @@
-'use strict';
-
 // imports
-const _ = require('lodash'),
-  httpStatus = require('http-status-codes');
+import httpStatus from 'http-status-codes';
 
 // local imports
-const consts = require('../model/consts'),
-  uuid = require('../lib/uuid'),
-  httpUtil = require('../lib/http-util'),
-  itemUtil = require('../lib/item-util'),
-  fileStorage = require('../lib/file-storage'),
-  s3Client = require('../lib/s3-client'),
-  storage_columns = consts.storage_columns;
+import { storage_columns } from '../model/consts';
+import { createOrderedId } from '../lib/uuid';
+import { toResponse, toRedirectResponse } from '../lib/http-util';
+import { isNotValid } from '../lib/item-util';
+import { loadFile } from '../lib/file-storage';
+import { getPresignedUrl } from '../lib/s3-client';
 
 // logging
-const bunyan = require('bunyan'),
-  log = bunyan.createLogger({
-    name: 'storage-api-get'
-  });
+import { createLogger } from 'bunyan';
+const log = bunyan.createLogger({ name: 'storage-api-get' });
 
 exports.get = (event, context, callback) => {
   const request_id = uuid.createOrderedId();
@@ -26,7 +20,7 @@ exports.get = (event, context, callback) => {
     event
   }, 'start');
   const file_id = event.pathParameters && event.pathParameters[storage_columns.file_id];
-  if (itemUtil.isNotValid(file_id)) {
+  if (isNotValid(file_id)) {
     const response = httpUtil.toResponse(httpStatus.BAD_REQUEST);
     log.warn({
       request_id,
@@ -58,7 +52,7 @@ exports.get = (event, context, callback) => {
 
 function buildResponse(file) {
   if (file) {
-    const url = s3Client.getPresignedUrl(file.file_s3_bucket, file.file_s3_key);
+    const url = getPresignedUrl(file.file_s3_bucket, file.file_s3_key);
     return httpUtil.toRedirectResponse(url);
   } else {
     return httpUtil.toResponse(httpStatus.NOT_FOUND);

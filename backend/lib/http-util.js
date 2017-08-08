@@ -1,18 +1,15 @@
 'use strict';
 
 // imports
-const _ = require('lodash'),
-  httpStatus = require('http-status-codes');
+import httpStatus from 'http-status-codes';
+import { map, filter} from 'lodash';
 
 // local imports
-const item = require('./item-util'),
-  event_columns = require('../model/consts').event_columns;
+import { event_columns } from '../model/consts';
 
 // logging
-const bunyan = require('bunyan'),
-  log = bunyan.createLogger({
-    name: 'http-util'
-  });
+import { createLogger } from 'bunyan';
+const log = bunyan.createLogger({ name: 'http-util' });
 
 const DEFAULT_CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -64,7 +61,7 @@ exports.resolveMimeType = (extension) => {
 
 exports.parseEvent = (event) => {
   const records = event.Records ? event.Records : [];
-  const events = _.map(records, record => {
+  const events = map(records, record => {
     try {
       const newImage = record.dynamodb.NewImage,
         trader_id = newImage[event_columns.trader_id].S,
@@ -87,7 +84,7 @@ exports.parseEvent = (event) => {
       return {};
     }
   });
-  return _.filter(events, eventUtil.isEventPredicate);
+  return filter(events, eventUtil.isEventPredicate);
 };
 
 exports.executePromises = (promise, request_logger, callback) => {

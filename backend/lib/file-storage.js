@@ -1,15 +1,10 @@
-'use strict';
-
 // local imports
-const File = require('../model/file'),
-  consts = require('../model/consts'),
-  storage_columns = consts.storage_columns;
+import File from '../model/file';
+import { storage_columns } from '../model/consts';
 
 // logging
-const bunyan = require('bunyan'),
-  log = bunyan.createLogger({
-    name: 'file-storage'
-  });
+import { createLogger } from 'bunyan';
+const log = bunyan.createLogger({ name: 'file-storage' });
 
 exports.saveFile = (payload) => {
   return new Promise((resolve, reject) => {

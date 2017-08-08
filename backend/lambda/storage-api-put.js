@@ -1,34 +1,28 @@
-'use strict';
-
 // imports
-const _ = require('lodash'),
-  httpStatus = require('http-status-codes');
+import httpStatus from 'http-status-codes';
 
 // local imports
-const consts = require('../model/consts'),
-  uuid = require('../lib/uuid'),
-  httpUtil = require('../lib/http-util'),
-  itemUtil = require('../lib/item-util'),
-  fileStorage = require('../lib/file-storage'),
-  s3Client = require('../lib/s3-client'),
-  storage_columns = consts.storage_columns;
+import consts from '../model/consts';
+import httpUtil from '../lib/http-util';
+import s3Client from '../lib/s3-client';
+import { createOrderedId, createId } from '../lib/uuid';
+import { isNotValid } from '../lib/item-util';
+import { loadFile, saveFile } from '../lib/file-storage';
 
 // logging
-const bunyan = require('bunyan'),
-  log = bunyan.createLogger({
-    name: 'storage-api-put'
-  });
+import { createLogger } from 'bunyan';
+const log = bunyan.createLogger({ name: 'storage-api-put' });
 
 exports.put = (event, context, callback) => {
-  const request_id = uuid.createOrderedId();
+  const request_id = createOrderedId();
   log.info({
     request_id,
     event
   }, 'start');
-  const file_id = event.pathParameters && event.pathParameters[storage_columns.file_id],
+  const file_id = event.pathParameters && event.pathParameters[consts.storage_columns.file_id],
     request = JSON.parse(event.body) || {},
-    file_name = request[storage_columns.file_name];
-  if (itemUtil.isNotValid(file_id) || itemUtil.isNotValid(file_name)) {
+    file_name = request[consts.storage_columns.file_name];
+  if (isNotValid(file_id) || isNotValid(file_name)) {
     const response = httpUtil.toResponse(httpStatus.BAD_REQUEST);
     log.warn({
       request_id,
@@ -36,8 +30,7 @@ exports.put = (event, context, callback) => {
     }, 'Failed to parse request params - end');
     return callback(null, response);
   } else {
-    fileStorage
-      .loadFile(file_id)
+    loadFile(file_id)
       .then(file => {
         if (file) {
           //Already exists
@@ -49,7 +42,7 @@ exports.put = (event, context, callback) => {
           return callback(null, response);
         } else {
           const file_s3_bucket = consts.storage_bucket,
-            file_s3_key = `${uuid.createId()}-${file_name}`,
+            file_s3_key = `${createId()}-${file_name}`,
             file_extention = httpUtil.parseExtension(file_name),
             content_type = httpUtil.resolveMimeType(file_extention);
           const payload = {
@@ -60,7 +53,7 @@ exports.put = (event, context, callback) => {
             file_s3_bucket,
             content_type
           }
-          return fileStorage.saveFile(payload)
+          return saveFile(payload)
         }
       })
       .then(fileItem => {
