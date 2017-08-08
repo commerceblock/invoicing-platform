@@ -40,7 +40,7 @@ exports.policyToBase64 = function (policy) {
 };
 
 exports.signPolicyB64 = function (policyB64) {
-  const hmac = crypto.createHmac(consts.sha1_hash, consts.storage_secret_key);
+  const hmac = createHmac(consts.sha1_hash, consts.storage_secret_key);
   hmac.update(new Buffer(policyB64, consts.default_encoding));
   return hmac.digest(consts.base64_encoding);
 };

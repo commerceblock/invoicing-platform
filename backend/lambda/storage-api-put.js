@@ -52,8 +52,8 @@ exports.put = (event, context, callback) => {
             file_s3_key,
             file_s3_bucket,
             content_type
-          }
-          return saveFile(payload)
+          };
+          return saveFile(payload);
         }
       })
       .then(fileItem => {

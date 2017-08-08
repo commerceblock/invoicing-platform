@@ -1,7 +1,7 @@
 'use strict';
 
 import uuid from 'uuid';
-import { encode } from 'bs58';
+import bs58 from 'bs58';
 
 exports.createId = () => {
   // random uuid

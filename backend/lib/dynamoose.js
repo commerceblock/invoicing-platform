@@ -36,7 +36,7 @@ dynamoose.setDefaults({
   update: false,
   waitForActive: false,
   waitForActiveTimeout: 1,
-  prefix: `${modelConsts.env_name}-`,
+  prefix: `${env_name}-`,
   useDocumentTypes: true,
   useNativeBooleans: true
 });
