@@ -37,7 +37,7 @@ app.post('/graphql', (req, res) => {
 app.use(middleware);
 app.use(webpackHotMiddleware(compiler));
 // TODO: add favicon.ico
-// app.use(favicon(path.resolve(process.cwd(), 'app/favicon.ico')));
+// app.use(favicon(path.resolve(process.cwd(), 'frontend/favicon.ico')));
 
 app.get('*', (req, res) => {
   const indexFilePath = path.join(compiler.outputPath, 'index.html');

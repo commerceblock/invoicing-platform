@@ -41,4 +41,4 @@ dynamoose.setDefaults({
   useNativeBooleans: true
 });
 
-module.exports = dynamoose;
+export default dynamoose;

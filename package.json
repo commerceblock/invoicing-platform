@@ -26,16 +26,16 @@
   },
   "pre-commit": "lint:staged",
   "dependencies": {
+    "apollo-client": "^1.0.0-rc.2",
+    "babel-polyfill": "^6.16.0",
     "bs58": "^4.0.1",
     "bunyan": "^1.8.10",
+    "classnames": "2.2.5",
     "dynamoose": "^0.8.3",
+    "graphql-tag": "^1.2.3",
     "http-status-codes": "^1.2.0",
     "lodash": "^4.17.4",
-    "uuid": "^2.0.3",
-    "babel-polyfill": "^6.16.0",
-    "apollo-client": "^1.0.0-rc.2",
-    "classnames": "2.2.5",
-    "graphql-tag": "^1.2.3"
+    "uuid": "^2.0.3"
   },
   "devDependencies": {
     "aws-sdk": "^2.63.0",
@@ -81,7 +81,6 @@
     "stylelint": "^7.3.1",
     "stylelint-config-standard": "^16.0.0",
     "url-loader": "^0.5.7",
-    "uuid-js": "^0.7.5",
     "webpack": "^2.2.0",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.11.0",

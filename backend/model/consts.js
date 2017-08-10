@@ -5,7 +5,7 @@ const envUtil = require('../lib/env-util');
 
 // env variables
 const env_name = exports.env_name = process.env.CB_ENV_NAME;
-exports.region = process.env.CB_REGION || 'us-east-1';
+exports.region = process.env.CB_REGION || 'liberty-middle-east';
 
 // storage env variables
 envUtil.initEnvVar(exports, 'CB_STORAGE_ACCESS_KEY', 'storage_access_key');

@@ -74,6 +74,14 @@ functions:
           method: get
           cors: true
 
+  graphql-api:
+    handler: lambda/graphql-api.post
+    events:
+    - http:
+        path: /v0.1/graphql
+        method: post
+        cors: true
+
 resources:
   Resources:
     StorageBucket:

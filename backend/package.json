@@ -8,6 +8,7 @@
     "http-status-codes": "^1.2.0",
     "lodash": "^4.17.4",
     "uuid": "^2.0.3",
+    "graphql": "^0.9.1",
     "babel-polyfill": "^6.16.0"
   }
 }
