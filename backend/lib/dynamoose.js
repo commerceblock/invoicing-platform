@@ -1,7 +1,8 @@
-'use strict';
+// imports
+import dynamoose from 'dynamoose';
 
-const dynamoose = require('dynamoose');
-const modelConsts = require('../model/consts')
+// local imports
+import { env_name  } from '../model/consts';
 
 if (process.env.IS_OFFLINE) {
   // dev env
@@ -35,9 +36,9 @@ dynamoose.setDefaults({
   update: false,
   waitForActive: false,
   waitForActiveTimeout: 1,
-  prefix: `${modelConsts.env_name}-`,
+  prefix: `${env_name}-`,
   useDocumentTypes: true,
   useNativeBooleans: true
 });
 
-module.exports = dynamoose;
+export default dynamoose;

@@ -5,6 +5,7 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 plugins:
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-kms-secrets
 
 provider:
   name: aws
@@ -15,7 +16,9 @@ provider:
   timeout: 5
   versionFunctions: true
   environment:
-    ENV_NAME: ${self:service}-${self:custom.stage}
+    CB_ENV_NAME: ${self:service}-${self:custom.stage}
+    CB_STORAGE_ACCESS_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_ACCESS_KEY}
+    CB_STORAGE_SECRET_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_SECRET_KEY}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -26,9 +29,17 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}-${self:custom.stage}-*"
+    - Effect: Allow
+      Action:
+        - KMS:Decrypt
+      Resource: ${self:custom.kmsSecrets.keyArn}
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  kmsSecrets: ${file(kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
+  cors:
+    allowOrigin: "*"
+    allowHeaders: ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
   dynamodbThroughput:
     events:
       read: 50
@@ -36,11 +47,6 @@ custom:
     storage:
       read: 50
       write: 10
-
-  cors:
-    allowOrigin: "*"
-    allowHeaders: ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
-
   dynamodb:
     start:
       port: 8000
@@ -49,9 +55,9 @@ custom:
       seed: false
 
 functions:
-  ### storage service
+  # storage service
 
-  # API functions
+  ### API functions
   storage-api-put:
     handler: lambda/storage-api-put.put
     events:
@@ -68,13 +74,34 @@ functions:
           method: get
           cors: true
 
+  graphql-api:
+    handler: lambda/graphql-api.post
+    events:
+    - http:
+        path: /v0.1/graphql
+        method: post
+        cors: true
+
 resources:
   Resources:
-    StorageDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
+    StorageBucket:
+      Type: "AWS::S3::Bucket"
       DeletionPolicy: Retain
       Properties:
-        TableName: ${self:provider.environment.ENV_NAME}-storage
+        BucketName: ${self:provider.environment.CB_ENV_NAME}-storage
+        CorsConfiguration:
+          CorsRules:
+          - AllowedHeaders: ["*"]
+            AllowedMethods: [GET, POST, PUT]
+            AllowedOrigins: ["*"]
+            ExposedHeaders: [Date]
+            Id: FirstRule
+            MaxAge: "3600"
+    StorageDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.CB_ENV_NAME}-storage
         AttributeDefinitions:
           -
             AttributeName: file_id
@@ -89,10 +116,10 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_IMAGE
     EventsDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain
       Properties:
-        TableName: ${self:provider.environment.ENV_NAME}-events
+        TableName: ${self:provider.environment.CB_ENV_NAME}-events
         AttributeDefinitions:
           -
             AttributeName: trader_id

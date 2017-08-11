@@ -1,32 +1,67 @@
 'use strict';
 
 // imports
-const _ = require('lodash');
+import httpStatus from 'http-status-codes';
+import { map, filter} from 'lodash';
 
 // local imports
-const eventUtil = require('./event-util'),
-  event_columns = require('../model/consts').event_columns;
+import { event_columns } from '../model/consts';
 
 // logging
-const bunyan = require('bunyan'),
-  log = bunyan.createLogger({
-    name: 'http-util'
-  });
+import { createLogger } from 'bunyan';
+const log = createLogger({ name: 'http-util' });
+
+const DEFAULT_CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true
+};
 
 exports.toResponse = (status, body) => {
+  body = body || {};
   return {
     statusCode: status,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
-    },
+    headers: DEFAULT_CORS_HEADERS,
     body: JSON.stringify(body)
+  }
+};
+
+exports.toRedirectResponse = (url) => {
+  const headers = Object.assign({
+    'Location': url
+  }, DEFAULT_CORS_HEADERS);
+  return {
+    statusCode: httpStatus.MOVED_TEMPORARILY,
+    headers
+  };
+};
+
+exports.parseExtension = (fname) => {
+  const ext = fname.slice((fname.lastIndexOf('.') - 1 >>> 0) + 2) || '';
+  return ext.toLowerCase();
+};
+
+exports.resolveMimeType = (extension) => {
+  switch (extension) {
+    case 'png':
+      return 'image/png';
+    case 'jpeg':
+    case 'jpg':
+    case 'jpe':
+      return 'image/jpeg';
+    case 'gif':
+      return 'image/gif';
+    case 'htm':
+      return 'text/html';
+    case 'html':
+      return 'text/html';
+    default:
+      return 'application/octet-stream';
   }
 };
 
 exports.parseEvent = (event) => {
   const records = event.Records ? event.Records : [];
-  const events = _.map(records, record => {
+  const events = map(records, record => {
     try {
       const newImage = record.dynamodb.NewImage,
         trader_id = newImage[event_columns.trader_id].S,
@@ -49,7 +84,7 @@ exports.parseEvent = (event) => {
       return {};
     }
   });
-  return _.filter(events, eventUtil.isEventPredicate);
+  return filter(events, eventUtil.isEventPredicate);
 };
 
 exports.executePromises = (promise, request_logger, callback) => {

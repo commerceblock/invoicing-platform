@@ -1,18 +1,14 @@
-'use strict';
-
 // imports
-const _ = require('lodash');
+import { sortBy } from 'lodash';
 
 // local imports
-const Event = require('../model/event'),
-  httpUtil = require('./http-util'),
-  event_columns = require('../model/consts').event_columns;
+import Event from '../model/event';
+import { event_columns } from '../model/consts';
+import { formatPQN } from './http-util';
 
 // logging
-const bunyan = require('bunyan'),
-  log = bunyan.createLogger({
-    name: 'event-store'
-  });
+import { createLogger } from 'bunyan';
+const log = createLogger({ name: 'event-store' });
 
 exports.saveEvent = (payload) => {
   return new Promise((resolve, reject) => {
@@ -29,7 +25,7 @@ exports.saveEvent = (payload) => {
             payload
           });
         } else {
-          log.info(`event saved, prn: ${httpUtil.formatPQN(payload)}`);
+          log.info(`event saved, prn: ${formatPQN(payload)}`);
           resolve(payload);
         }
       });
@@ -58,7 +54,7 @@ exports.loadEvents = (trader_id) => {
             error
           });
         } else {
-          const sorted_events = _.sortBy(events, [event_columns.timestamp]);
+          const sorted_events = sortBy(events, [event_columns.timestamp]);
           resolve(sorted_events);
         }
       });

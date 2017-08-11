@@ -30,4 +30,4 @@ const EventSchema = new Schema({
 });
 
 const Event = dynamoose.model('events', EventSchema);
-module.exports = Event;
+export default Event;
