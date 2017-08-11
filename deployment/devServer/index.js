@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import favicon from 'serve-favicon';
 import webpack from 'webpack';
+import cors from 'cors';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../webpack/webpack.dev';
@@ -18,6 +19,7 @@ const middleware = webpackDevMiddleware(compiler, {
   stats: 'errors-only',
 });
 
+app.use(cors())
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
