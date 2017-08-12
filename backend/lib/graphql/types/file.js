@@ -3,7 +3,8 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLID
 } from 'graphql';
 
 const FileType = new GraphQLObjectType({
@@ -11,7 +12,7 @@ const FileType = new GraphQLObjectType({
   description: 'A file object',
   fields: () => ({
     fileId: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLID),
       description: 'The unique Identifier of the file',
     },
     fileName: {

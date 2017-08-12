@@ -1,5 +1,5 @@
-import wrapLogger from '../../utils/wrapLogger';
-import wrapPromise from '../../utils/wrapPromise';
+import wrapLogger from '../../utils/wrap-logger';
+import wrapPromise from '../../utils/wrap-promise';
 
 const profile = {
   traderId: 'foo_bar_traderId',
@@ -23,11 +23,11 @@ const file = {
 };
 
 const database = {
-  getProfile: (_params) => profile,
-  getInvoice: (_params) => invoice,
-  getInvoices: (_params) => [invoice],
-  getInvoiceByLink: (_params) => invoice,
-  getFile: (_params) => file
+  getProfile: (traderId) => profile,
+  getInvoice: (traderId, invoiceId) => invoice,
+  getInvoices: (traderId, index, count) => [invoice],
+  getInvoiceByLink: (linkId) => invoice,
+  getFile: (fileId) => file
 };
 
 export default wrapLogger(wrapPromise(database));

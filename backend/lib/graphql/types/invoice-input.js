@@ -1,36 +1,33 @@
 /* @flow */
 
 import {
-  GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLString,
-  GraphQLList,
   GraphQLNonNull,
-  GraphQLID
+  GraphQLID,
+  GraphQLInt,
+  GraphQLList
 } from 'graphql';
 
-const InvoiceType = new GraphQLObjectType({
-  name: 'Invoice',
-  description: 'An invoice object',
+const InvoiceInputType = new GraphQLInputObjectType({
+  name: 'InvoiceInput',
+  description: 'An invoice input object',
   fields: () => ({
-    invoiceId: {
+    traderId: {
       type: new GraphQLNonNull(GraphQLID),
-      description: 'The unique identifier of the invoice',
+      description: 'The unique identifier of the trader',
     },
-    title: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'The title of the invoice',
+    contractNumber: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'The unique identifier of the contract',
     },
     fileIds: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: 'invoice attached file ids',
     },
-    contractBasePK: {
+    title: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'invoice contract base public key',
-    },
-    contractEncryptionKey: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'invoice contract encryption key',
+      description: 'The title of the invoice',
     },
     btcAmount: {
       type: new GraphQLNonNull(GraphQLString),
@@ -43,4 +40,4 @@ const InvoiceType = new GraphQLObjectType({
   }),
 });
 
-export default InvoiceType;
+export default InvoiceInputType;

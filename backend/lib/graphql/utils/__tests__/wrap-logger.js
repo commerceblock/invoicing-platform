@@ -1,4 +1,4 @@
-import wrapLogger from '../wrapLogger';
+import wrapLogger from '../wrap-logger';
 
 describe('wrapLogger', () => {
   it('returns the same structure as the original db', () => {

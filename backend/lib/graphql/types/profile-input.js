@@ -1,25 +1,25 @@
 /* @flow */
 
 import {
-  GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLString,
   GraphQLNonNull,
   GraphQLID
 } from 'graphql';
 
-const ProfileType = new GraphQLObjectType({
-  name: 'Profile',
-  description: 'A profile object',
+const ProfileInputType = new GraphQLInputObjectType({
+  name: 'ProfileInput',
+  description: 'A profile input object',
   fields: () => ({
     traderId: {
       type: new GraphQLNonNull(GraphQLID),
       description: 'The unique identifier of the trader',
     },
-    rootContractBasePKSignature: {
+    rootContractBasePK: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'The root contract base public key sha256 signature',
+      description: 'The root contract base public key',
     }
   }),
 });
 
-export default ProfileType;
+export default ProfileInputType;
