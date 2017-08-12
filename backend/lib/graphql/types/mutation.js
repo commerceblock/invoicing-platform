@@ -5,6 +5,7 @@ import ProfileType from '../types/profile';
 import ProfileInputType from '../types/profile-input';
 import InvoiceType from '../types/invoice';
 import InvoiceInputType from '../types/invoice-input';
+import ReceiptInputType from '../types/receipt-input'
 import db from '../database';
 
 const MutationType = new GraphQLObjectType({
@@ -42,11 +43,5 @@ const MutationType = new GraphQLObjectType({
     }
   }),
 });
-
-// #### Redeem receipt (by invoice id and trader_id) ####
-// Request:
-// - invoice_id (required) (max length 50)
-// - trader_id (required) (max length 100)
-// - contract_file_ids - List of contract_file_ids (required)
 
 export default MutationType;
