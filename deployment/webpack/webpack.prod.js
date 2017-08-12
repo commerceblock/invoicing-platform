@@ -15,7 +15,7 @@ module.exports = require('./webpack.base')({
   // In production, we skip all hot-reloading stuff.
   entry: [
     'whatwg-fetch',
-    path.join(process.cwd(), 'frontend/app.js'), // Start with js/app.js
+    path.join(process.cwd(), 'frontend/src/main.js'),
   ],
 
   // Utilize long-term caching by adding content hashes (not compilation hashes)

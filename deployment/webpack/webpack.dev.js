@@ -12,7 +12,7 @@ module.exports = require('./webpack.base')({
   // Add hot reloading in development
   entry: [
     'webpack-hot-middleware/client',
-    path.join(process.cwd(), 'frontend/app.js'), // Start with js/app.js
+    path.join(process.cwd(), 'frontend/src/main.js'),
   ],
 
   // Don't use hashes in dev mode for better performance
