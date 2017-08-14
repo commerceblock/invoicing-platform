@@ -8,12 +8,14 @@ import App from './App.vue';
 import router from './router';
 
 // Create the apollo client
+if (!process.env.GRAPHQL_ENDPOINT) {
+  throw new Error('GRAPHQL_ENDPOINT is not defined');
+}
 const apolloClient = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'http://localhost:3000/graphql'
+    uri: process.env.GRAPHQL_ENDPOINT,
   }),
-  connectToDevTools: true
-})
+});
 
 Vue.use(VueApollo)
 
