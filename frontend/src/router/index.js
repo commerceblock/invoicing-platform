@@ -5,7 +5,7 @@ import Router from 'vue-router';
 
 // local imports
 import Hello from '../components/Hello.vue';
-import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue'
+// import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue'
 
 Vue.use(Router)
 
@@ -15,11 +15,6 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello
-    },
-    {
-      path: '/invoice-summary',
-      name: 'invoice-summary',
-      component: InvoiceSummary
     }
   ]
 })
