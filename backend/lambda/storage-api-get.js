@@ -7,7 +7,7 @@ import { createOrderedId } from '../lib/uuid';
 import { toResponse, toRedirectResponse } from '../lib/http-util';
 import { isNotValid } from '../lib/item-util';
 import { loadFile } from '../lib/file-storage';
-import { getPresignedUrl } from '../lib/s3-client';
+import { generateSignedGetUrl } from '../lib/s3-client';
 
 // logging
 import { createLogger } from 'bunyan';
@@ -51,7 +51,7 @@ exports.get = (event, context, callback) => {
 
 function buildResponse(file) {
   if (file) {
-    const url = getPresignedUrl(file.file_s3_bucket, file.file_s3_key);
+    const url = generateSignedGetUrl(file.file_s3_bucket, file.file_s3_key);
     return toRedirectResponse(url);
   } else {
     return toResponse(httpStatus.NOT_FOUND);

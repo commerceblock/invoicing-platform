@@ -27,7 +27,11 @@ const database = {
   getInvoice: (traderId, invoiceId) => invoice,
   getInvoices: (traderId, index, count) => [invoice],
   getInvoiceByLink: (linkId) => invoice,
-  getFile: (fileId) => file
+  getFile: (fileId) => file,
+  createProfile: (profile) => { throw new Error('not implemented') },
+  createInvoice: (invoice) => { throw new Error('not implemented') },
+  redeemReceipt: (receipt) => { throw new Error('not implemented') },
+  createFile: (file) => { throw new Error('not implemented') }
 };
 
 export default wrapLogger(wrapPromise(database));

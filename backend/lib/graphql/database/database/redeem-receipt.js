@@ -1,2 +1,2 @@
-export default async (receipt) => ({
+export default async (receiptInput) => ({
 });

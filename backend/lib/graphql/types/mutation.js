@@ -6,6 +6,8 @@ import ProfileInputType from '../types/profile-input';
 import InvoiceType from '../types/invoice';
 import InvoiceInputType from '../types/invoice-input';
 import ReceiptInputType from '../types/receipt-input'
+import FileType from '../types/file'
+import FileInputType from '../types/file-input'
 import db from '../database';
 
 const MutationType = new GraphQLObjectType({
@@ -39,6 +41,16 @@ const MutationType = new GraphQLObjectType({
       },
       resolve: (value, { receipt }) => {
         return db.redeemReceipt(receipt);
+      }
+    },
+    saveFile: {
+      type: FileType,
+      description: 'Save a file',
+      args: {
+        file: { type: FileInputType }
+      },
+      resolve: (value, { file }) => {
+        return db.saveFile(file);
       }
     }
   }),

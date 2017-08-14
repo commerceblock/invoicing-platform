@@ -20,20 +20,38 @@ exports.default_token_duration_ms = 15 * 60 * 1000;
 // generic consts
 const utf_8_encoding = exports.utf_8_encoding = 'utf-8';
 exports.base64_encoding = 'base64';
+exports.hex_encoding = 'hex';
 exports.sha1_hash = 'sha1';
+exports.sha256_hash = 'sha256';
 exports.default_encoding = utf_8_encoding;
 
 // event columns
 exports.event_columns = {
-  trader_id: 'trader_id',
+  // general
   event_id: 'event_id',
   type: 'type',
   timestamp: 'timestamp',
-  data: 'data'
+  data: 'data',
+
+  // trade
+  trader_id: 'trader_id',
+  invoice_id: 'invoice_id',
+  title: 'title',
+  file_ids: 'file_ids',
+  contract_base_pk: 'contract_base_pk',
+  contract_encryption_key: 'contract_encryption_key',
+  btc_amount: 'btc_amount',
+  external_reference_id: 'external_reference_id',
+  root_contract_base_pk_signature: 'root_contract_base_pk_signature'
 };
 
 // event types
-exports.event_type = {};
+exports.event_type = {
+  profile_created: 'profile_created',
+  invoice_created: 'invoice_created',
+  receipt_redeemed: 'receipt_redeemed',
+  invoice_link_generated: 'invoice_link_generated'
+};
 
 // storage columns
 exports.storage_columns = {

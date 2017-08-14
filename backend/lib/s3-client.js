@@ -15,9 +15,14 @@ exports.refresh = function () {
   });
 };
 
-exports.getPresignedUrl = function (bucket, key) {
+exports.generateSignedGetUrl = function (bucket, key) {
   const params = { Bucket: bucket, Key: key };
   return s3.getSignedUrl('getObject', params);
+};
+
+exports.generateSignedPutUrl = function (bucket, key) {
+  const params = { Bucket: bucket, Key: key };
+  return s3.getSignedUrl('putObject', params);
 };
 
 exports.getPolicy = function (bucket, key, acl, content_type, success_action_status) {
