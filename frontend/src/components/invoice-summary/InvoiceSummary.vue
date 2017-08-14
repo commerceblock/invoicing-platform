@@ -30,10 +30,10 @@
 </template>
 
 <script>
-  import InvoiceHeader from '@/components/invoice-summary/InvoiceHeader'
-  import DownloadContract from '@/components/invoice-summary/steps/DownloadContract'
-  import PayInvoice from '@/components/invoice-summary/steps/PayInvoice'
-  import SignContact from '@/components/invoice-summary/steps/SignContact'
+  import InvoiceHeader from './InvoiceHeader.vue'
+  import DownloadContract from './steps/DownloadContract.vue'
+  import PayInvoice from './steps/PayInvoice.vue'
+  import SignContact from './steps/SignContact.vue'
   import {
     FormWizard,
     TabContent

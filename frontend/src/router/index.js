@@ -1,8 +1,11 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Hello from './components/Hello.vue'
-// import Hello from '@/components/Hello'
-// import InvoiceSummary from '@/components/invoice-summary/InvoiceSummary'
+
+// imports
+import Vue from 'vue';
+import Router from 'vue-router';
+
+// local imports
+import Hello from '../components/Hello.vue';
+import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue'
 
 Vue.use(Router)
 
