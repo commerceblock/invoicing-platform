@@ -2,14 +2,14 @@ import Vue from 'vue';
 import VueApollo from 'vue-apollo'
 import {
   ApolloClient,
-  createBatchingNetworkInterface
+  createNetworkInterface
 } from 'apollo-client'
 import App from './App.vue';
 import router from './router';
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  networkInterface: createBatchingNetworkInterface({
+  networkInterface: createNetworkInterface({
     uri: 'http://localhost:3000/graphql'
   }),
   connectToDevTools: true
