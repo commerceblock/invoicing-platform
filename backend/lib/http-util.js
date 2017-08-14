@@ -1,19 +1,20 @@
-'use strict';
+
 
 // imports
 import httpStatus from 'http-status-codes';
-import { map, filter} from 'lodash';
+import { map, filter } from 'lodash';
 
 // local imports
 import { event_columns } from '../model/consts';
 
 // logging
 import { createLogger } from 'bunyan';
+
 const log = createLogger({ name: 'http-util' });
 
 const DEFAULT_CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Credentials': true
+  'Access-Control-Allow-Credentials': true,
 };
 
 exports.toResponse = (status, body) => {
@@ -21,17 +22,17 @@ exports.toResponse = (status, body) => {
   return {
     statusCode: status,
     headers: DEFAULT_CORS_HEADERS,
-    body: JSON.stringify(body)
-  }
+    body: JSON.stringify(body),
+  };
 };
 
 exports.toRedirectResponse = (url) => {
   const headers = Object.assign({
-    'Location': url
+    Location: url,
   }, DEFAULT_CORS_HEADERS);
   return {
     statusCode: httpStatus.MOVED_TEMPORARILY,
-    headers
+    headers,
   };
 };
 
@@ -74,12 +75,12 @@ exports.parseEvent = (event) => {
         event_id,
         type,
         timestamp,
-        data
+        data,
       };
     } catch (err) {
       log.error({
         record,
-        err
+        err,
       }, 'Failed to prase record');
       return {};
     }
@@ -87,28 +88,26 @@ exports.parseEvent = (event) => {
   return filter(events, eventUtil.isEventPredicate);
 };
 
-exports.executePromises = (promise, request_logger, callback) => {
-  return promise
-    .then(results => {
-      const msg = `Finished processing ${results.length} events`;
-      request_logger.info(msg);
-      //TODO: revisit flow, we might need further processing...
-      callback(null, {
-        result: {
-          message: msg
-        }
-      });
-    })
-    .catch(error => {
-      request_logger.error({
-        error
-      }, 'Failed to process events');
-      //TODO: revisit flow, we might need further processing...
-      callback(null, {
-        error: {
-          message: 'Failed to process events',
-          error
-        }
-      });
+exports.executePromises = (promise, request_logger, callback) => promise
+  .then(results => {
+    const msg = `Finished processing ${results.length} events`;
+    request_logger.info(msg);
+    // TODO: revisit flow, we might need further processing...
+    callback(null, {
+      result: {
+        message: msg,
+      },
     });
-};
+  })
+  .catch(error => {
+    request_logger.error({
+      error,
+    }, 'Failed to process events');
+    // TODO: revisit flow, we might need further processing...
+    callback(null, {
+      error: {
+        message: 'Failed to process events',
+        error,
+      },
+    });
+  });

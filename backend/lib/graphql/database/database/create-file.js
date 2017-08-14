@@ -5,7 +5,7 @@ import { createId } from '../../../../lib/uuid';
 import { storage_bucket } from '../../../../model/consts';
 import {
   parseExtension,
-  resolveMimeType
+  resolveMimeType,
 } from '../../../../lib/http-util';
 import { generateSignedPutUrl } from '../../../s3-client';
 
@@ -18,12 +18,12 @@ export default async (fileInput) => {
     file_id,
     file_name,
     file_s3_bucket,
-    file_s3_key
+    file_s3_key,
   };
   return saveFile(payload)
     .then(payload => ({
       fileId: file_id,
       fileName: file_name,
-      fileS3Url: generateSignedPutUrl(file_s3_bucket, file_s3_key)
+      fileS3Url: generateSignedPutUrl(file_s3_bucket, file_s3_key),
     }));
-}
+};

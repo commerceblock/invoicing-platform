@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import VueApollo from 'vue-apollo'
+import VueApollo from 'vue-apollo';
 import {
   ApolloClient,
-  createNetworkInterface
-} from 'apollo-client'
+  createNetworkInterface,
+} from 'apollo-client';
 import App from './App.vue';
 import router from './router';
 
@@ -17,13 +17,13 @@ const apolloClient = new ApolloClient({
   }),
 });
 
-Vue.use(VueApollo)
+Vue.use(VueApollo);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
-})
+  defaultClient: apolloClient,
+});
 
 /* eslint-disable no-new */
 new Vue({
@@ -31,5 +31,5 @@ new Vue({
   router,
   apolloProvider,
   template: '<App/>',
-  components: { App }
-})
+  components: { App },
+});

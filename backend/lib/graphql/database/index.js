@@ -7,5 +7,5 @@ const useMockedDatabase = `${envVariable}`.toLowerCase() === 'true';
 const db = useMockedDatabase ? require('./mocked-database').default : require('./database').default;
 
 export default {
-  ...db
+  ...db,
 };

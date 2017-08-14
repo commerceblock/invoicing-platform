@@ -12,7 +12,7 @@ export function createId() {
   return toBase58(id);
 }
 
-export function createOrderedId () {
+export function createOrderedId() {
   // time ordered uuid
   const orderedId = uuid.v1();
   return toBase58(orderedId);

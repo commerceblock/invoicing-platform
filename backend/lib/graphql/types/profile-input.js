@@ -4,7 +4,7 @@ import {
   GraphQLInputObjectType,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLID
+  GraphQLID,
 } from 'graphql';
 
 const ProfileInputType = new GraphQLInputObjectType({
@@ -18,7 +18,7 @@ const ProfileInputType = new GraphQLInputObjectType({
     rootContractBasePK: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'The root contract base public key',
-    }
+    },
   }),
 });
 

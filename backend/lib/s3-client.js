@@ -6,12 +6,12 @@ import { createHmac } from 'crypto';
 import consts from '../model/consts';
 
 // TODO: workaround - refresh manually
-var s3;
+let s3;
 exports.refresh = function () {
   s3 = new AWS.S3({
     accessKeyId: consts.storage_access_key,
     secretAccessKey: consts.storage_secret_key,
-    region: consts.region
+    region: consts.region,
   });
 };
 
@@ -34,10 +34,10 @@ exports.getPolicy = function (bucket, key, acl, content_type, success_action_sta
       ['starts-with', '$key', `${key}`],
       { acl },
       ['starts-with', '$Content-Type', content_type],
-      { success_action_status }
+      { success_action_status },
     ],
   };
-}
+};
 
 exports.policyToBase64 = function (policy) {
   const polictStr = JSON.stringify(policy);

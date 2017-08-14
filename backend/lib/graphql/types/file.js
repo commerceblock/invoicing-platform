@@ -4,7 +4,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLID
+  GraphQLID,
 } from 'graphql';
 
 const FileType = new GraphQLObjectType({
@@ -22,7 +22,7 @@ const FileType = new GraphQLObjectType({
     fileS3Url: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'S3 URL of the file',
-    }
+    },
   }),
 });
 

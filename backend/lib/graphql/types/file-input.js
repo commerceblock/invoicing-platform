@@ -3,7 +3,7 @@
 import {
   GraphQLInputObjectType,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
 } from 'graphql';
 
 const FileInputType = new GraphQLInputObjectType({
@@ -13,7 +13,7 @@ const FileInputType = new GraphQLInputObjectType({
     fileName: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'The name of the file',
-    }
+    },
   }),
 });
 

@@ -3,7 +3,7 @@ import wrapPromise from '../../utils/wrap-promise';
 
 const profile = {
   traderId: 'foo_bar_traderId',
-  rootContractBasePKSignature: 'foo_bar_rootContractBasePKSignature'
+  rootContractBasePKSignature: 'foo_bar_rootContractBasePKSignature',
 };
 
 const invoice = {
@@ -13,13 +13,13 @@ const invoice = {
   contractBasePK: 'foo_contractBasePK',
   contractEncryptionKey: 'foo_contractEncryptionKey',
   btcAmount: '1000',
-  externalReferenceId: ''
+  externalReferenceId: '',
 };
 
 const file = {
   fileId: 'foo_fileId',
   fileName: 'foo_fileName',
-  fileS3Url: 'https://foo_fileS3Url'
+  fileS3Url: 'https://foo_fileS3Url',
 };
 
 const database = {
@@ -28,10 +28,10 @@ const database = {
   getInvoices: (traderId, index, count) => [invoice],
   getInvoiceByLink: (linkId) => invoice,
   getFile: (fileId) => file,
-  createProfile: (profile) => { throw new Error('not implemented') },
-  createInvoice: (invoice) => { throw new Error('not implemented') },
-  redeemReceipt: (receipt) => { throw new Error('not implemented') },
-  createFile: (file) => { throw new Error('not implemented') }
+  createProfile: (profile) => { throw new Error('not implemented'); },
+  createInvoice: (invoice) => { throw new Error('not implemented'); },
+  redeemReceipt: (receipt) => { throw new Error('not implemented'); },
+  createFile: (file) => { throw new Error('not implemented'); },
 };
 
 export default wrapLogger(wrapPromise(database));

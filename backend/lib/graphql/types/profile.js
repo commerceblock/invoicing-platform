@@ -4,7 +4,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLID
+  GraphQLID,
 } from 'graphql';
 
 const ProfileType = new GraphQLObjectType({
@@ -18,7 +18,7 @@ const ProfileType = new GraphQLObjectType({
     rootContractBasePKSignature: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'The root contract base public key sha256 signature',
-    }
+    },
   }),
 });
 

@@ -1,4 +1,4 @@
-'use strict';
+
 
 // imports
 const dynamoose = require('../lib/dynamoose'),
@@ -12,17 +12,17 @@ const consts = require('./consts'),
 const FileSchema = new Schema({
   [storage_columns.file_id]: {
     type: String,
-    hashKey: true
+    hashKey: true,
   },
   [storage_columns.file_name]: {
-    type: String
+    type: String,
   },
   [storage_columns.file_s3_key]: {
-    type: String
+    type: String,
   },
   [storage_columns.file_s3_bucket]: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 const File = dynamoose.model('storage', FileSchema);

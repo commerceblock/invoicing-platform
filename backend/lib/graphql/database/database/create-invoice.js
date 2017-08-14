@@ -5,7 +5,7 @@ import { event_type } from '../../../../model/consts';
 import { computeSignature } from '../../../../lib/item-util';
 import {
   createId,
-  createOrderedId
+  createOrderedId,
 } from '../../../../lib/uuid';
 
 export default async (invoiceInput) => {
@@ -22,8 +22,8 @@ export default async (invoiceInput) => {
       file_ids: invoiceInput.fileIds,
       title: invoiceInput.title,
       btc_amount: invoiceInput.btcAmount,
-      external_reference_id: invoiceInput.externalReferenceId
-    }
+      external_reference_id: invoiceInput.externalReferenceId,
+    },
   };
   // TODO:: complete
   // contractBasePK
@@ -38,4 +38,4 @@ export default async (invoiceInput) => {
       btcAmount: payload.data.btc_amount,
       externalReferenceId: payload.data.external_reference_id,
     }));
-}
+};

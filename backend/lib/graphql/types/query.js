@@ -4,7 +4,7 @@ import {
   GraphQLList,
   GraphQLInt,
   GraphQLID,
-  GraphQLNonNull
+  GraphQLNonNull,
 } from 'graphql';
 import ProfileType from '../types/profile';
 import InvoiceType from '../types/invoice';
@@ -22,66 +22,66 @@ const QueryType = new GraphQLObjectType({
       type: ProfileType,
       args: {
         traderId: {
-          type: new GraphQLNonNull(GraphQLString)
-        }
+          type: new GraphQLNonNull(GraphQLString),
+        },
       },
-      resolve(parent, {traderId}) {
+      resolve(parent, { traderId }) {
         return db.getProfile(traderId);
-      }
+      },
     },
     invoice: {
       type: InvoiceType,
       args: {
         traderId: {
-          type: new GraphQLNonNull(GraphQLString)
+          type: new GraphQLNonNull(GraphQLString),
         },
         invoiceId: {
-          type: new GraphQLNonNull(GraphQLString)
-        }
+          type: new GraphQLNonNull(GraphQLString),
+        },
       },
-      resolve(parent, {traderId, invoiceId}) {
+      resolve(parent, { traderId, invoiceId }) {
         return db.getInvoice(traderId, invoiceId);
-      }
+      },
     },
     invoices: {
       type: new GraphQLList(InvoiceType),
       args: {
         traderId: {
-          type: new GraphQLNonNull(GraphQLString)
+          type: new GraphQLNonNull(GraphQLString),
         },
         index: {
-          type: GraphQLString
+          type: GraphQLString,
         },
-        count:{
-          type: GraphQLInt
-        }
+        count: {
+          type: GraphQLInt,
+        },
       },
-      resolve(parent, {traderId, index, count}) {
+      resolve(parent, { traderId, index, count }) {
         return db.getInvoices(traderId, index, count);
-      }
+      },
     },
     invoiceByLink: {
       type: InvoiceType,
       args: {
         linkId: {
-          type: new GraphQLNonNull(GraphQLID)
-        }
+          type: new GraphQLNonNull(GraphQLID),
+        },
       },
-      resolve(parent, {linkId}) {
+      resolve(parent, { linkId }) {
         return db.getInvoiceByLink(linkId);
-      }
+      },
     },
     file: {
       type: FileType,
       args: {
         fileId: {
-          type: new GraphQLNonNull(GraphQLID)
-        }
+          type: new GraphQLNonNull(GraphQLID),
+        },
       },
-      resolve(parent, {fileId}) {
+      resolve(parent, { fileId }) {
         return db.getFile(fileId);
-      }
-    }
+      },
+    },
   }),
 });
 

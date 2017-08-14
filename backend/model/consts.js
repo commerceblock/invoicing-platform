@@ -1,4 +1,4 @@
-'use strict';
+
 
 // local imports
 const envUtil = require('../lib/env-util');
@@ -42,7 +42,7 @@ exports.event_columns = {
   contract_encryption_key: 'contract_encryption_key',
   btc_amount: 'btc_amount',
   external_reference_id: 'external_reference_id',
-  root_contract_base_pk_signature: 'root_contract_base_pk_signature'
+  root_contract_base_pk_signature: 'root_contract_base_pk_signature',
 };
 
 // event types
@@ -50,7 +50,7 @@ exports.event_type = {
   profile_created: 'profile_created',
   invoice_created: 'invoice_created',
   receipt_redeemed: 'receipt_redeemed',
-  invoice_link_generated: 'invoice_link_generated'
+  invoice_link_generated: 'invoice_link_generated',
 };
 
 // storage columns
@@ -58,5 +58,5 @@ exports.storage_columns = {
   file_id: 'file_id',
   file_s3_key: 'file_s3_key',
   file_s3_bucket: 'file_s3_bucket',
-  file_name: 'file_name'
+  file_name: 'file_name',
 };

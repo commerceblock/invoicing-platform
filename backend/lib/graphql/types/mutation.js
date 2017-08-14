@@ -5,9 +5,9 @@ import ProfileType from '../types/profile';
 import ProfileInputType from '../types/profile-input';
 import InvoiceType from '../types/invoice';
 import InvoiceInputType from '../types/invoice-input';
-import ReceiptInputType from '../types/receipt-input'
-import FileType from '../types/file'
-import FileInputType from '../types/file-input'
+import ReceiptInputType from '../types/receipt-input';
+import FileType from '../types/file';
+import FileInputType from '../types/file-input';
 import db from '../database';
 
 const MutationType = new GraphQLObjectType({
@@ -17,42 +17,34 @@ const MutationType = new GraphQLObjectType({
       type: ProfileType,
       description: 'Create a new profile',
       args: {
-        profile: { type: ProfileInputType }
+        profile: { type: ProfileInputType },
       },
-      resolve: (value, { profile }) => {
-        return db.createProfile(profile);
-      }
+      resolve: (value, { profile }) => db.createProfile(profile),
     },
     createInvoice: {
       type: InvoiceType,
       description: 'Create a new invoice',
       args: {
-        invoice: { type: InvoiceInputType }
+        invoice: { type: InvoiceInputType },
       },
-      resolve: (value, { invoice }) => {
-        return db.createInvoice(invoice);
-      }
+      resolve: (value, { invoice }) => db.createInvoice(invoice),
     },
     redeemReceipt: {
       type: InvoiceType,
       description: 'Redeem receipt',
       args: {
-        receipt: { type: ReceiptInputType }
+        receipt: { type: ReceiptInputType },
       },
-      resolve: (value, { receipt }) => {
-        return db.redeemReceipt(receipt);
-      }
+      resolve: (value, { receipt }) => db.redeemReceipt(receipt),
     },
     saveFile: {
       type: FileType,
       description: 'Save a file',
       args: {
-        file: { type: FileInputType }
+        file: { type: FileInputType },
       },
-      resolve: (value, { file }) => {
-        return db.saveFile(file);
-      }
-    }
+      resolve: (value, { file }) => db.saveFile(file),
+    },
   }),
 });
 

@@ -1,36 +1,36 @@
-const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.assetsPath = function (_path) {
   // TODO: fix
   // var assetsSubDirectory = process.env.NODE_ENV === 'production'
   //   ? config.build.assetsSubDirectory
   //   : config.dev.assetsSubDirectory
-  const assetsSubDirectory = 'frontend/static'
+  const assetsSubDirectory = 'frontend/static';
   return path.posix.join(assetsSubDirectory, _path);
-}
+};
 
 exports.cssLoaders = function (options) {
-  options = options || {}
+  options = options || {};
 
-  var cssLoader = {
+  const cssLoader = {
     loader: 'css-loader',
     options: {
       minimize: process.env.NODE_ENV === 'production',
-      sourceMap: options.sourceMap
-    }
-  }
+      sourceMap: options.sourceMap,
+    },
+  };
 
   // generate loader string to be used with extract text plugin
-  function generateLoaders (loader, loaderOptions) {
-    var loaders = [cssLoader]
+  function generateLoaders(loader, loaderOptions) {
+    const loaders = [cssLoader];
     if (loader) {
       loaders.push({
-        loader: loader + '-loader',
+        loader: `${loader}-loader`,
         options: Object.assign({}, loaderOptions, {
-          sourceMap: options.sourceMap
-        })
-      })
+          sourceMap: options.sourceMap,
+        }),
+      });
     }
 
     // Extract CSS when that option is specified
@@ -38,11 +38,10 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
-      })
-    } else {
-      return ['vue-style-loader'].concat(loaders)
+        fallback: 'vue-style-loader',
+      });
     }
+    return ['vue-style-loader'].concat(loaders);
   }
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
@@ -53,6 +52,6 @@ exports.cssLoaders = function (options) {
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
-    styl: generateLoaders('stylus')
-  }
-}
+    styl: generateLoaders('stylus'),
+  };
+};

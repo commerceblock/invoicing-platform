@@ -6,7 +6,7 @@ import {
   GraphQLNonNull,
   GraphQLID,
   GraphQLInt,
-  GraphQLList
+  GraphQLList,
 } from 'graphql';
 
 const InvoiceInputType = new GraphQLInputObjectType({
@@ -36,7 +36,7 @@ const InvoiceInputType = new GraphQLInputObjectType({
     externalReferenceId: {
       type: GraphQLString,
       description: 'external reference identifier',
-    }
+    },
   }),
 });
 

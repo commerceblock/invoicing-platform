@@ -7,14 +7,14 @@ import Router from 'vue-router';
 import Hello from '../components/Hello.vue';
 // import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
       name: 'Hello',
-      component: Hello
-    }
-  ]
-})
+      component: Hello,
+    },
+  ],
+});

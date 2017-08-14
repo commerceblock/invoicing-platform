@@ -1,4 +1,4 @@
-'use strict';
+
 
 // imports
 const dynamoose = require('../lib/dynamoose'),
@@ -12,21 +12,21 @@ const consts = require('./consts'),
 const EventSchema = new Schema({
   [event_columns.trader_id]: {
     type: String,
-    hashKey: true
+    hashKey: true,
   },
   [event_columns.event_id]: {
     type: String,
-    rangeKey: true
+    rangeKey: true,
   },
   [event_columns.type]: {
-    type: String
+    type: String,
   },
   [event_columns.timestamp]: {
-    type: String
+    type: String,
   },
   [event_columns.data]: {
-    type: Object
-  }
+    type: Object,
+  },
 });
 
 const Event = dynamoose.model('events', EventSchema);

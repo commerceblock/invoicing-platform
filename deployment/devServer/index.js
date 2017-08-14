@@ -19,7 +19,7 @@ const middleware = webpackDevMiddleware(compiler, {
   stats: 'errors-only',
 });
 
-app.use(cors())
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {

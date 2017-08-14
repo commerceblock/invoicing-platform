@@ -1,4 +1,4 @@
-'use strict';
+
 
 // imports
 import { isEmpty, conforms, isString } from 'lodash';
@@ -7,12 +7,12 @@ import { createHmac } from 'crypto';
 // local imports
 import {
   hex_encoding,
-  sha256_hash
+  sha256_hash,
 } from '../model/consts';
 
 
 export const isEventPredicate = conforms({
-  type: isString
+  type: isString,
 });
 
 export function isValid(param) {
@@ -29,7 +29,7 @@ export function formatEventFQN(event) {
 }
 
 export function uuidToBase58(uuidStr) {
-  const stripped = uuidStr.replace(/-/g,'');
+  const stripped = uuidStr.replace(/-/g, '');
   const buffer = new Buffer(stripped, hex_encoding);
   return bs58.encode(buffer);
 }

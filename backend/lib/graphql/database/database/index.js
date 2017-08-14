@@ -18,7 +18,7 @@ const database = {
   createProfile,
   createInvoice,
   redeemReceipt,
-  createFile
+  createFile,
 };
 
 export default wrapLogger(database);

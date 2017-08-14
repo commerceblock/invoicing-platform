@@ -17,12 +17,12 @@ export default async (profileInput) => {
     timestamp: new Date().toISOString(),
     data: {
       root_contract_base_pk,
-      root_contract_base_pk_signature
-    }
+      root_contract_base_pk_signature,
+    },
   };
   return saveEvent(payload)
     .then(payload => ({
       traderId: trader_id,
-      rootContractBasePKSignature: root_contract_base_pk_signature
+      rootContractBasePKSignature: root_contract_base_pk_signature,
     }));
-}
+};
