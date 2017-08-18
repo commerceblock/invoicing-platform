@@ -10,7 +10,7 @@ import gql from 'graphql-tag'
 
 export default {
   name: 'hello',
-  data () {
+  data: function () {
     return {
       msg: 'Welcome to Your Vue.js App',
       hello: 'foo4life!'
@@ -21,8 +21,7 @@ export default {
       query: gql`query { invoiceByLink(linkId : "dddd") {
           invoiceId
           title
-        }}`,
-      pollInterval: 1000 // ms
+        }}`
     }
   }
 }
