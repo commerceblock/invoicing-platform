@@ -19,7 +19,8 @@ export default new Router({
     {
       path: '/invoice-summary/:id',
       name: 'invoice-summary',
-      component: InvoiceSummary
+      component: InvoiceSummary,
+      props: (route) => ({ linkId: route.params.id })
     },
     {
       path: '*',
