@@ -5,7 +5,9 @@ import Router from 'vue-router';
 
 // local imports
 import Portal from '../components/portal/Home.vue';
-import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue'
+import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue';
+import InvoicesManager from '../components/portal/InvoicesManager.vue';
+import CreateInvoice  from '../components/portal/CreateInvoice.vue';
 
 Vue.use(Router);
 
@@ -14,8 +16,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Portal',
       component: Portal,
+      children: [
+        {
+          path: '/',
+          component: InvoicesManager,
+          name: 'InvoicesManager'
+        }, {
+          path: '/portal/invoices/',
+          component: CreateInvoice,
+          name: 'CreateInvoice'
+        }
+      ]
     },
     {
       path: '/invoices/:id',
@@ -23,5 +35,5 @@ export default new Router({
       component: InvoiceSummary,
       props: (route) => ({ linkId: route.params.id })
     }
-  ],
+  ]
 });

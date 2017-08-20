@@ -31,7 +31,7 @@
     </nav>
 
     <div class="container content">
-      <component :is="currentView" transition="fade" transition-mode="out-in"></component>
+      <router-view></router-view>
     </div>
 
   </div>
