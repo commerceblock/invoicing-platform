@@ -1,7 +1,6 @@
 
 // imports
 import uuid from 'uuid';
-import bs58 from 'bs58';
 
 // local imports
 import { uuidToBase58 } from './item-util';

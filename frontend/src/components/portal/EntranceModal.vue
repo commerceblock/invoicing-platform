@@ -3,25 +3,32 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
           <div class="modal-header">
             <slot name="header">
               <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
             </slot>
           </div>
-
           <div class="modal-body">
             <slot name="body">
               <p>Welcome!</p>
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-lock"></i>
+                </span>
+                <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Enter your 12 words seed phrase" v-model="mnemonic" rows="3" />
+              </div>
+              <div v-if=erroResponse class="text-red">
+                <p>{{erroResponse}}</p>
+              </div>
             </slot>
           </div>
-
           <div class="modal-footer">
             <slot name="footer">
-
+              <div class="text-center col-md-4 col-sm-offset-4">
+                <button class="btn btn-primary btn-lg" type="submit" v-on:click="signin">Sign in</button>
+              </div>
             </slot>
           </div>
-
         </div>
       </div>
     </div>
@@ -29,17 +36,81 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
+import {
+  isEmpty
+} from 'lodash'
+import {
+  computeAccessKey,
+  isValid
+} from '../../lib/credentials'
+import {
+  setCreds
+} from '../../lib/vault'
+
 export default {
   name: 'EntranceModal',
   data: function () {
     return {
+      mnemonic: null,
+      erroResponse: null
     }
   },
   methods: {
     close: function (event) {
       this.$emit('close');
+    },
+    signin: function (event) {
+      // TODO:: toggle progress bar
+      if (this.creds !== null) {
+        // access query
+        this.erroResponse = null;
+        if (!this.profile.traderId) {
+          this.erroResponse = 'Unknown seed, please register or check your seed.'
+        } else {
+          setCreds(this.creds);
+          this.close();
+        }
+      } else if (isEmpty(this.mnemonic)) {
+        // empty phrase
+        this.erroResponse = 'seed is empty';
+      } else if (!isValid(this.mnemonic)) {
+        // check phrase
+        this.erroResponse = 'seed is not valid, seed must be 12 words.';
+      }
     }
-  }
+  },
+  computed: {
+    creds: function () {
+      if (this.mnemonic && isValid(this.mnemonic)) {
+        return computeAccessKey(this.mnemonic);
+      } else {
+        return null;
+      }
+    }
+  },
+  apollo: {
+    profile: {
+      query: function () {
+        if (this.creds) {
+          const traderId = this.creds.traderId;
+          return gql`query {
+          profile(traderId : "${traderId}") {
+              traderId
+          }}`;
+        }
+        return null;
+      },
+      variables() {
+        return {
+          creds: this.creds
+        }
+      },
+      skip() {
+        return this.creds === null;
+      }
+    },
+  },
 }
 </script>
 
@@ -85,6 +156,8 @@ export default {
 .modal-default-button {
   float: right;
 }
+
+
 
 
 /*

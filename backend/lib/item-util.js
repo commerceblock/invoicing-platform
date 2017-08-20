@@ -1,6 +1,7 @@
 
 
 // imports
+import bs58 from 'bs58';
 import { isEmpty, conforms, isString } from 'lodash';
 import { createHmac } from 'crypto';
 
