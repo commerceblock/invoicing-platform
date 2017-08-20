@@ -41,6 +41,8 @@ app.use(webpackHotMiddleware(compiler));
 // TODO: add favicon.ico
 // app.use(favicon(path.resolve(process.cwd(), 'frontend/favicon.ico')));
 
+app.use('/static', express.static(path.join(compiler.outputPath, '../frontend/public')))
+
 app.get('*', (req, res) => {
   const indexFilePath = path.join(compiler.outputPath, 'index.html');
   middleware.fileSystem.readFile(indexFilePath, (err, file) => {

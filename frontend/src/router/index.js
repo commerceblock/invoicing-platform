@@ -22,10 +22,6 @@ export default new Router({
       name: 'invoice-summary',
       component: InvoiceSummary,
       props: (route) => ({ linkId: route.params.id })
-    },
-    {
-      path: '*',
-      redirect: '/'
     }
   ],
 });

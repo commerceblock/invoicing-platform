@@ -2,12 +2,12 @@
   <div class="header">
     <div class="top">
       <div>
-        <img class="commerce-block-white-bg" src="../../assets/white-logo.png" />
+        <img class="commerce-block-white-bg" src="/static/assets/white-logo.png" />
         <span class="commerce-block-green">
-          <img src="../../assets/comany-name.svg" />
+          <img src="assets/comany-name.svg" />
         </span>
       </div>
-      <img class="icon-lock-green" src="../../assets/icon-lock-green.svg" />
+      <img class="icon-lock-green" src="/static/assets/icon-lock-green.svg" />
     </div>
     <div class="invoice-data">
       <div class="invoice-id">Inovice #ID-000004</div>

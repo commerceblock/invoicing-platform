@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <p>Copy about the origin of this document</p>
-    <img src="../../../assets/file-commerceblock.svg" />
+    <img src="/static/assets/file-commerceblock.svg" />
     <h2>Filename.pdf</h2>
     <button class="pure-button">Download Contact</button>
     <div class="backup-invoice">
