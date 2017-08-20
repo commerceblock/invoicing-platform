@@ -30,21 +30,8 @@
       </div>
     </nav>
 
-    <div class="subnav">
-      <div class="container">
-        <div class="pull-left title">Invoices</div>
-          <div class="pull-right new-invoice-btn">
-            <button type="button" class="btn btn-success">
-              <span class="fa fa-plus"></span> New Invoice
-            </button>
-          </div>
-      </div>
-    </div>
-
     <div class="container content">
-      <div class="row">
-        <component :is="currentView" transition="fade" transition-mode="out-in"></component>
-      </div>
+      <component :is="currentView" transition="fade" transition-mode="out-in"></component>
     </div>
 
   </div>
@@ -118,25 +105,6 @@ nav .navbar-header {min-height: 70px;}
   nav ul.navbar-nav a:hover,
   nav ul.navbar-nav li.active a { border-color: #ffffff; background-color: transparent; }
   nav .logout-btn {background-color: #36373A; border-color: #ccc; color: #fff; margin-top: 17px;}
-}
-
-.subnav {
-  margin-top: 100px;
-	background-color: #FFFFFF;
-  box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.25);
-  height: 40px;
-}
-
-.subnav .title {
-	color: #36373A;
-	font-family: "Open Sans";
-	font-size: 20px;
-  font-weight: bold;
-
-}
-
-.subnav .new-invoice-btn {
-  margin-top: -10px;
 }
 
 .content {
