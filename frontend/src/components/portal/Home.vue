@@ -4,50 +4,49 @@
     <div>
       <input type="hidden" :value="traderId" ref="traderId">
     </div>
-    <div class="navbar-wrapper">
-      <div class="container-fluid">
-        <nav class="navbar navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="/#">
-                <img class="commerce-block-white-bg" src="/static/assets/white-logo.png" />
-                <span class="commerce-block-green"><img src="/static/assets/company-name.svg" /></span>
-              </a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <li class="active">
-                  <a href="/#" class="">Invoices</a>
-                </li>
-              </ul>
-              <ul class="nav navbar-nav pull-right">
-                <li class="">
-                  <button type="button" class="btn btn-default" v-on:click="logout">
-                    <span class="fa fa-sign-out"></span> Log out
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row" style="margin-top:100px">
 
-        <div class="row">
-          <div class="container">
-            <component :is="currentView" transition="fade" transition-mode="out-in"></component>
-          </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img src="/static/assets/logo-commcereblock-white.svg" /></a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-left">
+            <li class="active"><a href="#">Invoices</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <button type="button" class="btn btn-default logout-btn" v-on:click="logout">
+              <span class="fa fa-sign-out"></span> Log out
+            </button>
+          </ul>
         </div>
       </div>
+    </nav>
+
+    <div class="subnav">
+      <div class="container">
+        <div class="pull-left title">Invoices</div>
+          <div class="pull-right new-invoice-btn">
+            <button type="button" class="btn btn-success">
+              <span class="fa fa-plus"></span> New Invoice
+            </button>
+          </div>
+      </div>
     </div>
+
+    <div class="container content">
+      <div class="row">
+        <component :is="currentView" transition="fade" transition-mode="out-in"></component>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -108,10 +107,40 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
-  height: 90px;
-  width: 1440px;
-  background-color: #36373A;
-  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.25);
+
+nav {min-height: 70px; background-color: #36373A;}
+nav .navbar-header {min-height: 70px;}
+
+@media only screen and (min-width : 768px) {
+  nav ul.navbar-nav li { margin: 10px 10px 0 10px; height: 60px; background-color: transparent; }
+  nav ul.navbar-nav { margin-left: 50px; }
+  nav ul.navbar-nav a { color: #ffffff; border-style: solid; border-width: 0 0 3px 0; border-color: #36373A; height: 61px; }
+  nav ul.navbar-nav a:hover,
+  nav ul.navbar-nav li.active a { border-color: #ffffff; background-color: transparent; }
+  nav .logout-btn {background-color: #36373A; border-color: #ccc; color: #fff; margin-top: 17px;}
 }
+
+.subnav {
+  margin-top: 100px;
+	background-color: #FFFFFF;
+  box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.25);
+  height: 40px;
+}
+
+.subnav .title {
+	color: #36373A;
+	font-family: "Open Sans";
+	font-size: 20px;
+  font-weight: bold;
+
+}
+
+.subnav .new-invoice-btn {
+  margin-top: -10px;
+}
+
+.content {
+  margin-top: 50px;
+}
+
 </style>
