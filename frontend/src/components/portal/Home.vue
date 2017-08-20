@@ -28,7 +28,9 @@
               </ul>
               <ul class="nav navbar-nav pull-right">
                 <li class="">
-                  <a href="#">Logout</a>
+                  <button type="button" class="btn btn-default" v-on:click="logout">
+                    <span class="fa fa-sign-out"></span> Log out
+                  </button>
                 </li>
               </ul>
             </div>
@@ -37,48 +39,11 @@
       </div>
     </div>
     <div class="container">
-      <div class="row" style="margin-top:150px">
+      <div class="row" style="margin-top:100px">
+
         <div class="row">
-          <div class="col-lg-12">
-            <table class="table" id="table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Date</th>
-                  <th>Your Refrence</th>
-                  <th>BTC</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Foo</td>
-                  <td>Bar</td>
-                  <td>Baz</td>
-                  <td>Daz</td>
-                  <td>Faz</td>
-                  <td>Jaz</td>
-                </tr>
-                <tr>
-                  <td>Lorem</td>
-                  <td>Ipsum</td>
-                  <td>Dolor</td>
-                  <td>Lorem</td>
-                  <td>Ipsum</td>
-                  <td>Dolor</td>
-                </tr>
-                <tr>
-                  <td>Some</td>
-                  <td>More</td>
-                  <td>Data</td>
-                  <td>Lorem</td>
-                  <td>Ipsum</td>
-                  <td>Dolor</td>
-                </tr>
-              </tbody>
-            </table>
-            <hr>
+          <div class="container">
+            <component :is="currentView" transition="fade" transition-mode="out-in"></component>
           </div>
         </div>
       </div>
@@ -89,16 +54,30 @@
 <script>
 import gql from 'graphql-tag'
 import Modal from './EntranceModal.vue'
+import InvoicesManager from './InvoicesManager.vue'
+import CreateInvoice from './CreateInvoice.vue'
+import { reset } from '../../lib/vault'
 
 export default {
   name: 'home',
   components: {
-    Modal
+    Modal,
+    InvoicesManager,
+    CreateInvoice
   },
   data: function () {
     return {
       showEntranceModal: true,
-      traderId: null
+      traderId: null,
+      currentView: 'InvoicesManager'
+    }
+  },
+  methods: {
+    logout() {
+      reset();
+      this.traderId = null;
+      this.currentView = 'InvoicesManager';
+      this.showEntranceModal = true;
     }
   },
   apollo: {
