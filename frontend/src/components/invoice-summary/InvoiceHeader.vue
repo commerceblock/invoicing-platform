@@ -4,7 +4,7 @@
       <div>
         <img class="commerce-block-white-bg" src="/static/assets/white-logo.png" />
         <span class="commerce-block-green">
-          <img src="assets/comany-name.svg" />
+          <img src="/static/assets/company-name.svg" />
         </span>
       </div>
       <img class="icon-lock-green" src="/static/assets/icon-lock-green.svg" />
