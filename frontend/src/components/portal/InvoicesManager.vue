@@ -5,6 +5,7 @@
         <table class="table" id="table">
           <thead>
             <tr>
+              <th></th>
               <th>ID</th>
               <th>Date</th>
               <th>Your Refrence</th>
@@ -15,28 +16,67 @@
           </thead>
           <tbody>
             <tr>
-              <td>Foo</td>
-              <td>Bar</td>
-              <td>Baz</td>
-              <td>Daz</td>
-              <td>Faz</td>
-              <td>Jaz</td>
+              <td><i class="fa fa-circle text-warning"></i></td>
+              <td>123414124</td>
+              <td>30-07-17</td>
+              <td>ID-0000003</td>
+              <td>0.0048812</td>
+              <td><span class="text-warning">Fulfill</span></td>
+              <td>
+                <div class="dropdown">
+                  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Actions
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">View</a></li>
+                    <li><a href="#">Redeem</a></li>
+                    <li><a href="#">Archive</a></li>
+                  </ul>
+                </div>
+              </td>
             </tr>
             <tr>
-              <td>Lorem</td>
-              <td>Ipsum</td>
-              <td>Dolor</td>
-              <td>Lorem</td>
-              <td>Ipsum</td>
-              <td>Dolor</td>
+              <td><i class="fa fa-circle text-success"></i></td>
+              <td>123414124</td>
+              <td>30-07-17</td>
+              <td>ID-0000003</td>
+              <td>0.0048812</td>
+              <td><span class="text-success">Fulfill</span></td>
+              <td>
+                <div class="dropdown">
+                  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Actions
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">View</a></li>
+                    <li><a href="#">Redeem</a></li>
+                    <li><a href="#">Archive</a></li>
+                  </ul>
+                </div>
+              </td>
             </tr>
             <tr>
-              <td>Some</td>
-              <td>More</td>
-              <td>Data</td>
-              <td>Lorem</td>
-              <td>Ipsum</td>
-              <td>Dolor</td>
+              <td><i class="fa fa-circle text-danger"></i></td>
+              <td>123414124</td>
+              <td>30-07-17</td>
+              <td>ID-0000003</td>
+              <td>0.0048812</td>
+              <td><span class="text-danger">Fulfill</span></td>
+              <td>
+                <div class="dropdown">
+                  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Actions
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">View</a></li>
+                    <li><a href="#">Redeem</a></li>
+                    <li><a href="#">Archive</a></li>
+                  </ul>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -67,6 +107,31 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .table {
+    border-collapse: separate;
+    border-spacing: 0 1em;
+
+    thead th{
+      border: none;
+    }
+
+    tbody {
+      tr {
+        background-color: #FFFFFF;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.1);
+      }
+
+      td {
+        padding: 20px 0;
+      }
+
+    }
+  }
+
+  .fa-circle {
+    font-size:12px;
+    margin-left: 10px;
+  }
 
 </style>
