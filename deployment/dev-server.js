@@ -1,10 +1,13 @@
 
+// imports
+import express from 'express';
+import webpack from 'webpack';
+import opn from 'opn';
+import bodyParser from 'body-parser';
 
-const path = require('path')
-const express = require('express')
-const webpack = require('webpack')
-const opn = require('opn')
-const webpackConfig = require('./webpack/webpack.dev')
+// local imports
+import webpackConfig from './webpack/webpack.dev';
+import graphQLHandler from '../backend/lib/graphql';
 
 
 // default port where dev server listens for incoming traffic
@@ -31,6 +34,13 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
+app.use((req, res, next) => {
+  console.log(new Date(), req.method, req.url);
+  next();
+});
+
+app.use(bodyParser.json());
+
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 
@@ -43,6 +53,15 @@ app.use(hotMiddleware)
 
 // serve pure static assets
 app.use('/static', express.static('./frontend/static'))
+
+app.post('/graphql', (req, res) => {
+  graphQLHandler(req.body.query, req.body.variables)
+    .then(result => {
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.end(JSON.stringify(result, null, 2));
+    })
+    .catch(err => res.end(err));
+});
 
 module.exports = app.listen(port, function (err) {
   if (err) {
