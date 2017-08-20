@@ -18,7 +18,7 @@ export default new Router({
       component: Portal,
     },
     {
-      path: '/invoice-summary/:id',
+      path: '/invoices/:id',
       name: 'invoice-summary',
       component: InvoiceSummary,
       props: (route) => ({ linkId: route.params.id })

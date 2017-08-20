@@ -11,6 +11,7 @@
           <div class="modal-body">
             <slot name="body">
               <p>Welcome!</p>
+              <h3><a href="/invoices/12345" target="_blank">Invoice Summary Example</a></h3>
               <div class="input-group">
                 <span class="input-group-addon">
                   <i class="fa fa-lock"></i>
