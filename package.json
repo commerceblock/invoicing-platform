@@ -19,7 +19,7 @@
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch",
     "test:coverage": "npm test -- --coverage --collectCoverageFrom 'frontend/**/*.js' --collectCoverageFrom 'backend/**/*.js' --collectCoverageFrom 'deployment/**/*.js'",
-    "dev": "MOCKED_DATABASE=true env-cmd deployment/environment/security.env.local babel-node deployment/dev-server.js"
+    "dev": "MOCKED_DATABASE=true env-cmd deployment/environment/security.env.local babel-node deployment/dev-server/server.js"
   },
   "lint-staged": {
     "lint:eslint": "*.js",

@@ -6,8 +6,8 @@ import opn from 'opn';
 import bodyParser from 'body-parser';
 
 // local imports
-import webpackConfig from './webpack/webpack.dev';
-import graphQLHandler from '../backend/lib/graphql';
+import webpackConfig from '../webpack/webpack.dev';
+import graphQLHandler from '../../backend/lib/graphql';
 
 
 // default port where dev server listens for incoming traffic
@@ -68,7 +68,7 @@ module.exports = app.listen(port, function (err) {
     console.log(err)
     return
   }
-  var uri = 'http://localhost:' + port
-  console.log('Listening at ' + uri + '\n')
+  const uri = 'http://localhost:' + port
+  console.log(`Listening at ${uri}\n`)
   opn(uri)
 })
