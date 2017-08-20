@@ -8,3 +8,7 @@ export function setCreds(creds) {
 export function getCreds(creds) {
   return store.creds;
 }
+
+export function reset() {
+  store.creds = null;
+}
