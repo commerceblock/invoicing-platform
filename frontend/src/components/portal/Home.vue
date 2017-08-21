@@ -14,12 +14,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><img src="/static/assets/logo-commcereblock-white.svg" /></a>
+          <div class="navbar-brand">
+            <router-link to="/"><img src="/static/assets/logo-commcereblock-white.svg" /></router-link>
+          </div>
         </div>
 
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-left">
-            <li class="active"><a href="#">Invoices</a></li>
+            <li class="active">
+              <router-link to="/">Invoices</router-link>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <button type="button" class="btn btn-default logout-btn" v-on:click="logout">

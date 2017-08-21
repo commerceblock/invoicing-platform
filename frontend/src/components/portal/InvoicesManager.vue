@@ -1,12 +1,14 @@
 <template>
-  <div>
+  <section class="contect">
     <div class="subnav">
       <div class="container">
         <div class="pull-left title">Invoices</div>
         <div class="pull-right new-invoice-btn">
-          <button type="button" class="btn btn-success">
-            <span class="fa fa-plus"></span> New Invoice
-          </button>
+          <router-link to="/portal/invoices">
+            <button type="button" class="btn btn-success">
+              <span class="fa fa-plus"></span> New Invoice
+            </button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -123,7 +125,7 @@
         <hr>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

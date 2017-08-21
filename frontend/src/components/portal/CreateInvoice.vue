@@ -1,32 +1,71 @@
 <template>
-  <div>
-    <div class="header clearfix">
-      <nav>
-        <ul class="nav nav-pills pull-right">
-          <li role="presentation">
-            <a href="#" @click="createInvoice">Go Back</a>
-          </li>
-        </ul>
-      </nav>
-      <h3 class="text-muted">Invoices / ... </h3>
+  <section class="content">
+    <div class="subnav">
+      <div class="container">
+        <div class="pull-left title">
+          <router-link to="/">Invoices</router-link> / <span class="text-muted">Contract ID {{contractId}}</span>
+        </div>
+      </div>
     </div>
-    <div class="row">
-      Foo Fighter
+    <div class="input-group form-group">
+      <h4>Create Invoice</h4>
+    </div>
+
+    <div class="input-group form-group">
+      <div>Invoice contracts are created by uploading files and then generating hashes which are used as part of the addresses.</div>
+      <div>Public keys can be used by the payer to validate associated data (uploaded files) with the derived addresses.</div>
+      <div>By generating these public keys you are associate the files with the derived addresses.</div>
+    </div>
+    <div class="input-group form-group">
+      <label>Contract Id</label>
+      <div>
+        <input class="form-control contract-id-input" readonly="readonly" type="text" v-model="contractId" />
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <label>Your Reference</label>
+      <div>
+        <input class="form-control contract-id-input" type="text" v-model="externalReferenceId" placeholder="Enter reference id (e.g. ID-000007)" />
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <label>Invoice Amount (BTC)</label>
+      <div>
+        <input class="form-control contract-id-input" type="text" v-model="btcAmount" placeholder="Enter bitcoin amount" />
+      </div>
+    </div>
+    <div class="ui form">
+      <div class='btn-toolbar'>
+        <div class="btn-group" role="group">
+          <button class='btn btn-primary btn-lg forms-buttons' v-on:click='generate'>Generate</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button class='btn btn-primary btn-lg forms-buttons' v-on:click='reset'>Reset</button>
+        </div>
+      </div>
     </div>
   </div>
+  </section>
 </template>
 
 <script>
+import { random } from 'lodash';
+
 export default {
   name: 'InvoicesManager',
   data: function () {
     return {
+      contractId: null,
+      externalReferenceId: null
     };
   },
   methods: {
-    createInvoice: function () {
-      this.$parent.currentView = 'InvoicesManager';
-    }
+    generateContractId() {
+      this.contractId = random(0, 2147483647);
+    },
+  },
+  mounted() {
+    this.generateContractId();
   },
   computed: {
 
@@ -38,5 +77,21 @@ export default {
 </script>
 
 <style scoped>
+.subnav {
+  margin-top: 50px;
+  background-color: #FFFFFF;
+  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.25);
+  height: 40px;
+}
 
+.subnav .title {
+  color: #36373A;
+  font-family: "Open Sans";
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.subnav .new-invoice-btn {
+  margin-top: -10px;
+}
 </style>
