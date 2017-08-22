@@ -5,6 +5,7 @@ import {
   isEmpty,
   find,
 } from 'lodash';
+import moment from 'moment';
 
 // local imports
 import { loadEvents } from '../../../event-store';
@@ -19,20 +20,30 @@ export const invoice_types = [
   event_type.invoice_link_generated,
 ];
 
+export function formatDate(timestamp) {
+  return moment(timestamp).format('DD-MM-YY')
+}
+
 export function buildInvoice(events) {
   const invoice_created = find(events, {
     type: event_type.invoice_created,
   });
+
   if (invoice_created) {
+    const receipt_redeemed = find(events, {
+      type: event_type.receipt_redeemed,
+    });
+    const status = receipt_redeemed !== null ? 'redeemed' : 'pending'
     const data = invoice_created.data;
     return {
       invoiceId: data.invoice_id,
-      title: data.title,
+      date: formatDate(invoice_created.timestamp),
+      externalReferenceId: data.external_reference_id,
+      btcAmount: data.btc_amount,
+      status,
       fileIds: data.file_ids,
       contractBasePK: data.contract_base_pk,
-      contractEncryptionKey: data.contract_encryption_key,
-      btcAmount: data.btc_amount,
-      externalReferenceId: data.external_reference_id,
+      contractEncryptionKey: data.contract_encryption_key
     };
   }
   // TODO:: revisit, maybe option instead

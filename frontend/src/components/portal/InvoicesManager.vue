@@ -13,7 +13,15 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-12">
+      <div class="col-lg-12" v-if="isInvoicesEmpty()">
+        <!-- <h4> empty list</h4>
+        <router-link to="/portal/invoices">
+            <button type="button" class="btn btn-success">
+              <span class="fa fa-plus"></span> New Invoice
+            </button>
+          </router-link> -->
+      </div>
+      <div class="col-lg-12" v-else>
         <table class="table" id="table">
           <thead>
             <tr>
@@ -129,6 +137,14 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
+import {
+  isEmpty
+} from 'lodash'
+import {
+  getCreds
+} from '../../lib/vault'
+
 export default {
   name: 'InvoicesManager',
   data: function () {
@@ -136,16 +152,38 @@ export default {
     };
   },
   methods: {
-    createInvoice: function () {
-      this.$parent.currentView = 'CreateInvoice';
+    isInvoicesEmpty: function () {
+      return isEmpty(this.invoices);
     }
   },
   computed: {
-
+    traderId: function () {
+      return getCreds();
+    }
   },
   apollo: {
-
-  },
+    invoices: {
+      query: function () {
+        if (this.traderId) {
+          return gql`query {
+          invoices(traderId : "${this.traderId}") {
+              invoiceId
+              btcAmount
+              externalReferenceId
+          }}`;
+        }
+        return null;
+      },
+      variables() {
+        return {
+          traderId: this.traderId
+        };
+      },
+      skip() {
+        return isEmpty(this.traderId);
+      }
+    },
+  }
 }
 </script>
 

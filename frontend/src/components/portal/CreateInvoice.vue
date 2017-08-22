@@ -19,29 +19,36 @@
     <div class="input-group form-group">
       <label>Contract Id</label>
       <div>
-        <input class="form-control contract-id-input" readonly="readonly" type="text" v-model="contractId" />
+        <input class="form-control" readonly="readonly" type="text" v-model="contractId" />
       </div>
     </div>
     <div class="input-group form-group">
       <label>Your Reference</label>
       <div>
-        <input class="form-control contract-id-input" type="text" v-model="externalReferenceId" placeholder="Enter reference id (e.g. ID-000007)" />
+        <input class="form-control" type="text" v-model="externalReferenceId" placeholder="Enter reference id (e.g. ID-000007)" />
       </div>
     </div>
     <div class="input-group form-group">
       <label>Invoice Amount (BTC)</label>
       <div>
-        <input class="form-control contract-id-input" type="text" v-model="btcAmount" placeholder="Enter bitcoin amount" />
+        <input class="form-control" type="text" v-model="btcAmount" placeholder="Enter bitcoin amount" />
+      </div>
+    </div>
+     <div class="input-group form-group">
+      <label>Contract Files</label>
+      <div>
+        <input class="form-control contract-id-input" type="file" multiple="multiple" ref="contractFiles" />
       </div>
     </div>
     <div class="ui form">
       <div class='btn-toolbar'>
         <div class="btn-group" role="group">
-          <button class='btn btn-primary btn-lg forms-buttons' v-on:click='generate'>Generate</button>
-        </div>
-        <div class="btn-group" role="group">
           <button class='btn btn-primary btn-lg forms-buttons' v-on:click='reset'>Reset</button>
         </div>
+        <div class="btn-group" role="group">
+          <button class='btn btn-primary btn-lg forms-buttons' v-on:click='sumbit'>Continue</button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -56,13 +63,29 @@ export default {
   data: function () {
     return {
       contractId: null,
-      externalReferenceId: null
+      externalReferenceId: null,
+      btcAmount: null,
+
     };
   },
   methods: {
     generateContractId() {
       this.contractId = random(0, 2147483647);
     },
+    reset() {
+      this.contractId = null;
+      this.externalReferenceId = null;
+      this.btcAmount = null;
+      this.$refs.contractFiles.value = null;
+      this.generateContractId();
+    },
+    sumbit() {
+      // upload files
+
+      // create event
+
+      // update popup
+    }
   },
   mounted() {
     this.generateContractId();

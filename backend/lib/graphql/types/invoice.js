@@ -16,9 +16,21 @@ const InvoiceType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLID),
       description: 'The unique identifier of the invoice',
     },
-    title: {
+    date: {
+      type: new GraphQLNonNull(GraphQLID),
+      description: 'invoice creation date (e.g. 30-07-17)',
+    },
+    externalReferenceId: {
+      type: GraphQLString,
+      description: 'external reference identifier',
+    },
+    btcAmount: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'The title of the invoice',
+      description: 'invoice btc amount in satoshis',
+    },
+    status: {
+      type: GraphQLString,
+      description: 'invoice status (pending, redeemed)',
     },
     fileIds: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
@@ -31,15 +43,7 @@ const InvoiceType = new GraphQLObjectType({
     contractEncryptionKey: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'invoice contract encryption key',
-    },
-    btcAmount: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'invoice btc amount in satoshis',
-    },
-    externalReferenceId: {
-      type: GraphQLString,
-      description: 'external reference identifier',
-    },
+    }
   }),
 });
 
