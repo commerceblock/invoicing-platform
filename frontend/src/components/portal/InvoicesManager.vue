@@ -34,17 +34,18 @@
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-for="invoice in invoices" :key="invoice.invoiceId">
             <tr>
               <td>
                 <i class="fa fa-circle text-warning"></i>
               </td>
-              <td>123414124</td>
-              <td>30-07-17</td>
-              <td>ID-0000003</td>
-              <td>0.0048812</td>
+              <td>{{ invoice.invoiceId }}</td>
+              <td>{{ invoice.date }}</td>
+              <td>{{ invoice.externalReferenceId }}</td>
+              <td>{{ invoice.btcAmount }}</td>
               <td>
-                <span class="text-warning">Fulfill</span>
+                <span class="text-warning" v-if="invoice.status === 'pending'">{{ invoice.status }}</span>
+                <span class="text-success" v-if="invoice.status === 'redeemed'">{{ invoice.status }}</span>
               </td>
               <td>
                 <div class="dropdown">
@@ -54,75 +55,13 @@
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                     <li>
-                      <a href="#">View</a>
+                      <router-link :to="viewLink(invoice.invoiceId)">View</router-link>
                     </li>
                     <li>
-                      <a href="#">Redeem</a>
+                      <router-link :to="redeemLink(invoice.invoiceId)">Redeem</router-link>
                     </li>
                     <li>
-                      <a href="#">Archive</a>
-                    </li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="fa fa-circle text-success"></i>
-              </td>
-              <td>123414124</td>
-              <td>30-07-17</td>
-              <td>ID-0000003</td>
-              <td>0.0048812</td>
-              <td>
-                <span class="text-success">Fulfill</span>
-              </td>
-              <td>
-                <div class="dropdown">
-                  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Actions
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li>
-                      <a href="#">View</a>
-                    </li>
-                    <li>
-                      <a href="#">Redeem</a>
-                    </li>
-                    <li>
-                      <a href="#">Archive</a>
-                    </li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="fa fa-circle text-danger"></i>
-              </td>
-              <td>123414124</td>
-              <td>30-07-17</td>
-              <td>ID-0000003</td>
-              <td>0.0048812</td>
-              <td>
-                <span class="text-danger">Fulfill</span>
-              </td>
-              <td>
-                <div class="dropdown">
-                  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Actions
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li>
-                      <a href="#">View</a>
-                    </li>
-                    <li>
-                      <a href="#">Redeem</a>
-                    </li>
-                    <li>
-                      <a href="#">Archive</a>
+                      <a href="javascript:;" @click="archiveInvoice(invoice.invoiceId)">Archive</a>
                     </li>
                   </ul>
                 </div>
@@ -147,18 +86,23 @@ import {
 
 export default {
   name: 'InvoicesManager',
-  data: function () {
-    return {
-    };
-  },
   methods: {
     isInvoicesEmpty: function () {
       return isEmpty(this.invoices);
+    },
+    viewLink: function(invoiceId) {
+      return `/portal/invoices/${invoiceId}`;
+    },
+    redeemLink: function(invoiceId) {
+      return `/portal/invoices/${invoiceId}/redeem`;
+    },
+    archiveInvoice: function(invoiceId) {
+      // TODO
     }
   },
   computed: {
     traderId: function () {
-      return getCreds().traderId;
+      return this.$parent.traderId;
     }
   },
   apollo: {
@@ -168,8 +112,10 @@ export default {
           return gql`query {
           invoices(traderId : "${this.traderId}") {
               invoiceId
-              btcAmount
+              date
               externalReferenceId
+              btcAmount
+              status
           }}`;
         }
         return null;
@@ -182,7 +128,7 @@ export default {
       skip() {
         return isEmpty(this.traderId);
       }
-    },
+    }
   }
 }
 </script>

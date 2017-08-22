@@ -1,5 +1,7 @@
 
-const store = {};
+const store = {
+  creds: null
+};
 
 export function setCreds(creds) {
   store.creds = creds;

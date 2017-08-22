@@ -25,7 +25,7 @@
           <div class="modal-footer">
             <slot name="footer">
               <div class="text-center col-md-4 col-sm-offset-4">
-                <button class="btn btn-primary btn-lg" type="submit" v-on:click="signin">Sign in</button>
+                <button class="btn btn-primary btn-lg" type="submit" @click="signin">Sign in</button>
               </div>
             </slot>
           </div>
@@ -69,6 +69,8 @@ export default {
         //   this.erroResponse = 'Unknown seed, please register or check your seed.';
         // } else {
           setCreds(this.creds);
+          // workaround: update traderId explicility
+          this.$parent.traderId = this.creds.traderId
           this.close();
         // }
       } else if (isEmpty(this.mnemonic)) {

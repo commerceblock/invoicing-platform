@@ -46,7 +46,6 @@ import {
 } from 'lodash'
 import {
   reset,
-  getCreds
 } from '../../lib/vault'
 
 export default {
@@ -56,7 +55,8 @@ export default {
   },
   data: function () {
     return {
-      showEntranceModal: true
+      showEntranceModal: true,
+      traderId: null
     }
   },
   methods: {
@@ -65,34 +65,6 @@ export default {
       this.traderId = null;
       this.showEntranceModal = true;
     }
-  },
-  computed: {
-    traderId: function () {
-      return getCreds();
-    }
-  },
-  apollo: {
-    invoices: {
-      query: function () {
-        if (this.traderId) {
-          return gql`query {
-          invoices(traderId : "${this.traderId}") {
-              invoiceId
-              btcAmount
-              externalReferenceId
-          }}`;
-        }
-        return null;
-      },
-      variables() {
-        return {
-          traderId: this.traderId
-        };
-      },
-      skip() {
-        return isEmpty(this.traderId);
-      }
-    },
   }
 }
 </script>
