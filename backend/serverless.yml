@@ -53,6 +53,8 @@ custom:
       inMemory: true
       migrate: true
       seed: false
+  serverless-offline:
+    port: 9000
 
 functions:
   # storage service

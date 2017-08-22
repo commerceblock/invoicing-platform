@@ -1,9 +1,10 @@
 // env variables
 export const env_name = process.env.CB_ENV_NAME;
-export const region = process.env.CB_REGION || 'liberty-middle-east';
 
 // storage env variables
 export const storage_bucket = `${env_name}-storage`;
+export const storage_access_key = process.env.CB_STORAGE_ACCESS_KEY;
+export const storage_secret_key = process.env.CB_STORAGE_SECRET_KEY;
 
 // storage settings
 export const default_acl = 'private';

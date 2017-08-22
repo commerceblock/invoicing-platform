@@ -80,6 +80,9 @@ export default {
       this.generateContractId();
     },
     sumbit() {
+
+
+      console.log(this.$apollo)
       // upload files
 
       // create event

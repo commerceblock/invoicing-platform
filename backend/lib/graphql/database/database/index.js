@@ -7,7 +7,7 @@ import getFile from './get-file';
 import createProfile from './create-profile';
 import createInvoice from './create-invoice';
 import redeemReceipt from './redeem-receipt';
-import createFile from './create-file';
+import saveFile from './create-file';
 
 const database = {
   getProfile,
@@ -18,7 +18,7 @@ const database = {
   createProfile,
   createInvoice,
   redeemReceipt,
-  createFile,
+  saveFile,
 };
 
 export default wrapLogger(database);

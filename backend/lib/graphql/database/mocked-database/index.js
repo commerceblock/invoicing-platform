@@ -31,7 +31,7 @@ const database = {
   createProfile: (profile) => { throw new Error('not implemented'); },
   createInvoice: (invoice) => { throw new Error('not implemented'); },
   redeemReceipt: (receipt) => { throw new Error('not implemented'); },
-  createFile: (file) => { throw new Error('not implemented'); },
+  saveFile: (file) => { throw new Error('not implemented'); },
 };
 
 export default wrapLogger(wrapPromise(database));

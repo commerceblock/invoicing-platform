@@ -12,6 +12,7 @@ if (process.env.IS_OFFLINE) {
   dynamoose.AWS.config.update({
     accessKeyId: 'AKID',
     secretAccessKey: 'SECRET',
+    region: 'test'
   });
   dynamoose.local();
 }
