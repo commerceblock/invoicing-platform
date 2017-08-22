@@ -66,12 +66,12 @@ export default {
       if (this.creds !== null) {
         // access query
         this.erroResponse = null;
-        if (!this.profile.traderId) {
-          this.erroResponse = 'Unknown seed, please register or check your seed.';
-        } else {
+        // if (!this.profile.traderId) {
+        //   this.erroResponse = 'Unknown seed, please register or check your seed.';
+        // } else {
           setCreds(this.creds);
           this.close();
-        }
+        // }
       } else if (isEmpty(this.mnemonic)) {
         // empty phrase
         this.erroResponse = 'seed is empty';
