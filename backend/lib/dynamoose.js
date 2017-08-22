@@ -1,13 +1,4 @@
 
-
-// TODO: fix workaround
-import AWS from 'aws-sdk';
-import consts from '../model/consts';
-
-AWS.config.update({
-  region: consts.region
-});
-
 // imports
 import dynamoose from 'dynamoose';
 

@@ -1,4 +1,4 @@
-service: cb-invoices
+service: invoices
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
@@ -9,14 +9,13 @@ plugins:
 
 provider:
   name: aws
-  stage: prod001
-  region: eu-west-2
+  stage: prod
+  region: us-east-1
   runtime: nodejs6.10
   memorySize: 256
   timeout: 5
   versionFunctions: true
   environment:
-    CB_REGION: ${self:provider.region}
     CB_ENV_NAME: ${self:service}-${self:custom.stage}
     CB_STORAGE_ACCESS_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_ACCESS_KEY}
     CB_STORAGE_SECRET_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_SECRET_KEY}
@@ -24,8 +23,11 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:Query
+        - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}-${self:custom.stage}-*"
     - Effect: Allow
       Action:
@@ -72,7 +74,7 @@ functions:
           method: get
           cors: true
 
-  graphql-api-v1:
+  graphql-api:
     handler: lambda/graphql-api.post
     events:
     - http:
@@ -85,7 +87,7 @@ resources:
     WebsiteS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.CB_ENV_NAME}
+        BucketName: ${self:provider.environment.CB_ENV_NAME}-website
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html

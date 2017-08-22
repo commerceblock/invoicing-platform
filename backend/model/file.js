@@ -1,12 +1,13 @@
 
 // imports
-const dynamoose = require('dynamoose');
+import { Schema } from 'dynamoose'
+import dynamoose from '../lib/dynamoose'
 
 // local imports
 import { storage_columns } from './consts'
 
 // schema defintion
-const FileSchema = new dynamoose.Schema({
+const FileSchema = new Schema({
   [storage_columns.file_id]: {
     type: String,
     hashKey: true,
