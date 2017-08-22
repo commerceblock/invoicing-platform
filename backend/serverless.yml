@@ -52,7 +52,12 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
-      seed: false
+      seed: true
+    seed:
+      domain:
+        sources:
+          - table: ${self:provider.environment.CB_ENV_NAME}-events
+            sources: [./data/events.json]
   serverless-offline:
     port: 9000
 

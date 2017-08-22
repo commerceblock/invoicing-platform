@@ -158,7 +158,7 @@ export default {
   },
   computed: {
     traderId: function () {
-      return getCreds();
+      return getCreds().traderId;
     }
   },
   apollo: {

@@ -4,7 +4,7 @@ import { sortBy } from 'lodash';
 // local imports
 import Event from '../model/event';
 import { event_columns } from '../model/consts';
-import { formatPQN } from './http-util';
+import { formatEventFQN } from './item-util';
 
 // logging
 import { createLogger } from 'bunyan';
@@ -25,7 +25,7 @@ exports.saveEvent = (payload) => new Promise((resolve, reject) => {
           payload,
         });
       } else {
-        log.info(`event saved, prn: ${formatPQN(payload)}`);
+        log.info(`event saved, prn: ${formatEventFQN(payload)}`);
         resolve(payload);
       }
     });

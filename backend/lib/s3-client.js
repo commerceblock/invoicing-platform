@@ -52,12 +52,22 @@ try {
 }
 
 export function generateSignedGetUrl(bucket, key) {
-  const params = { Bucket: bucket, Key: key };
+  const params = {
+    Bucket: bucket,
+    Key: key,
+    Expires: 15*60
+  };
   return s3.getSignedUrl('getObject', params);
 };
 
-export function generateSignedPutUrl(bucket, key) {
-  const params = { Bucket: bucket, Key: key };
+export function generateSignedPutUrl(bucket, key, type) {
+  const params = {
+    Bucket: bucket,
+    Key: key,
+    ACL: 'authenticated-read',
+    ContentType: type,
+    Expires: 15*60
+  };
   return s3.getSignedUrl('putObject', params);
 };
 

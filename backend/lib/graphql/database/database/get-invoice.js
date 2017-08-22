@@ -33,7 +33,7 @@ export function buildInvoice(events) {
     const receipt_redeemed = find(events, {
       type: event_type.receipt_redeemed,
     });
-    const status = receipt_redeemed !== null ? 'redeemed' : 'pending'
+    const status = receipt_redeemed === undefined ? 'pending': 'redeemed';
     const data = invoice_created.data;
     return {
       invoiceId: data.invoice_id,

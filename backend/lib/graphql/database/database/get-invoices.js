@@ -16,13 +16,15 @@ import {
   event_columns,
 } from '../../../../model/consts';
 
-export default async (traderId, index = 10, count = 10) => loadEvents(traderId)
+export default async (traderId, index = 0, count = 10) => loadEvents(traderId)
   .then(events => {
     const invoices = chain(events)
       .filter(event => includes(invoice_types, event.type))
       .groupBy(event => event.data.invoice_id)
       .map((items, key) => buildInvoice(items))
       .filter(invoice => !isEmpty(invoice))
+      .drop(index)
+      .take(count)
       .value();
-    return chain(invoices).drop(index).take(count);
+    return invoices;
   });

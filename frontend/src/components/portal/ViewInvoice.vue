@@ -17,7 +17,7 @@
 <script>
 export default {
   name: 'ViewInvoice',
-  props: ['invoiceId'],
+  props: ['invoiceId', 'showMessage'],
   data: function () {
     return {
       contractId: null,

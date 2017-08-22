@@ -25,10 +25,6 @@ const InvoiceInputType = new GraphQLInputObjectType({
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: 'invoice attached file ids',
     },
-    title: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'The title of the invoice',
-    },
     btcAmount: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'invoice btc amount in satoshis',

@@ -2,6 +2,9 @@
 // imports
 import Vue from 'vue';
 import Router from 'vue-router';
+import {
+  has
+} from 'lodash'
 
 // local imports
 import Portal from '../components/portal/Home.vue';
@@ -32,7 +35,10 @@ export default new Router({
           path: '/portal/invoices/:id',
           name: 'ViewInvoice',
           component: ViewInvoice,
-          props: (route) => ({ invoiceId: route.params.id })
+          props: (route) => ({
+            invoiceId: route.params.id,
+            showMessage: has(route.query, 'show-message')
+          })
         }, {
           path: '/portal/invoices/:id/redeem',
           name: 'RedeemInvoice',
