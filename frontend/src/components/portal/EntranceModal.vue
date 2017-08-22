@@ -70,7 +70,6 @@ export default {
           this.erroResponse = 'Unknown seed, please register or check your seed.';
         } else {
           setCreds(this.creds);
-          this.$parent.traderId = this.creds.traderId;
           this.close();
         }
       } else if (isEmpty(this.mnemonic)) {

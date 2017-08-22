@@ -1,15 +1,12 @@
 
-
 // imports
-const dynamoose = require('../lib/dynamoose'),
-  Schema = dynamoose.Schema;
+const dynamoose = require('dynamoose');
 
 // local imports
-const consts = require('./consts'),
-  event_columns = consts.event_columns;
+import { event_columns } from './consts'
 
 // schema defintion
-const EventSchema = new Schema({
+const EventSchema = new dynamoose.Schema({
   [event_columns.trader_id]: {
     type: String,
     hashKey: true,

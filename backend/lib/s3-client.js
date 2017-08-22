@@ -5,15 +5,24 @@ import { createHmac } from 'crypto';
 // local imports
 import consts from '../model/consts';
 
-// TODO: workaround - refresh manually
-let s3;
-exports.refresh = function () {
+var s3 = null;
+var storage_access_key = null;
+var storage_secret_key = null;
+
+// woraround to init s3 client from KMS creds
+function refresh () {
   s3 = new AWS.S3({
     accessKeyId: consts.storage_access_key,
     secretAccessKey: consts.storage_secret_key,
     region: consts.region,
   });
 };
+
+function init() {
+
+}
+
+// TODO: workaround - refresh manually
 
 exports.generateSignedGetUrl = function (bucket, key) {
   const params = { Bucket: bucket, Key: key };

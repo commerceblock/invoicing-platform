@@ -16,6 +16,7 @@ provider:
   timeout: 5
   versionFunctions: true
   environment:
+    CB_REGION: ${self:provider.region}
     CB_ENV_NAME: ${self:service}-${self:custom.stage}
     CB_STORAGE_ACCESS_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_ACCESS_KEY}
     CB_STORAGE_SECRET_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_SECRET_KEY}
@@ -23,11 +24,8 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:Query
-        - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}-${self:custom.stage}-*"
     - Effect: Allow
       Action:
@@ -74,7 +72,7 @@ functions:
           method: get
           cors: true
 
-  graphql-api:
+  graphql-api-v1:
     handler: lambda/graphql-api.post
     events:
     - http:

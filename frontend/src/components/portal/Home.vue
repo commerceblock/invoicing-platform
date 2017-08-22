@@ -1,9 +1,6 @@
 <template>
   <div class="wrapper">
     <modal v-if="showEntranceModal" @close="showEntranceModal = false" />
-    <div>
-      <input type="hidden" :value="traderId" ref="traderId">
-    </div>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -44,30 +41,34 @@
 <script>
 import gql from 'graphql-tag'
 import Modal from './EntranceModal.vue'
-import InvoicesManager from './InvoicesManager.vue'
-import CreateInvoice from './CreateInvoice.vue'
-import { reset } from '../../lib/vault'
+import {
+  isEmpty
+} from 'lodash'
+import {
+  reset,
+  getCreds
+} from '../../lib/vault'
 
 export default {
   name: 'home',
   components: {
-    Modal,
-    InvoicesManager,
-    CreateInvoice
+    Modal
   },
   data: function () {
     return {
-      showEntranceModal: true,
-      traderId: null,
-      currentView: 'InvoicesManager'
+      showEntranceModal: true
     }
   },
   methods: {
     logout() {
       reset();
       this.traderId = null;
-      this.currentView = 'InvoicesManager';
       this.showEntranceModal = true;
+    }
+  },
+  computed: {
+    traderId: function () {
+      return getCreds();
     }
   },
   apollo: {
@@ -82,7 +83,6 @@ export default {
           }}`;
         }
         return null;
-
       },
       variables() {
         return {
@@ -90,7 +90,7 @@ export default {
         };
       },
       skip() {
-        return this.traderId === null;
+        return isEmpty(this.traderId);
       }
     },
   }
