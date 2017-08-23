@@ -11,7 +11,7 @@
           <div class="modal-body">
             <slot name="body">
               <p>Welcome!</p>
-              <div class="input-group">
+              <div class="input-group" v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
                 <span class="input-group-addon">
                   <i class="fa fa-lock"></i>
                 </span>
@@ -25,7 +25,7 @@
           <div class="modal-footer">
             <slot name="footer">
               <div class="text-center col-md-4 col-sm-offset-4">
-                <button class="btn btn-primary btn-lg" type="submit" @click="signin">Sign in</button>
+                <button class="btn btn-success btn-lg" type="submit" @click="signin">Sign in</button>
               </div>
             </slot>
           </div>
@@ -83,13 +83,16 @@ export default {
     }
   },
   computed: {
+    isValid: function () {
+      return this.mnemonic && isValid(this.mnemonic.trim())
+    },
     creds: function () {
       if (this.mnemonic && isValid(this.mnemonic.trim())) {
         return computeAccessKey(this.mnemonic.trim());
       } else {
         return null;
       }
-    }
+    },
   },
   apollo: {
     profile: {
@@ -196,5 +199,17 @@ export default {
 
 textarea {
   resize: none;
+}
+
+.seed-input-red textarea:focus{
+  border-color: red;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
+  outline: 0 none;
+}
+
+.seed-input-green textarea:focus{
+  border-color: #258C42;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
+  outline: 0 none;
 }
 </style>
