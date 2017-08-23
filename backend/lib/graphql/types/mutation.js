@@ -1,10 +1,15 @@
 /* @flow */
 
-import { GraphQLObjectType } from 'graphql';
+import {
+  GraphQLID,
+  GraphQLNonNull,
+  GraphQLObjectType,
+} from 'graphql';
 import ProfileType from '../types/profile';
 import ProfileInputType from '../types/profile-input';
 import InvoiceType from '../types/invoice';
 import InvoiceInputType from '../types/invoice-input';
+import InvoiceArchivedType from '../types/invoice-archived';
 import ReceiptInputType from '../types/receipt-input';
 import FileType from '../types/file';
 import FileInputType from '../types/file-input';
@@ -28,6 +33,21 @@ const MutationType = new GraphQLObjectType({
         invoice: { type: InvoiceInputType },
       },
       resolve: (value, { invoice }) => db.createInvoice(invoice),
+    },
+    archiveInvoice: {
+      type: InvoiceArchivedType,
+      description: 'Create a new invoice',
+      args: {
+        traderId: {
+          type: new GraphQLNonNull(GraphQLID),
+          description: 'The unique identifier of the trader',
+        },
+        invoiceId: {
+          type: new GraphQLNonNull(GraphQLID),
+          description: 'The unique identifier of the invoice',
+        },
+      },
+      resolve: (value, { traderId, invoiceId }) => db.archiveInvoice(traderId, invoiceId),
     },
     redeemReceipt: {
       type: InvoiceType,

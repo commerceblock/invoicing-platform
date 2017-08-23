@@ -97,13 +97,27 @@ export default {
       return `/portal/invoices/${invoiceId}/redeem`;
     },
     archiveInvoice: function(invoiceId) {
-      // TODO
+      const apolloClient = this.apolloClient;
+      return apolloClient
+        .mutate({
+          mutation: gql`mutation {
+          archiveInvoice(traderId: "${this.traderId}", invoiceId: "${invoiceId}") {
+            invoiceId
+            status
+          }
+        }`})
+        .then(result => {
+          this.$apollo.queries.invoices.refetch();
+        })
     }
   },
   computed: {
     traderId: function () {
       return this.$parent.traderId;
-    }
+    },
+    apolloClient: function () {
+      return this.$apollo.provider.defaultClient;
+    },
   },
   apollo: {
     invoices: {

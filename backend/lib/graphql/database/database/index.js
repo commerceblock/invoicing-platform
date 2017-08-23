@@ -6,6 +6,7 @@ import getInvoiceByLink from './get-invoice-by-link';
 import getFile from './get-file';
 import createProfile from './create-profile';
 import createInvoice from './create-invoice';
+import archiveInvoice from './archive-invoice'
 import redeemReceipt from './redeem-receipt';
 import saveFile from './create-file';
 
@@ -17,6 +18,7 @@ const database = {
   getFile,
   createProfile,
   createInvoice,
+  archiveInvoice,
   redeemReceipt,
   saveFile,
 };

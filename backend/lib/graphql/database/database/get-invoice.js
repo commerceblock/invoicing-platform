@@ -12,13 +12,8 @@ import { loadEvents } from '../../../event-store';
 import {
   event_type,
   event_columns,
+  invoice_status,
 } from '../../../../model/consts';
-
-export const invoice_types = [
-  event_type.invoice_created,
-  event_type.receipt_redeemed,
-  event_type.invoice_link_generated,
-];
 
 export function formatDate(timestamp) {
   return moment(timestamp).format('DD-MM-YY')
@@ -31,9 +26,16 @@ export function buildInvoice(events) {
 
   if (invoice_created) {
     const receipt_redeemed = find(events, {
-      type: event_type.receipt_redeemed,
+      type: event_type.receipt_redeemed
     });
-    const status = receipt_redeemed === undefined ? 'pending': 'redeemed';
+    const invoice_archived = find(events, {
+      type: event_type.invoice_archived
+    });
+    const status = resolveStatus({
+      invoice_created,
+      invoice_archived,
+      receipt_redeemed
+    });
     const data = invoice_created.data;
     return {
       invoiceId: data.invoice_id,
@@ -50,10 +52,19 @@ export function buildInvoice(events) {
   return null;
 }
 
+export function resolveStatus(invoiceMap) {
+  if (invoiceMap.invoice_archived !== undefined) {
+    return invoice_status.archived;
+  } else if (invoiceMap.receipt_redeemed !== undefined) {
+    return invoice_status.redeemed;
+  } else {
+    return invoice_status.pending;
+  }
+}
+
 export default async (traderId, invoiceId) => loadEvents(traderId)
   .then(events => {
     const invoiceEvents = chain(events)
       .filter(event => event.data.invoice_id === invoiceId)
-      .filter(event => includes(invoice_types, event.type));
     return buildInvoice(invoiceEvents);
   });

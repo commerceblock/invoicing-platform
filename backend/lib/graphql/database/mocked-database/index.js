@@ -32,6 +32,7 @@ const database = {
   createInvoice: (invoice) => { throw new Error('not implemented'); },
   redeemReceipt: (receipt) => { throw new Error('not implemented'); },
   saveFile: (file) => { throw new Error('not implemented'); },
+  archiveInvoice: (traderId, invoiceId) => { throw new Error('not implemented'); },
 };
 
 export default wrapLogger(wrapPromise(database));

@@ -45,6 +45,7 @@ export const event_type = {
   invoice_created: 'invoice_created',
   receipt_redeemed: 'receipt_redeemed',
   invoice_link_generated: 'invoice_link_generated',
+  invoice_archived: 'invoice_archived',
 };
 
 // storage columns
@@ -53,4 +54,10 @@ export const storage_columns = {
   file_s3_key: 'file_s3_key',
   file_s3_bucket: 'file_s3_bucket',
   file_name: 'file_name',
+};
+
+export const invoice_status = {
+  pending: 'pending',
+  redeemed: 'redeemed',
+  archived: 'archived'
 };
