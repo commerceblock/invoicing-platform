@@ -42,7 +42,8 @@
 import gql from 'graphql-tag'
 import Modal from './EntranceModal.vue'
 import {
-  isEmpty
+  isEmpty,
+  each,
 } from 'lodash'
 import {
   reset,
@@ -62,6 +63,11 @@ export default {
   methods: {
     logout() {
       reset();
+      each(this.$children, child => {
+        if(child.reset) {
+          child.reset();
+        }
+      })
       this.traderId = null;
       this.showEntranceModal = true;
     }

@@ -118,7 +118,10 @@ export default {
         .then(result => {
           this.$apollo.queries.invoices.refetch();
         })
-    }
+    },
+    reset: function () {
+      this.invoices = null;
+    },
   },
   computed: {
     traderId: function () {

@@ -125,7 +125,6 @@ export default {
       invoiceCreated.then(result => {
         const invoiceId = result.data.createInvoice.invoiceId;
         const location = `/portal/invoices/${invoiceId}?show-message`;
-        console.log(`URL: ${location}`);
         router.push(location);
       });
     },
