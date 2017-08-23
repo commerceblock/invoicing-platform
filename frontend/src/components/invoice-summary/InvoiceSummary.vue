@@ -36,7 +36,7 @@ import gql from 'graphql-tag'
 import InvoiceHeader from './InvoiceHeader.vue'
 import DownloadContract from './steps/DownloadContract.vue'
 import PayInvoice from './steps/PayInvoice.vue'
-import SignContact from './steps/SignContact.vue'
+import SignContract from './steps/SignContract.vue'
 import {
   FormWizard,
   TabContent
@@ -47,7 +47,7 @@ export default {
   components: {
     DownloadContract,
     PayInvoice,
-    SignContact,
+    SignContract,
     InvoiceHeader,
     FormWizard,
     TabContent

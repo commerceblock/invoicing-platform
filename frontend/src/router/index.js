@@ -12,7 +12,7 @@ import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue';
 import InvoicesManager from '../components/portal/InvoicesManager.vue';
 import CreateInvoice  from '../components/portal/CreateInvoice.vue';
 import ViewInvoice from '../components/portal/ViewInvoice.vue'
-import RedeemInvoice from '../components/portal/RedeemInvoice.vue'
+import RedeemInvoice from '../components/portal/redeem-invoice/RedeemInvoice.vue'
 
 Vue.use(Router);
 

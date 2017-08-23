@@ -84,8 +84,8 @@ export default {
   },
   computed: {
     creds: function () {
-      if (this.mnemonic && isValid(this.mnemonic)) {
-        return computeAccessKey(this.mnemonic);
+      if (this.mnemonic && isValid(this.mnemonic.trim())) {
+        return computeAccessKey(this.mnemonic.trim());
       } else {
         return null;
       }
