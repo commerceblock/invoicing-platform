@@ -138,7 +138,8 @@ export default {
       },
       skip() {
         return isEmpty(this.traderId);
-      }
+      },
+      pollInterval: 5000,
     }
   }
 }
