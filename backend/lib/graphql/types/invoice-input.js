@@ -17,7 +17,7 @@ const InvoiceInputType = new GraphQLInputObjectType({
       type: new GraphQLNonNull(GraphQLID),
       description: 'The unique identifier of the trader',
     },
-    contractNumber: {
+    contractId: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'The unique identifier of the contract',
     },

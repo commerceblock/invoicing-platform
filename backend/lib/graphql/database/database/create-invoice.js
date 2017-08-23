@@ -18,9 +18,8 @@ export default async (invoiceInput) => {
     timestamp: new Date().toISOString(),
     data: {
       invoice_id: createId(),
-      contract_number: invoiceInput.contractNumber,
+      contract_id: invoiceInput.contractId,
       file_ids: invoiceInput.fileIds,
-      title: invoiceInput.title,
       btc_amount: invoiceInput.btcAmount,
       external_reference_id: invoiceInput.externalReferenceId,
     },
@@ -31,8 +30,8 @@ export default async (invoiceInput) => {
   return saveEvent(payload)
     .then(payload => ({
       invoiceId: payload.data.invoice_id,
-      title: payload.data.title,
       fileIds: payload.data.file_ids,
+      contractId: payload.contract_id,
       contractBasePK: 'FOO_FIGHTER',
       contractEncryptionKey: 'EAGLE_EYE',
       btcAmount: payload.data.btc_amount,

@@ -49,7 +49,6 @@
         <div class="btn-group" role="group">
           <button class="btn btn-primary btn-lg forms-buttons" v-on:click="submit" v-bind:disabled="disableSubmit">Continue</button>
         </div>
-
       </div>
     </div>
     </div>
@@ -103,7 +102,7 @@ export default {
       const invoiceCreated = allTasks.then(results => {
         // collect fileIds
         const traderId = getCreds().traderId;
-        const contractNumber = this.contractId;
+        const contractId = this.contractId;
         const fileIds = map(results, res => res.data.saveFile.fileId);
         const btcAmount = this.btcAmount;
         const externalReferenceId = this.externalReferenceId;
@@ -112,7 +111,7 @@ export default {
             mutation: gql`mutation {
             createInvoice(invoice: {
               traderId: "${traderId}",
-              contractNumber: ${contractNumber},
+              contractId: ${contractId},
               fileIds: ${JSON.stringify(fileIds)},
               btcAmount: "${btcAmount}",
               externalReferenceId: "${externalReferenceId}"

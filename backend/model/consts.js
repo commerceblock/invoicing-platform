@@ -30,8 +30,8 @@ export const event_columns = {
   // trade
   trader_id: 'trader_id',
   invoice_id: 'invoice_id',
-  title: 'title',
   file_ids: 'file_ids',
+  contract_id: 'contract_id',
   contract_base_pk: 'contract_base_pk',
   contract_encryption_key: 'contract_encryption_key',
   btc_amount: 'btc_amount',

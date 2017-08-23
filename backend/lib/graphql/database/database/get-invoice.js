@@ -1,9 +1,7 @@
 // imports
 import {
-  chain,
-  includes,
-  isEmpty,
   find,
+  filter,
 } from 'lodash';
 import moment from 'moment';
 
@@ -11,9 +9,9 @@ import moment from 'moment';
 import { loadEvents } from '../../../event-store';
 import {
   event_type,
-  event_columns,
   invoice_status,
 } from '../../../../model/consts';
+
 
 export function formatDate(timestamp) {
   return moment(timestamp).format('DD-MM-YY')
@@ -64,7 +62,6 @@ export function resolveStatus(invoiceMap) {
 
 export default async (traderId, invoiceId) => loadEvents(traderId)
   .then(events => {
-    const invoiceEvents = chain(events)
-      .filter(event => event.data.invoice_id === invoiceId)
+    const invoiceEvents = filter(events, event => event.data.invoice_id === invoiceId)
     return buildInvoice(invoiceEvents);
   });

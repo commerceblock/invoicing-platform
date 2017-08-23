@@ -36,6 +36,10 @@ const InvoiceType = new GraphQLObjectType({
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: 'invoice attached file ids',
     },
+    contractId: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'The unique identifier of the contract',
+    },
     contractBasePK: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'invoice contract base public key',

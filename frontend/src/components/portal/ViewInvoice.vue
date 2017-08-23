@@ -3,36 +3,87 @@
     <div class="subnav">
       <div class="container">
         <div class="pull-left title">
-          <router-link to="/">Invoices</router-link> / <span class="text-muted">Contract ID {{contractId}}</span>
+          <router-link to="/">Invoices</router-link> / <router-link :to="viewLink">{{ invoiceId }}</router-link> / <span class="text-muted">Contract ID {{ contractId }}</span>
         </div>
       </div>
     </div>
     <div class="input-group form-group">
       <h4>View Invoice</h4>
     </div>
+    <!-- <div class="input-group form-group">
+      <label>Invoice Id</label>
+      <div>
+        <input class="form-control" readonly="readonly" type="text" v-model="invoiceId" />
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <label>Contract Id</label>
+      <div>
+        <input class="form-control" readonly="readonly" type="text" v-model="contractId" />
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <label>Your Reference</label>
+      <div>
+        <input class="form-control" type="text" v-model="this.invoice.externalReferenceId" placeholder="Enter reference id (e.g. ID-000007)" />
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <label>Invoice Amount (BTC)</label>
+      <div>
+        <input class="form-control" type="text" v-model="this.invoice.btcAmount" placeholder="Enter bitcoin amount" />
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <label>Contract Files</label>
+      <div>
+      </div>
+    </div> -->
   </div>
   </section>
 </template>
 
 <script>
+import { isEmpty } from 'lodash'
+import gql from 'graphql-tag'
+
 export default {
   name: 'ViewInvoice',
   props: ['invoiceId', 'showMessage'],
   data: function () {
     return {
-      contractId: null,
-      externalReferenceId: null
+      viewLink: `/portal/invoices/${this.invoiceId}`,
+      contractId: null
     };
   },
-  methods: {
-
-  },
   computed: {
-
+    traderId: function () {
+      return this.$parent.traderId;
+    },
   },
   apollo: {
-
-  },
+    invoice: {
+      query: function () {
+        return gql`query ListInvoice($traderId: String!, $invoiceId: String!) {
+          invoice(traderId: $traderId, invoiceId: $invoiceId) {
+              invoiceId
+              date
+              externalReferenceId
+              btcAmount
+              status
+          }}`;
+      },
+      variables() {
+        return {
+          traderId: this.traderId,
+          invoiceId: this.invoiceId,
+        };
+      },
+      skip() {
+        return isEmpty(this.traderId) || isEmpty(this.invoiceId);
+      }
+    }
+  }
 }
 </script>
 

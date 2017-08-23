@@ -15,11 +15,11 @@
     <div class="row">
       <div class="col-lg-12" v-if="isInvoicesEmpty()">
         <!-- <h4> empty list</h4>
-        <router-link to="/portal/invoices">
-            <button type="button" class="btn btn-success">
-              <span class="fa fa-plus"></span> New Invoice
-            </button>
-          </router-link> -->
+          <router-link to="/portal/invoices">
+              <button type="button" class="btn btn-success">
+                <span class="fa fa-plus"></span> New Invoice
+              </button>
+            </router-link> -->
       </div>
       <div class="col-lg-12" v-else>
         <table class="table" id="table">
@@ -90,13 +90,13 @@ export default {
     isInvoicesEmpty: function () {
       return isEmpty(this.invoices);
     },
-    viewLink: function(invoiceId) {
+    viewLink: function (invoiceId) {
       return `/portal/invoices/${invoiceId}`;
     },
-    redeemLink: function(invoiceId) {
+    redeemLink: function (invoiceId) {
       return `/portal/invoices/${invoiceId}/redeem`;
     },
-    archiveInvoice: function(invoiceId) {
+    archiveInvoice: function (invoiceId) {
       const apolloClient = this.apolloClient;
       return apolloClient
         .mutate({
@@ -122,17 +122,14 @@ export default {
   apollo: {
     invoices: {
       query: function () {
-        if (this.traderId) {
-          return gql`query {
-          invoices(traderId : "${this.traderId}") {
+        return gql`query ListInvoices($traderId: String!) {
+          invoices(traderId : $traderId) {
               invoiceId
               date
               externalReferenceId
               btcAmount
               status
           }}`;
-        }
-        return null;
       },
       variables() {
         return {

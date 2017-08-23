@@ -8,8 +8,8 @@ const profile = {
 
 const invoice = {
   invoiceId: 'foo_invoiceId',
-  title: 'foo_title',
   fileIds: ['foo_fileId'],
+  contractId: 124,
   contractBasePK: 'foo_contractBasePK',
   contractEncryptionKey: 'foo_contractEncryptionKey',
   btcAmount: '1000',
