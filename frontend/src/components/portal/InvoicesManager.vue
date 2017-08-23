@@ -13,7 +13,12 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-12" v-if="isInvoicesEmpty()">
+      <div class="col-lg-12 empty-table" v-if="isInvoicesEmpty()">
+        <clip-loader
+          :color="'#258C42'"
+          :size="'100px'"
+          :radius="'100px'"
+          ></clip-loader>
         <!-- <h4> empty list</h4>
           <router-link to="/portal/invoices">
               <button type="button" class="btn btn-success">
@@ -77,6 +82,7 @@
 
 <script>
 import gql from 'graphql-tag'
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 import {
   isEmpty
 } from 'lodash'
@@ -86,6 +92,9 @@ import {
 
 export default {
   name: 'InvoicesManager',
+  components: {
+    ClipLoader
+  },
   methods: {
     isInvoicesEmpty: function () {
       return isEmpty(this.invoices);
@@ -164,6 +173,10 @@ export default {
       padding: 20px 0;
     }
   }
+}
+
+.empty-table {
+  margin-top: 100px;
 }
 
 .fa-circle {
