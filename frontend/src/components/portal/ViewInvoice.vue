@@ -10,35 +10,40 @@
     <div class="input-group form-group">
       <h4>View Invoice</h4>
     </div>
-    <!-- <div class="input-group form-group">
-      <label>Invoice Id</label>
+    <div class="input-group form-group">
+      <label>Invoice ID</label>
       <div>
         <input class="form-control" readonly="readonly" type="text" v-model="invoiceId" />
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Contract Id</label>
+      <label>Contract ID</label>
       <div>
         <input class="form-control" readonly="readonly" type="text" v-model="contractId" />
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Your Reference</label>
+      <label>Your Reference ID</label>
       <div>
-        <input class="form-control" type="text" v-model="this.invoice.externalReferenceId" placeholder="Enter reference id (e.g. ID-000007)" />
+        <input class="form-control" readonly="readonly" type="text" v-model="externalReferenceId" />
       </div>
     </div>
     <div class="input-group form-group">
       <label>Invoice Amount (BTC)</label>
       <div>
-        <input class="form-control" type="text" v-model="this.invoice.btcAmount" placeholder="Enter bitcoin amount" />
+        <input class="form-control" readonly="readonly" type="text" v-model="btcAmount" />
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Contract Files</label>
+      <label>Invoice - Contract Files</label>
       <div>
       </div>
-    </div> -->
+    </div>
+    <div class="input-group form-group">
+      <label>Receipt - Contract Files</label>
+      <div>
+      </div>
+    </div>
   </div>
   </section>
 </template>
@@ -52,13 +57,21 @@ export default {
   props: ['invoiceId', 'showMessage'],
   data: function () {
     return {
-      viewLink: `/portal/invoices/${this.invoiceId}`,
-      contractId: null
+      viewLink: `/portal/invoices/${this.invoiceId}`
     };
   },
   computed: {
     traderId: function () {
-      return this.$parent.traderId;
+      return this.$parent.traderId
+    },
+    contractId: function () {
+      return this.invoice && this.invoice.contractId
+    },
+    externalReferenceId: function () {
+      return this.invoice && this.invoice.externalReferenceId;
+    },
+    btcAmount: function  () {
+      return this.invoice && this.invoice.btcAmount;
     },
   },
   apollo: {
@@ -68,9 +81,11 @@ export default {
           invoice(traderId: $traderId, invoiceId: $invoiceId) {
               invoiceId
               date
+              contractId
               externalReferenceId
               btcAmount
               status
+              fileIds
           }}`;
       },
       variables() {

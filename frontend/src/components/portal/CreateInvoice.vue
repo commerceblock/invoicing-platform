@@ -18,7 +18,7 @@
       <div>By generating these public keys you are associate the files with the derived addresses.</div>
     </div>
     <div class="input-group form-group">
-      <label>Contract Id</label>
+      <label>Contract ID</label>
       <div>
         <input class="form-control" readonly="readonly" type="text" v-model="contractId" />
       </div>

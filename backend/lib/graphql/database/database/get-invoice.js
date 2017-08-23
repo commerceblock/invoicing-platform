@@ -42,8 +42,9 @@ export function buildInvoice(events) {
       btcAmount: data.btc_amount,
       status,
       fileIds: data.file_ids,
+      contractId: data.contract_id,
       contractBasePK: data.contract_base_pk,
-      contractEncryptionKey: data.contract_encryption_key
+      contractEncryptionKey: data.contract_encryption_key,
     };
   }
   // TODO:: revisit, maybe option instead

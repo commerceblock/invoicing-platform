@@ -1,11 +1,12 @@
 /* @flow */
 
 import {
-  GraphQLObjectType,
+  GraphQLInt,
+  GraphQLID,
   GraphQLString,
   GraphQLList,
+  GraphQLObjectType,
   GraphQLNonNull,
-  GraphQLID,
 } from 'graphql';
 
 const InvoiceType = new GraphQLObjectType({
