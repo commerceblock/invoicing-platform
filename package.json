@@ -111,8 +111,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "^.+\\.(jpg|png|gif|eot|svg|ttf|woff|woff2|mp4|webm)$": "<rootDir>/foundation/jest/fileMock.js",
-      "^.+\\.css$": "<rootDir>/foundation/jest/cssMock.js"
+      "^.+\\.(jpg|png|gif|eot|svg|ttf|woff|woff2|mp4|webm)$": "<rootDir>/deployment/jest/fileMock.js",
+      "^.+\\.css$": "<rootDir>/deployment/jest/cssMock.js"
     }
   }
 }
