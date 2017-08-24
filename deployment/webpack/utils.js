@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.assetsPath = function (_path) {
@@ -8,6 +9,10 @@ exports.assetsPath = function (_path) {
   //   : config.dev.assetsSubDirectory
   const assetsSubDirectory = 'frontend/static';
   return path.posix.join(assetsSubDirectory, _path);
+};
+
+exports.templateContent = function templateContent() {
+  return fs.readFileSync(path.resolve(process.cwd(), 'frontend/index.html')).toString();
 };
 
 exports.cssLoaders = function (options) {
