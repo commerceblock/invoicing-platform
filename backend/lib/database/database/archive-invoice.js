@@ -11,6 +11,7 @@ import {
 } from '../../utils/uuid';
 
 export default async (trader_id, invoice_id) => {
+  // TODO:: check if there is invoice first.
   const event_id = createOrderedId();
   const payload = {
     trader_id,

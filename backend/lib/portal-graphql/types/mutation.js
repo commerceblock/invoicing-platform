@@ -33,7 +33,7 @@ const MutationType = new GraphQLObjectType({
           description: 'The unique identifier of the invoice',
         },
       },
-      resolve: (value, { invoiceId }) => db.archiveInvoice(context.traderId, invoiceId),
+      resolve: (value, { invoiceId }, context) => db.archiveInvoice(context.traderId, invoiceId),
     },
     redeemReceipt: {
       type: InvoiceType,
