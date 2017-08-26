@@ -12,6 +12,9 @@
             </div>
             <div class="modal-body">
               <slot name="body">
+                <div v-if=erroResponse class="alert alert-danger" role="alert">
+                  <p>{{erroResponse}}</p>
+                </div>
                 <div class="login-description">
                   Please ensure you are not being watched or that only people who should have access to the account are present.
                 </div>
@@ -21,9 +24,6 @@
                 <div class="generate-new">
                   <a @click="showMessageTab">
                     <i class="fa fa-refresh"></i> Generate New SEED</a>
-                </div>
-                <div v-if=erroResponse class="text-red">
-                  <p>{{erroResponse}}</p>
                 </div>
               </slot>
             </div>
