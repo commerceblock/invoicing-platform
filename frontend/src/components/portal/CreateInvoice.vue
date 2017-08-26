@@ -37,18 +37,20 @@
     </div>
     <div class="input-group form-group">
       <label>Contract Files</label>
-      <div>
-        <input class="form-control contract-id-input" type="file" multiple="multiple" ref="contractFiles" />
+      <div class="upload-files">
+          <div><i class="fa fa-file-text-o"></i></div>
+          <label class="btn btn-success btn-file">
+              Upload contract files <input class="form-control contract-id-input" type="file" multiple="multiple" ref="contractFiles" style="display: none;" />
+          </label>
+          <div>or drag the content here</div>
       </div>
     </div>
     <div class="ui form">
       <div class="btn-toolbar">
-        <div class="btn-group" role="group">
-          <button class="btn btn-primary btn-lg forms-buttons" v-on:click="reset">Reset</button>
+        <div class="btn-group pull-right" role="group">
+          <button class="btn btn-success btn-lg forms-buttons continue-button" v-on:click="submit" v-bind:disabled="disableSubmit">Continue</button>
         </div>
-        <div class="btn-group" role="group">
-          <button class="btn btn-primary btn-lg forms-buttons" v-on:click="submit" v-bind:disabled="disableSubmit">Continue</button>
-        </div>
+        <div class="btn-group pull-right" role="group"><a href="" v-on:click="reset">Reset</a></div>
       </div>
     </div>
     </div>
@@ -168,7 +170,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .subnav {
   margin-top: 50px;
   background-color: #FFFFFF;
@@ -185,5 +187,36 @@ export default {
 
 .subnav .new-invoice-btn {
   margin-top: -10px;
+}
+
+.upload-files {
+  padding: 40px;
+  width: 400px;
+  text-align: center;
+  border: 2px dotted #979797;
+
+  .fa-file-text-o {
+    font-size: 90px;
+    color: #BFBFBF;
+  }
+
+  .btn-file {
+    margin: 10px 0;
+  }
+
+  button {
+    margin: 15px 0
+  }
+}
+
+.btn-toolbar {
+  border-top: 1px solid #000;
+  width: 400px;
+  padding: 30px 0;
+}
+
+.continue-button {
+  margin-top: -12px;
+  margin-left: 15px;
 }
 </style>

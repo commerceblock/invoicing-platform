@@ -301,7 +301,7 @@ export function computeCreds(mnemonic) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: #f9f9f9;
   display: table;
   transition: opacity .3s ease;
 }
