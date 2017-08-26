@@ -13,12 +13,18 @@ import InvoicesManager from '../components/portal/InvoicesManager.vue';
 import CreateInvoice  from '../components/portal/CreateInvoice.vue';
 import ViewInvoice from '../components/portal/ViewInvoice.vue'
 import RedeemInvoice from '../components/portal/redeem-invoice/RedeemInvoice.vue'
+import Login from '../components/portal/Login.vue'
 
 Vue.use(Router);
 
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+    },
     {
       path: '/',
       component: Portal,

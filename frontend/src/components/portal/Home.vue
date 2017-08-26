@@ -1,7 +1,5 @@
 <template>
   <div class="wrapper">
-    <modal v-if="showEntranceModal" @close="showEntranceModal = false" />
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -40,7 +38,6 @@
 
 <script>
 import gql from 'graphql-tag'
-import Modal from './EntranceModal.vue'
 import {
   isEmpty,
   each,
@@ -51,12 +48,8 @@ import {
 
 export default {
   name: 'home',
-  components: {
-    Modal
-  },
   data: function () {
     return {
-      showEntranceModal: true,
       traderId: null
     }
   },
@@ -69,7 +62,6 @@ export default {
         }
       })
       this.traderId = null;
-      this.showEntranceModal = true;
     }
   }
 }
