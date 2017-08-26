@@ -1,5 +1,6 @@
 <template>
-  <section class="content">
+  <section class="content wrapper">
+    <modal v-if="showMessageEnabled" @close="showMessageEnabled = false" />
     <div class="subnav">
       <div class="container">
         <div class="pull-left title">
@@ -51,19 +52,20 @@
 <script>
 import { isEmpty } from 'lodash'
 import gql from 'graphql-tag'
+import Modal from './ContractVerifiedModal.vue'
 
 export default {
   name: 'ViewInvoice',
   props: ['invoiceId', 'showMessage'],
+  components: {
+    Modal
+  },
   data: function () {
     return {
-      viewLink: `/portal/invoices/${this.invoiceId}`
+      showMessageEnabled: !!this.showMessage
     };
   },
   computed: {
-    traderId: function () {
-      return this.$parent.traderId
-    },
     contractId: function () {
       return this.invoice && this.invoice.contractId
     },
@@ -77,8 +79,8 @@ export default {
   apollo: {
     invoice: {
       query: function () {
-        return gql`query ListInvoice($traderId: String!, $invoiceId: String!) {
-          invoice(traderId: $traderId, invoiceId: $invoiceId) {
+        return gql`query ListInvoice($invoiceId: String!) {
+          invoice(invoiceId: $invoiceId) {
               invoiceId
               date
               contractId
@@ -90,12 +92,11 @@ export default {
       },
       variables() {
         return {
-          traderId: this.traderId,
           invoiceId: this.invoiceId,
         };
       },
       skip() {
-        return isEmpty(this.traderId) || isEmpty(this.invoiceId);
+        return isEmpty(this.invoiceId);
       }
     }
   }

@@ -186,7 +186,7 @@ export default {
     },
     login: function() {
       // TODO:: toggle progress bar
-      const creds = computeAccessKey(this.mnemonic)
+      const creds = computeCreds(this.mnemonic)
       if (creds !== null) {
         // access query
         this.errorResponse = null;
@@ -313,7 +313,7 @@ export function computeCreds(mnemonic) {
 
 .modal-container {
   width: 650px;
-  height: 550px;
+  height: 500px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
