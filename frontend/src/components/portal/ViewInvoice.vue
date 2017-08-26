@@ -61,9 +61,6 @@ export default {
     };
   },
   computed: {
-    traderId: function () {
-      return this.$parent.traderId
-    },
     contractId: function () {
       return this.invoice && this.invoice.contractId
     },
@@ -77,8 +74,8 @@ export default {
   apollo: {
     invoice: {
       query: function () {
-        return gql`query ListInvoice($traderId: String!, $invoiceId: String!) {
-          invoice(traderId: $traderId, invoiceId: $invoiceId) {
+        return gql`query ListInvoice($invoiceId: String!) {
+          invoice(invoiceId: $invoiceId) {
               invoiceId
               date
               contractId
@@ -90,12 +87,11 @@ export default {
       },
       variables() {
         return {
-          traderId: this.traderId,
           invoiceId: this.invoiceId,
         };
       },
       skip() {
-        return isEmpty(this.traderId) || isEmpty(this.invoiceId);
+        return isEmpty(this.invoiceId);
       }
     }
   }

@@ -110,7 +110,6 @@ export default {
           .mutate({
             mutation: gql`mutation {
             createInvoice(invoice: {
-              traderId: "${traderId}",
               contractId: ${contractId},
               fileIds: ${JSON.stringify(fileIds)},
               btcAmount: "${btcAmount}",
