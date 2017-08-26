@@ -5,7 +5,7 @@
         <div class="modal-container">
           <div class="modal-header">
             <slot name="header">
-              <span class="login-title">Login</span>
+              <span class="login-title">Sign in</span>
               <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
             </slot>
           </div>
@@ -27,7 +27,7 @@
           </div>
           <div class="modal-footer">
             <slot name="footer">
-              <button class="btn btn-success btn-lg btn-block" type="submit" @click="signin">Continue to verification</button>
+              <button class="btn btn-success btn-lg btn-block" type="submit" @click="signin">Sign in</button>
             </slot>
           </div>
         </div>
