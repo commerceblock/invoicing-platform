@@ -68,7 +68,9 @@ export default {
   },
   mounted: function () {
     // TODO: we should use vuex as a proper store.
-    this.traderId = getCreds().traderId;
+    if (getCreds()) {
+      this.traderId = getCreds().traderId;
+    }
   }
 }
 </script>

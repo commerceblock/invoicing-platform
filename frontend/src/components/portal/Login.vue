@@ -12,18 +12,18 @@
             </div>
             <div class="modal-body">
               <slot name="body">
-                <div v-if=erroResponse class="alert alert-danger" role="alert">
-                  <p>{{erroResponse}}</p>
+                <div v-if=errorResponse class="alert alert-danger" role="alert">
+                  <p>{{errorResponse}}</p>
                 </div>
                 <div class="login-description">
                   Please ensure you are not being watched or that only people who should have access to the account are present.
                 </div>
                 <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
-                  <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Log in with your Seed or generate a new SEED with the button below" v-model="mnemonic" rows="3" />
+                  <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Log in with your Seed or generate a new Seed with the button below" v-model="mnemonic" rows="3" />
                 </div>
                 <div class="generate-new">
                   <a @click="showMessageTab">
-                    <i class="fa fa-refresh"></i> Generate New SEED</a>
+                    <i class="fa fa-refresh"></i> Generate New Seed</a>
                 </div>
               </slot>
             </div>
@@ -44,9 +44,9 @@
               <slot name="body">
                 <div>Important Notice!</div>
                 <p>1. With CommerceBlock there are no traditional login accounts.</p>
-                <p>All information is encrypted and can only be accessed via a unique 12 words SEED, simply a series of random words, which acts as both your username and password.</p>
-                <p>2. This SEED is extremly important and must be kept in a secure place. It is advisable to backup your SEED in an equally secure place.</p>
-                <p>3. The only way to retreive your information is by using the SEED, for security and privacy purposes, CommerceBlock does not have access to any information and will never be able to retreive associated data if you lose your SEED.</p>
+                <p>All information is encrypted and can only be accessed via a unique 12 words Seed, simply a series of random words, which acts as both your username and password.</p>
+                <p>2. This Seed is extremly important and must be kept in a secure place. It is advisable to backup your Seed in an equally secure place.</p>
+                <p>3. The only way to retreive your information is by using the Seed, for security and privacy purposes, CommerceBlock does not have access to any information and will never be able to retreive associated data if you lose your Seed.</p>
               </slot>
             </div>
             <div class="modal-footer">
@@ -67,11 +67,11 @@
                 <div class="seed-description">
                   Please ensure you are not being watched or that only people who should have access to the account are present.
                 </div>
-                <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
+                <div>
                   <textarea class="form-control span6 prvKey" name="mnemonic" readonly="readonly" v-model="newMnemonic" rows="3" />
                 </div>
                 <div class="write-down-msg">
-                  Make sure you write down your SEED before you continue
+                  Make sure you write down your Seed before you continue
                 </div>
               </slot>
             </div>
@@ -109,17 +109,22 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import 'whatwg-fetch';
+import httpStatus from 'http-status-codes';
+import gql from 'graphql-tag';
+import Mnemonic from 'bitcore-mnemonic';
 import {
-  isEmpty
+  isEmpty,
 } from 'lodash'
 import {
   computeAccessKey,
-  isValid
+  isValid,
 } from '../../lib/credentials'
 import {
-  setCreds
+  setCreds,
+  setAccessToken,
 } from '../../lib/vault'
+import endpoints from '../../lib/endpoints'
 
 export default {
   name: 'Login',
@@ -127,7 +132,7 @@ export default {
     return {
       mnemonic: null,
       newMnemonic: null,
-      erroResponse: null,
+      errorResponse: null,
       showLogin: true,
       showMessage: false,
       showSeed: false,
@@ -142,10 +147,15 @@ export default {
       this.showMessage = true;
     },
     showSeedTab: function() {
+      this.generateNewMnemonic();
       this.showLogin = false;
       this.showMessage = false;
       this.showVerification = false;
       this.showSeed = true;
+    },
+    generateNewMnemonic: function () {
+      const code = new Mnemonic();
+      this.newMnemonic = code.toString();
     },
     showVerificationTab: function() {
       this.showLogin = false;
@@ -155,37 +165,110 @@ export default {
     },
     login: function() {
       // TODO:: toggle progress bar
-      if (this.creds !== null) {
+      const creds = computeAccessKey(this.mnemonic)
+      if (creds !== null) {
         // access query
-        this.erroResponse = null;
-        setCreds(this.creds);
-
-        // TODO log in request or show error
-        this.$router.push('/');
+        this.errorResponse = null;
+        const data = {
+          trader_id: creds.traderId,
+          trader_signature: creds.traderSignature
+        };
+        const that = this;
+        fetch(endpoints.portalLogin(), {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json"
+          },
+        }).then(function(response) {
+          if (response.status === 201) {
+            return response.json();
+          } else {
+            that.errorResponse = "Unknown Seed, please verify your input.";
+          }
+        }, function(error) {
+          console.log(error);
+          that.errorResponse = "Failed to connect to server, please try again.";
+        }).then(data => {
+          if (data) {
+            setCreds(that.creds);
+            setAccessToken(data.access_token_id);
+            that.$router.push('/');
+          }
+        });
       } else if (isEmpty(this.mnemonic)) {
         // empty phrase
-        this.erroResponse = 'seed is empty';
+        this.errorResponse = 'seed is empty';
       } else if (!isValid(this.mnemonic)) {
         // check phrase
-        this.erroResponse = 'seed is not valid, seed must be 12 words.';
+        this.errorResponse = 'seed is not valid, seed must be 12 words.';
       }
     },
-    register: function () {
-
+    register: function() {
+      const creds = computeAccessKey(this.newMnemonic)
+      const request = {
+        trader_id: creds.traderId,
+        trader_signature: creds.traderSignature
+      };
+      const that = this;
+      fetch(endpoints.portalSignup(), {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+          "Content-Type": "application/json"
+        },
+      }).then(function(response) {
+        if (response.status === 201) {
+          return response.json();
+        } else {
+          // TODO handle error
+        }
+      }, function(error) {
+        // TODO handle error
+        console.log(error)
+      }).then((data) => {
+        if (data) {
+          return fetch(endpoints.portalLogin(), {
+            method: "POST",
+            body: JSON.stringify(request),
+            headers: {
+              "Content-Type": "application/json"
+            },
+          });
+        }
+      }).then(function(response) {
+        if (response) {
+          if (response.status === 201) {
+            return response.json();
+          } else {
+            // TODO handle error
+          }
+        }
+      }, function(error) {
+        // TODO handle error
+        console.log(error)
+      }).then(data => {
+        if (data) {
+          setCreds(creds);
+          setAccessToken(data.access_token_id);
+          this.$router.push('/');
+        }
+      });
     }
   },
   computed: {
     isValid: function() {
       return this.mnemonic && isValid(this.mnemonic.trim())
     },
-    creds: function() {
-      if (this.mnemonic && isValid(this.mnemonic.trim())) {
-        return computeAccessKey(this.mnemonic.trim());
-      } else {
-        return null;
-      }
-    },
   },
+}
+
+export function computeCreds(mnemonic) {
+  if (mnemonic && isValid(mnemonic.trim())) {
+    return computeAccessKey(this.mnemonic.trim());
+  } else {
+    return null;
+  }
 }
 </script>
 
@@ -209,7 +292,7 @@ export default {
 
 .modal-container {
   width: 650px;
-  height: 440px;
+  height: 550px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -244,8 +327,6 @@ export default {
   text-align: center;
   margin-top: 40px;
 }
-
-
 
 
 /*

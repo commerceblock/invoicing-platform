@@ -1,10 +1,10 @@
 
 // imports
-import { Schema } from 'dynamoose'
-import dynamoose from '../lib/dynamoose'
+import { Schema } from 'dynamoose';
 
 // local imports
-import { storage_columns } from './consts'
+import dynamoose from '../lib/clients/dynamoose';
+import { storage_columns } from './consts';
 
 // schema defintion
 const FileSchema = new Schema({

@@ -20,7 +20,7 @@ export const sha256_hash = 'sha256';
 export const default_encoding = utf_8_encoding;
 
 // event columns
-export const event_columns = {
+export const columns = {
   // general
   event_id: 'event_id',
   type: 'type',
@@ -29,6 +29,7 @@ export const event_columns = {
 
   // trade
   trader_id: 'trader_id',
+  trader_signature: 'trader_signature',
   invoice_id: 'invoice_id',
   file_ids: 'file_ids',
   contract_id: 'contract_id',
@@ -36,12 +37,13 @@ export const event_columns = {
   contract_encryption_key: 'contract_encryption_key',
   btc_amount: 'btc_amount',
   external_reference_id: 'external_reference_id',
+  access_token_id: 'access_token_id',
   root_contract_base_pk_signature: 'root_contract_base_pk_signature',
 };
 
 // event types
 export const event_type = {
-  profile_created: 'profile_created',
+  account_created: 'account_created',
   invoice_created: 'invoice_created',
   receipt_redeemed: 'receipt_redeemed',
   invoice_link_generated: 'invoice_link_generated',

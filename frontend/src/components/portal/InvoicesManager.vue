@@ -87,7 +87,8 @@ import {
   isEmpty
 } from 'lodash'
 import {
-  getCreds
+  getCreds,
+  getAccessToken,
 } from '../../lib/vault'
 
 export default {
@@ -110,7 +111,7 @@ export default {
       return apolloClient
         .mutate({
           mutation: gql`mutation {
-          archiveInvoice(traderId: "${this.traderId}", invoiceId: "${invoiceId}") {
+          archiveInvoice(invoiceId: "${invoiceId}") {
             invoiceId
             status
           }
@@ -134,8 +135,8 @@ export default {
   apollo: {
     invoices: {
       query: function () {
-        return gql`query ListInvoices($traderId: String!) {
-          invoices(traderId : $traderId) {
+        return gql`query {
+          invoices {
               invoiceId
               date
               externalReferenceId
@@ -143,13 +144,8 @@ export default {
               status
           }}`;
       },
-      variables() {
-        return {
-          traderId: this.traderId
-        };
-      },
       skip() {
-        return isEmpty(this.traderId);
+        return isEmpty(getAccessToken());
       },
       pollInterval: 5000,
     }

@@ -19,21 +19,6 @@
 <script>
 export default {
   name: 'InvoiceHeader',
-  methods: {
-    test: function() {
-      console.log('first')
-      console.log(this.$parent)
-
-      console.log('second')
-      console.log(this.$parent.$parent)
-
-      console.log('third')
-      console.log(this.$parent.$parent.$parent)
-
-      console.log('forth')
-      console.log(this.$parent.$parent.$parent.$parent)
-    }
-  },
   computed: {
     grandParent: function () {
       // TODO: find a better way to do this.
