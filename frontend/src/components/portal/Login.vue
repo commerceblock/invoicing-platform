@@ -16,7 +16,7 @@
                   Please ensure you are not being watched or that only people who should have access to the account are present.
                 </div>
                 <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
-                  <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Generate a new SEED with the button below" v-model="mnemonic" rows="3" />
+                  <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Log in with your Seed or generate a new SEED with the button below" v-model="mnemonic" rows="3" />
                 </div>
                 <div class="generate-new">
                   <a @click="showMessageTab">
@@ -156,14 +156,10 @@ export default {
       if (this.creds !== null) {
         // access query
         this.erroResponse = null;
-        // if (!this.profile.traderId) {
-        //   this.erroResponse = 'Unknown seed, please register or check your seed.';
-        // } else {
         setCreds(this.creds);
-        // workaround: update traderId explicility
-        this.$parent.traderId = this.creds.traderId
-        this.close();
-        // }
+
+        // TODO log in request or show error
+        this.$router.push('/');
       } else if (isEmpty(this.mnemonic)) {
         // empty phrase
         this.erroResponse = 'seed is empty';
@@ -185,28 +181,6 @@ export default {
         return computeAccessKey(this.mnemonic.trim());
       } else {
         return null;
-      }
-    },
-  },
-  apollo: {
-    profile: {
-      query: function() {
-        if (this.creds) {
-          const traderId = this.creds.traderId;
-          return gql`query {
-          profile(traderId : "${traderId}") {
-              traderId
-          }}`;
-        }
-        return null;
-      },
-      variables() {
-        return {
-          creds: this.creds
-        }
-      },
-      skip() {
-        return this.creds === null;
       }
     },
   },
