@@ -5,12 +5,17 @@
         <div class="modal-container">
           <div class="modal-header">
             <slot name="header">
+              <span class="title">Contract Verified</span>
               <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
             </slot>
           </div>
           <div class="modal-body">
             <slot name="body">
-
+              <p>Now that the contract has been verified and encrypted all you need to do is to send the invoice link to the other party.</p>
+              <div>
+                <span><input class="form-control" readonly="readonly" type="text" v-model="invoiceId" /></span>
+                <span><a @click="copyLink"><i class="fa fa-files-o"></i> Copy Link</a></span>
+              </div>
             </slot>
           </div>
           <div class="modal-footer">
@@ -37,6 +42,9 @@ export default {
     close: function (event) {
       this.$emit('close');
     },
+    copyLink: function() {
+      // TODO
+    }
   },
   computed: {
 
@@ -111,5 +119,14 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.title {
+  color: #141414;
+  font-family: "Open Sans";
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
 }
 </style>
