@@ -70,7 +70,7 @@
                 <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
                   <textarea class="form-control span6 prvKey" name="mnemonic" readonly="readonly" v-model="newMnemonic" rows="3" />
                 </div>
-                <div>
+                <div class="write-down-msg">
                   Make sure you write down your SEED before you continue
                 </div>
               </slot>
@@ -234,6 +234,14 @@ export default {
   text-align: center;
 }
 
+.write-down-msg {
+  color: #141414;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 40px;
+}
 
 
 
@@ -295,12 +303,12 @@ textarea {
   text-align: center;
 }
 
-.login-description .seed-description {
+.login-description, .seed-description {
   color: #141414;
   font-family: "Open Sans";
   font-size: 14px;
   line-height: 19px;
-  margin: 15px 0 40px 0;
+  margin: 5px 0 30px 0;
 }
 
 .generate-new {
