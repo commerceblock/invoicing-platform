@@ -5,17 +5,20 @@
         <div class="modal-container">
           <div class="modal-header">
             <slot name="header">
+              <span class="login-title">Login</span>
               <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
             </slot>
           </div>
           <div class="modal-body">
             <slot name="body">
-              <p>Welcome!</p>
-              <div class="input-group" v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
-                <span class="input-group-addon">
-                  <i class="fa fa-lock"></i>
-                </span>
-                <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Enter your 12 words seed phrase" v-model="mnemonic" rows="3" />
+              <div class="login-description">
+                Please ensure you are not being watched or that only people who should have access to the account are present.
+              </div>
+              <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
+                <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Generate a new SEED with the button below" v-model="mnemonic" rows="3" />
+              </div>
+              <div class="generate-new">
+                <a href=""><i class="fa fa-refresh"></i> Generate New SEED</a>
               </div>
               <div v-if=erroResponse class="text-red">
                 <p>{{erroResponse}}</p>
@@ -24,9 +27,7 @@
           </div>
           <div class="modal-footer">
             <slot name="footer">
-              <div class="text-center col-md-4 col-sm-offset-4">
-                <button class="btn btn-success btn-lg" type="submit" @click="signin">Sign in</button>
-              </div>
+              <button class="btn btn-success btn-lg btn-block" type="submit" @click="signin">Continue to verification</button>
             </slot>
           </div>
         </div>
@@ -162,6 +163,10 @@ export default {
   float: right;
 }
 
+.modal-header {
+  text-align: center;
+}
+
 
 
 
@@ -212,4 +217,29 @@ textarea {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
   outline: 0 none;
 }
+
+.login-title {
+	color: #141414;
+	font-family: "Open Sans";
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 24px;
+	text-align: center;
+}
+
+.login-description {
+  color: #141414;
+	font-family: "Open Sans";
+	font-size: 14px;
+	line-height: 19px;
+  margin: 15px 0 40px 0;
+}
+
+.generate-new {
+  margin-top: 10px;
+}
+.generate-new a{
+  color: #258C42;
+}
+
 </style>
