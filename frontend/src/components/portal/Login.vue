@@ -88,16 +88,37 @@
                 <span class="tab-title">Seed Verification</span>
               </slot>
             </div>
-            <div class="modal-body">
+            <div class="modal-body small">
               <slot name="body">
                 <div class="seed-description">
                   Please ensure you are not being watched or that only people who should have access to the account are present.
+                </div>
+                <div class="seed-box">
+                  <div class="row">
+                    <div class="col-xs-2"><div class="seed-item">round</div></div>
+                    <div class="col-xs-2"><div class="seed-item">stadium</div></div>
+                    <div class="col-xs-2"><div class="seed-item">eagle</div></div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2"><div class="seed-item">round</div></div>
+                  <div class="col-xs-2"><div class="seed-item">stadium</div></div>
+                  <div class="col-xs-2"><div class="seed-item">eagle</div></div>
+                  <div class="col-xs-2"><div class="seed-item">kid</div></div>
+                  <div class="col-xs-2"><div class="seed-item">rubber</div></div>
+                  <div class="col-xs-2"><div class="seed-item">chunk</div></div>
+                  <div class="col-xs-2"><div class="seed-item">agent</div></div>
+                  <div class="col-xs-2"><div class="seed-item">marble</div></div>
+                  <div class="col-xs-2"><div class="seed-item">extra</div></div>
+                  <div class="col-xs-2"><div class="seed-item">square</div></div>
+                  <div class="col-xs-2"><div class="seed-item">stereo</div></div>
+                  <div class="col-xs-2"><div class="seed-item">busy</div></div>
                 </div>
               </slot>
             </div>
             <div class="modal-footer">
               <slot name="footer">
-                <button class="btn btn-success btn-lg btn-block" type="submit" @click="register">Register</button>
+                <button class="btn btn-success btn-lg btn-block" type="submit" @click="register">Log In</button>
               </slot>
             </div>
           </div>
@@ -305,12 +326,20 @@ textarea {
   text-align: center;
 }
 
-.login-description, .seed-description {
+.login-description {
   color: #141414;
   font-family: "Open Sans";
   font-size: 14px;
   line-height: 19px;
   margin: 5px 0 30px 0;
+}
+
+.seed-description {
+  color: #141414;
+  font-family: "Open Sans";
+  font-size: 14px;
+  line-height: 19px;
+  margin: -20px 0 15px 0;
 }
 
 .generate-new {
@@ -319,5 +348,26 @@ textarea {
 
 .generate-new a {
   color: #258C42;
+}
+
+.modal-body.small {
+  margin: 10px 0;
+}
+
+.seed-box {
+  height: 80px;
+  margin-bottom: 20px;
+  border: 1px solid #979797;
+  padding: 10px;
+}
+
+.seed-item {
+  background-color: #258C42;
+  color: #fff;
+  padding: 3px;
+  border-radius: 2px;
+  text-align: center;
+  margin-bottom: 20px;
+  cursor: pointer;
 }
 </style>
