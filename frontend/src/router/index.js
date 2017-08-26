@@ -2,18 +2,17 @@
 // imports
 import Vue from 'vue';
 import Router from 'vue-router';
-import {
-  has
-} from 'lodash'
+import { has } from 'lodash';
 
 // local imports
 import Portal from '../components/portal/Home.vue';
 import InvoiceSummary from '../components/invoice-summary/InvoiceSummary.vue';
 import InvoicesManager from '../components/portal/InvoicesManager.vue';
 import CreateInvoice  from '../components/portal/CreateInvoice.vue';
-import ViewInvoice from '../components/portal/ViewInvoice.vue'
-import RedeemInvoice from '../components/portal/redeem-invoice/RedeemInvoice.vue'
-import Login from '../components/portal/Login.vue'
+import ViewInvoice from '../components/portal/ViewInvoice.vue';
+import RedeemInvoice from '../components/portal/redeem-invoice/RedeemInvoice.vue';
+import Login from '../components/portal/Login.vue';
+import { requireAuth } from './auth';
 
 Vue.use(Router);
 
@@ -28,6 +27,7 @@ export default new Router({
     {
       path: '/',
       component: Portal,
+      beforeEnter: requireAuth,
       children: [
         {
           path: '/',
