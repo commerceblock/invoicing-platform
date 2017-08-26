@@ -90,35 +90,30 @@
             </div>
             <div class="modal-body small">
               <slot name="body">
+                <div v-if=verificationSeedError class="alert alert-danger" role="alert">
+                  <p>{{verificationSeedError}}</p>
+                </div>
                 <div class="seed-description">
                   Please ensure you are not being watched or that only people who should have access to the account are present.
                 </div>
                 <div class="seed-box">
                   <div class="row">
-                    <div class="col-xs-2"><div class="seed-item">round</div></div>
-                    <div class="col-xs-2"><div class="seed-item">stadium</div></div>
-                    <div class="col-xs-2"><div class="seed-item">eagle</div></div>
+                    <div v-for="item in selectedWords" class="col-xs-2">
+                      <div class="seed-item" @click="deselectWord(item.index)">{{ item.word }}</div>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-2"><div class="seed-item">round</div></div>
-                  <div class="col-xs-2"><div class="seed-item">stadium</div></div>
-                  <div class="col-xs-2"><div class="seed-item">eagle</div></div>
-                  <div class="col-xs-2"><div class="seed-item">kid</div></div>
-                  <div class="col-xs-2"><div class="seed-item">rubber</div></div>
-                  <div class="col-xs-2"><div class="seed-item">chunk</div></div>
-                  <div class="col-xs-2"><div class="seed-item">agent</div></div>
-                  <div class="col-xs-2"><div class="seed-item">marble</div></div>
-                  <div class="col-xs-2"><div class="seed-item">extra</div></div>
-                  <div class="col-xs-2"><div class="seed-item">square</div></div>
-                  <div class="col-xs-2"><div class="seed-item">stereo</div></div>
-                  <div class="col-xs-2"><div class="seed-item">busy</div></div>
+                  <div v-for="item in seedWords" class="col-xs-2">
+                    <div class="empty-item" v-if="item.selected"><span></span></div>
+                    <div class="seed-item" v-if="!item.selected" @click="selectWord(item.index)">{{ item.word }}</div>
+                  </div>
                 </div>
               </slot>
             </div>
             <div class="modal-footer">
               <slot name="footer">
-                <button class="btn btn-success btn-lg btn-block" type="submit" @click="register">Log In</button>
+                <button class="btn btn-success btn-lg btn-block" type="submit" @click="register" :disabled="selectedWords.length !== 12">Register</button>
               </slot>
             </div>
           </div>
@@ -136,6 +131,9 @@ import gql from 'graphql-tag';
 import Mnemonic from 'bitcore-mnemonic';
 import {
   isEmpty,
+  shuffle,
+  find,
+  remove,
 } from 'lodash'
 import {
   computeAccessKey,
@@ -158,6 +156,9 @@ export default {
       showMessage: false,
       showSeed: false,
       showVerification: false,
+      seedWords: [],
+      selectedWords: [],
+      verificationSeedError: null,
     }
   },
   methods: {
@@ -174,15 +175,31 @@ export default {
       this.showVerification = false;
       this.showSeed = true;
     },
-    generateNewMnemonic: function () {
-      const code = new Mnemonic();
-      this.newMnemonic = code.toString();
+    generateNewMnemonic: function() {
+      const code = new Mnemonic().toString();
+      this.newMnemonic = code;
+      const words = shuffle(code.split(' '));
+      this.seedWords = words.map((word, index) => ({
+        index,
+        word,
+        selected: false
+      }));
     },
     showVerificationTab: function() {
       this.showLogin = false;
       this.showMessage = false;
       this.showSeed = false;
       this.showVerification = true;
+    },
+    selectWord: function(index) {
+      const selectedWord = find(this.seedWords, { index });
+      this.selectedWords.push(selectedWord);
+      selectedWord.selected = true;
+    },
+    deselectWord: function(index) {
+      remove(this.selectedWords, { index });
+      const selectedWord = find(this.seedWords, { index });
+      selectedWord.selected = false;
     },
     login: function() {
       // TODO:: toggle progress bar
@@ -225,7 +242,16 @@ export default {
         this.errorResponse = 'seed is not valid, seed must be 12 words.';
       }
     },
+    isSeedMatch: function () {
+      return this.selectedWords.map(item => item.word).join(' ') === this.newMnemonic;
+    },
     register: function() {
+      this.verificationSeedError = null;
+      const result = this.isSeedMatch();
+      if (!result) {
+        this.verificationSeedError = 'Seed does not match';
+        return;
+      }
       const creds = computeAccessKey(this.newMnemonic)
       const request = {
         trader_id: creds.traderId,
@@ -350,6 +376,7 @@ export function computeCreds(mnemonic) {
 }
 
 
+
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled
@@ -450,5 +477,12 @@ textarea {
   text-align: center;
   margin-bottom: 20px;
   cursor: pointer;
+}
+
+.empty-item {
+  padding: 3px;
+  border-radius: 2px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>
