@@ -14,11 +14,11 @@
     </div>
     <div class="row">
       <div class="col-lg-12 empty-table" v-if="isInvoicesEmpty()">
-        <clip-loader
+        <!-- <clip-loader
           :color="'#258C42'"
           :size="'100px'"
           :radius="'100px'"
-          ></clip-loader>
+          ></clip-loader> -->
         <!-- <h4> empty list</h4>
           <router-link to="/portal/invoices">
               <button type="button" class="btn btn-success">
