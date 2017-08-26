@@ -3,13 +3,14 @@ service: cb-invoices
 frameworkVersion: ">=1.1.0 <2.0.0"
 
 plugins:
+  - serverless-kms-secrets
   - serverless-dynamodb-local
   - serverless-offline
-  - serverless-kms-secrets
+  - serverless-s3-local
 
 provider:
   name: aws
-  stage: prod001
+  stage: prod003
   region: eu-west-2
   runtime: nodejs6.10
   memorySize: 256
@@ -23,11 +24,10 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:Query
-        - dynamodb:Scan
         - dynamodb:GetItem
+        - dynamodb:BatchGetItem
         - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
+        - dynamodb:BatchWriteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}-${self:custom.stage}-*"
     - Effect: Allow
       Action:
@@ -47,6 +47,9 @@ custom:
     storage:
       read: 50
       write: 10
+    accessTokens:
+      read: 50
+      write: 10
   dynamodb:
     start:
       port: 8000
@@ -58,34 +61,44 @@ custom:
         sources:
           - table: ${self:provider.environment.CB_ENV_NAME}-events
             sources: [./data/events.json]
+  s3:
+    port: 8001
+    directory: /tmp
+    cors: false
   serverless-offline:
     port: 9000
 
 functions:
-  # storage service
 
-  ### API functions
-  storage-api-put:
-    handler: lambda/storage-api-put.put
+  portal-signup-api:
+    handler: lambda/portal-signup-api.post
     events:
       - http:
-          path: /v1.0/storage/{file_id}
-          method: put
+          path: /portal/v1.0/signup
+          method: post
           cors: true
 
-  storage-api-get:
-    handler: lambda/storage-api-get.get
+  portal-login-api:
+    handler: lambda/portal-login-api.post
     events:
       - http:
-          path: /v1.0/storage/{file_id}
-          method: get
+          path: /portal/v1.0/login
+          method: post
           cors: true
 
-  graphql-api:
-    handler: lambda/graphql-api.post
+  portal-graphql-api:
+    handler: lambda/portal-graphql-api.post
     events:
     - http:
-        path: /v1.0/graphql
+        path: /portal/v1.0/graphql
+        method: post
+        cors: true
+
+  invoices-graphql-api:
+    handler: lambda/invoices-graphql-api.post
+    events:
+    - http:
+        path: /invoices/v1.0/graphql
         method: post
         cors: true
 
@@ -146,8 +159,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.dynamodbThroughput.storage.read}
           WriteCapacityUnits: ${self:custom.dynamodbThroughput.storage.write}
-        StreamSpecification:
-          StreamViewType: NEW_IMAGE
     EventsDynamoDbTable:
       Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain
@@ -172,3 +183,19 @@ resources:
           WriteCapacityUnits: ${self:custom.dynamodbThroughput.events.write}
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+    AccessTokensDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.CB_ENV_NAME}-access-tokens
+        AttributeDefinitions:
+          -
+            AttributeName: access_token_id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: access_token_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.dynamodbThroughput.accessTokens.read}
+          WriteCapacityUnits: ${self:custom.dynamodbThroughput.accessTokens.write}

@@ -9,7 +9,7 @@
 
 ### Application Domain Definitions ###
 - trader_id: sha256 hash of the following public key in base58 format: `m/0'/0'/1' (hardened deviation)`.
-- master_contract_base: extend public key `m/200'/0'`
+- trader_signature: sha256 hash of the following public key in base58 format `m/200'/0'/1'`.
 - invoice_id: a universally unique identifier (UUID), a 128-bit number in base58 format.
 - file_id:  a universally unique identifier (UUID), a 128-bit number in base58 format.
 - contract_number: a BIP32 node index (valid range: 0 - 2^31-1)

@@ -10,15 +10,16 @@ export const coin_type = 0; // btc livenet
 
 export const root_contract_key_path = `m/${purpose}'/${coin_type}'`;
 
-export const trader_id_path = `m/0'/0'/1`;
+export const trader_id_path = `m/0'/0'/1'`;
+export const trader_signature_path = `m/${purpose}'/${coin_type}'/0'/0'/1'`;
 
 export function computeTraderId(hdPrivateKey) {
   const publicKey = hdPrivateKey.derive(trader_id_path).hdPublicKey.toString();
   return sha256Base58(publicKey);
 }
 
-export function computeRootContractBasePKSignature(hdPrivateKey) {
-  const publicKey = hdPrivateKey.derive(root_contract_key_path).hdPublicKey.toString();
+export function computeTraderSignature(hdPrivateKey) {
+  const publicKey = hdPrivateKey.derive(trader_signature_path).hdPublicKey.toString();
   return sha256Base58(publicKey);
 }
 
@@ -30,10 +31,10 @@ export function computeAccessKey(mnemonic) {
   const code = new Mnemonic(mnemonic);
   const masterPrivateKey = code.toHDPrivateKey();
   const traderId = computeTraderId(masterPrivateKey);
-  const rootContractBasePKSignature = computeRootContractBasePKSignature(masterPrivateKey);
+  const traderSignature = computeTraderSignature(masterPrivateKey);
   return {
     traderId,
-    rootContractBasePKSignature
+    traderSignature
   };
 }
 

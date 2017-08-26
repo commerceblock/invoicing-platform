@@ -7,8 +7,6 @@ import bodyParser from 'body-parser';
 
 // local imports
 import webpackConfig from '../webpack/webpack.dev';
-import graphQLHandler from '../../backend/lib/graphql';
-
 
 // default port where dev server listens for incoming traffic
 const DEFAULT_APP_PORT = 3000;
@@ -53,15 +51,6 @@ app.use(hotMiddleware)
 
 // serve pure static assets
 app.use('/static', express.static('./frontend/static'))
-
-app.post('/graphql', (req, res) => {
-  graphQLHandler(req.body.query, req.body.variables)
-    .then(result => {
-      res.setHeader('Content-Type', 'application/json; charset=utf-8');
-      res.end(JSON.stringify(result, null, 2));
-    })
-    .catch(err => res.end(err));
-});
 
 module.exports = app.listen(port, function (err) {
   if (err) {

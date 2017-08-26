@@ -1,28 +1,28 @@
 
 // imports
 import { Schema } from 'dynamoose'
-import dynamoose from '../lib/dynamoose'
 
 // local imports
-import { event_columns } from './consts'
+import dynamoose from '../lib/clients/dynamoose';
+import { columns } from './consts'
 
 // schema defintion
 const EventSchema = new Schema({
-  [event_columns.trader_id]: {
+  [columns.trader_id]: {
     type: String,
     hashKey: true,
   },
-  [event_columns.event_id]: {
+  [columns.event_id]: {
     type: String,
     rangeKey: true,
   },
-  [event_columns.type]: {
+  [columns.type]: {
     type: String,
   },
-  [event_columns.timestamp]: {
+  [columns.timestamp]: {
     type: String,
   },
-  [event_columns.data]: {
+  [columns.data]: {
     type: Object,
   },
 });
