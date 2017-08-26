@@ -1,6 +1,6 @@
 <template>
   <section class="content wrapper">
-    <modal v-if="showMessage" @close="showMessage = false" />
+    <modal v-if="showMessageEnabled" @close="showMessageEnabled = false" />
     <div class="subnav">
       <div class="container">
         <div class="pull-left title">
@@ -62,7 +62,7 @@ export default {
   },
   data: function () {
     return {
-      viewLink: `/portal/invoices/${this.invoiceId}`
+      showMessageEnabled: !!this.showMessage
     };
   },
   computed: {
