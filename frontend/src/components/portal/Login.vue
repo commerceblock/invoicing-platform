@@ -3,33 +3,103 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="modal-header">
-            <slot name="header">
-              <span class="login-title">Sign in</span>
-              <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-            </slot>
+
+          <div v-if="showLogin">
+            <div class="modal-header">
+              <slot name="header">
+                <span class="tab-title">Log into CommerceBlock</span>
+              </slot>
+            </div>
+            <div class="modal-body">
+              <slot name="body">
+                <div class="login-description">
+                  Please ensure you are not being watched or that only people who should have access to the account are present.
+                </div>
+                <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
+                  <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Generate a new SEED with the button below" v-model="mnemonic" rows="3" />
+                </div>
+                <div class="generate-new">
+                  <a @click="showMessageTab">
+                    <i class="fa fa-refresh"></i> Generate New SEED</a>
+                </div>
+                <div v-if=erroResponse class="text-red">
+                  <p>{{erroResponse}}</p>
+                </div>
+              </slot>
+            </div>
+            <div class="modal-footer">
+              <slot name="footer">
+                <button class="btn btn-success btn-lg btn-block" @click="login">Log In</button>
+              </slot>
+            </div>
           </div>
-          <div class="modal-body">
-            <slot name="body">
-              <div class="login-description">
-                Please ensure you are not being watched or that only people who should have access to the account are present.
-              </div>
-              <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
-                <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Generate a new SEED with the button below" v-model="mnemonic" rows="3" />
-              </div>
-              <div class="generate-new">
-                <a href=""><i class="fa fa-refresh"></i> Generate New SEED</a>
-              </div>
-              <div v-if=erroResponse class="text-red">
-                <p>{{erroResponse}}</p>
-              </div>
-            </slot>
+
+          <div v-if="showMessage">
+            <div class="modal-header">
+              <slot name="header">
+                <span class="tab-title">New Account</span>
+              </slot>
+            </div>
+            <div class="modal-body">
+              <slot name="body">
+                <div>Important Notice!</div>
+                <p>1. With CommerceBlock there are no traditional login accounts.</p>
+                <p>All information is encrypted and can only be accessed via a unique 12 words SEED, simply a series of random words, which acts as both your username and password.</p>
+                <p>2. This SEED is extremly important and must be kept in a secure place. It is advisable to backup your SEED in an equally secure place.</p>
+                <p>3. The only way to retreive your information is by using the SEED, for security and privacy purposes, CommerceBlock does not have access to any information and will never be able to retreive associated data if you lose your SEED.</p>
+              </slot>
+            </div>
+            <div class="modal-footer">
+              <slot name="footer">
+                <button class="btn btn-success btn-lg btn-block" @click="showSeedTab">I Understand</button>
+              </slot>
+            </div>
           </div>
-          <div class="modal-footer">
-            <slot name="footer">
-              <button class="btn btn-success btn-lg btn-block" type="submit" @click="signin">Sign in</button>
-            </slot>
+
+          <div v-if="showSeed">
+            <div class="modal-header">
+              <slot name="header">
+                <span class="tab-title">Seed Generation</span>
+              </slot>
+            </div>
+            <div class="modal-body">
+              <slot name="body">
+                <div class="seed-description">
+                  Please ensure you are not being watched or that only people who should have access to the account are present.
+                </div>
+                <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
+                  <textarea class="form-control span6 prvKey" name="mnemonic" readonly="readonly" v-model="newMnemonic" rows="3" />
+                </div>
+                <div>
+                  Make sure you write down your SEED before you continue
+                </div>
+              </slot>
+            </div>
+            <div class="modal-footer">
+              <slot name="footer">
+                <button class="btn btn-success btn-lg btn-block" type="submit" @click="showVerificationTab">Continue to Verification</button>
+              </slot>
+            </div>
           </div>
+
+          <div v-if="showVerification">
+            <div class="modal-header">
+              <slot name="header">
+                <span class="tab-title">Seed Verification</span>
+              </slot>
+            </div>
+            <div class="modal-body">
+              <slot name="body">
+
+              </slot>
+            </div>
+            <div class="modal-footer">
+              <slot name="footer">
+                <button class="btn btn-success btn-lg btn-block" type="submit" @click="register">Log In</button>
+              </slot>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -50,18 +120,38 @@ import {
 } from '../../lib/vault'
 
 export default {
-  name: 'EntranceModal',
-  data: function () {
+  name: 'Login',
+  data: function() {
     return {
       mnemonic: null,
-      erroResponse: null
+      newMnemonic: null,
+      erroResponse: null,
+      showLogin: true,
+      showMessage: false,
+      showSeed: false,
+      showVerification: false,
     }
   },
   methods: {
-    close: function (event) {
-      this.$emit('close');
+    showMessageTab: function() {
+      this.showLogin = false;
+      this.showVerification = false;
+      this.showSeed = false;
+      this.showMessage = true;
     },
-    signin: function (event) {
+    showSeedTab: function() {
+      this.showLogin = false;
+      this.showMessage = false;
+      this.showVerification = false;
+      this.showSeed = true;
+    },
+    showVerificationTab: function() {
+      this.showLogin = false;
+      this.showMessage = false;
+      this.showSeed = false;
+      this.showVerification = true;
+    },
+    login: function() {
       // TODO:: toggle progress bar
       if (this.creds !== null) {
         // access query
@@ -69,10 +159,10 @@ export default {
         // if (!this.profile.traderId) {
         //   this.erroResponse = 'Unknown seed, please register or check your seed.';
         // } else {
-          setCreds(this.creds);
-          // workaround: update traderId explicility
-          this.$parent.traderId = this.creds.traderId
-          this.close();
+        setCreds(this.creds);
+        // workaround: update traderId explicility
+        this.$parent.traderId = this.creds.traderId
+        this.close();
         // }
       } else if (isEmpty(this.mnemonic)) {
         // empty phrase
@@ -81,13 +171,16 @@ export default {
         // check phrase
         this.erroResponse = 'seed is not valid, seed must be 12 words.';
       }
+    },
+    register: function () {
+
     }
   },
   computed: {
-    isValid: function () {
+    isValid: function() {
       return this.mnemonic && isValid(this.mnemonic.trim())
     },
-    creds: function () {
+    creds: function() {
       if (this.mnemonic && isValid(this.mnemonic.trim())) {
         return computeAccessKey(this.mnemonic.trim());
       } else {
@@ -97,7 +190,7 @@ export default {
   },
   apollo: {
     profile: {
-      query: function () {
+      query: function() {
         if (this.creds) {
           const traderId = this.creds.traderId;
           return gql`query {
@@ -170,6 +263,7 @@ export default {
 
 
 
+
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled
@@ -206,40 +300,40 @@ textarea {
   resize: none;
 }
 
-.seed-input-red textarea:focus{
+.seed-input-red textarea:focus {
   border-color: red;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
   outline: 0 none;
 }
 
-.seed-input-green textarea:focus{
+.seed-input-green textarea:focus {
   border-color: #258C42;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
   outline: 0 none;
 }
 
-.login-title {
-	color: #141414;
-	font-family: "Open Sans";
-	font-size: 18px;
-	font-weight: 600;
-	line-height: 24px;
-	text-align: center;
+.tab-title {
+  color: #141414;
+  font-family: "Open Sans";
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
 }
 
-.login-description {
+.login-description .seed-description {
   color: #141414;
-	font-family: "Open Sans";
-	font-size: 14px;
-	line-height: 19px;
+  font-family: "Open Sans";
+  font-size: 14px;
+  line-height: 19px;
   margin: 15px 0 40px 0;
 }
 
 .generate-new {
   margin-top: 10px;
 }
-.generate-new a{
+
+.generate-new a {
   color: #258C42;
 }
-
 </style>
