@@ -90,12 +90,14 @@
             </div>
             <div class="modal-body">
               <slot name="body">
-
+                <div class="seed-description">
+                  Please ensure you are not being watched or that only people who should have access to the account are present.
+                </div>
               </slot>
             </div>
             <div class="modal-footer">
               <slot name="footer">
-                <button class="btn btn-success btn-lg btn-block" type="submit" @click="register">Log In</button>
+                <button class="btn btn-success btn-lg btn-block" type="submit" @click="register">Register</button>
               </slot>
             </div>
           </div>
