@@ -1,5 +1,6 @@
 <template>
-  <section class="content">
+  <section class="content wrapper">
+    <modal v-if="showMessage" @close="showMessage = false" />
     <div class="subnav">
       <div class="container">
         <div class="pull-left title">
@@ -51,10 +52,14 @@
 <script>
 import { isEmpty } from 'lodash'
 import gql from 'graphql-tag'
+import Modal from './ContractVerifiedModal.vue'
 
 export default {
   name: 'ViewInvoice',
   props: ['invoiceId', 'showMessage'],
+  components: {
+    Modal
+  },
   data: function () {
     return {
       viewLink: `/portal/invoices/${this.invoiceId}`
