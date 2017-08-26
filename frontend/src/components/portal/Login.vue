@@ -312,7 +312,7 @@ export default {
 
 export function computeCreds(mnemonic) {
   if (mnemonic && isValid(mnemonic.trim())) {
-    return computeAccessKey(this.mnemonic.trim());
+    return computeAccessKey(mnemonic.trim());
   } else {
     return null;
   }
