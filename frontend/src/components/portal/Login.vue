@@ -122,6 +122,9 @@
 
         </div>
       </div>
+      <div class="bottom-logo">
+        <img src="/static/assets/commcerblock-big-gray.png" />
+      </div>
     </div>
   </transition>
 </template>
@@ -491,5 +494,12 @@ textarea {
   border-radius: 2px;
   text-align: center;
   margin-bottom: 20px;
+}
+
+.bottom-logo {
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  right: 0;
 }
 </style>

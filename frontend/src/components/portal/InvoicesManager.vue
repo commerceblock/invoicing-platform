@@ -19,12 +19,18 @@
           :size="'100px'"
           :radius="'100px'"
           ></clip-loader> -->
-        <!-- <h4> empty list</h4>
-          <router-link to="/portal/invoices">
+        <div>
+          <div class="new-invoice">
+            <img src="/static/assets/emptystate-invoice.svg" />
+            <div class="create-title">Commerce Without Blocks</div>
+            <div class="create-subtitle">Create your first encrypted and decentralized <br/>invoice with CommerceBlock</div>
+            <router-link to="/portal/invoices">
               <button type="button" class="btn btn-success">
-                <span class="fa fa-plus"></span> New Invoice
+                <span class="fa fa-plus"></span> Create New Invoice
               </button>
-            </router-link> -->
+            </router-link>
+          </div>
+        </div>
       </div>
       <div class="col-lg-12" v-else>
         <table class="table" id="table">
@@ -75,6 +81,9 @@
           </tbody>
         </table>
         <hr>
+      </div>
+      <div class="bottom-logo">
+        <img src="/static/assets/commcerblock-big-gray.png" />
       </div>
     </div>
   </section>
@@ -198,5 +207,34 @@ export default {
 
 .subnav .new-invoice-btn {
   margin-top: -10px;
+}
+
+.bottom-logo {
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  right: 0;
+}
+
+.new-invoice {
+  text-align: center;
+}
+
+.create-title {
+	color: #141414;
+	font-family: "Open Sans";
+	font-size: 22px;
+	font-weight: 600;
+  margin: 15px 0;
+}
+
+.create-subtitle {
+	opacity: 0.5;
+	color: #141414;
+	font-family: "Open Sans";
+	font-size: 18px;
+	line-height: 24px;
+	text-align: center;
+  margin: 15px 0;
 }
 </style>
