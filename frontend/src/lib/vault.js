@@ -1,15 +1,15 @@
 
 const store = {
-  creds: null,
-  accessToken: null
+  rootContractHDPrivateKey: null,
+  accessToken: null,
 };
 
-export function setCreds(creds) {
-  store.creds = creds;
+export function setRootContractHDPrivateKey(hdPrvKey) {
+  store.rootContractHDPrivateKey = hdPrvKey;
 }
 
-export function getCreds(creds) {
-  return store.creds;
+export function getRootContractHDPrivateKey() {
+  return store.rootContractHDPrivateKey;
 }
 
 export function setAccessToken(accessToken) {
@@ -21,6 +21,6 @@ export function getAccessToken() {
 }
 
 export function reset() {
-  store.creds = null;
+  store.rootContractHDPrivateKey = null;
   store.accessToken = null;
 }

@@ -3,6 +3,8 @@
 import Mnemonic from 'bitcore-mnemonic';
 import bs58 from 'bs58';
 import { createHash } from 'crypto';
+import { sort } from 'lodash'
+import { derivePath } from 'pay-to-contract-lib/lib/contract'
 
 
 export const purpose = 200;
@@ -12,6 +14,10 @@ export const root_contract_key_path = `m/${purpose}'/${coin_type}'`;
 
 export const trader_id_path = `m/0'/0'/1'`;
 export const trader_signature_path = `m/${purpose}'/${coin_type}'/0'/0'/1'`;
+
+export function computeContractBaseHDPublicKey(rootContractHDPrivateKey, contractId) {
+  return rootContractHDPrivateKey.derive(`m/${contractId}'`).hdPublicKey;
+}
 
 export function computeTraderId(hdPrivateKey) {
   const publicKey = hdPrivateKey.derive(trader_id_path).hdPublicKey.toString();
@@ -23,23 +29,64 @@ export function computeTraderSignature(hdPrivateKey) {
   return sha256Base58(publicKey);
 }
 
-export function isValid(mnemonic) {
-  return Mnemonic.isValid(mnemonic) && mnemonic.split(' ').length === 12;
+export function computeCommitmentPK(hdPublicKey, hash) {
+  const path = derivePath(contractHash);
+  return hdPublicKey.derive(`m/${path}`).toString();
 }
 
-export function computeAccessKey(mnemonic) {
+export function computeRootContractHDPrivateKey(hdPrivateKey) {
+  return hdPrivateKey.derive(root_contract_key_path);
+}
+
+export function computeHDPrivateKey(mnemonic) {
   const code = new Mnemonic(mnemonic);
-  const masterPrivateKey = code.toHDPrivateKey();
-  const traderId = computeTraderId(masterPrivateKey);
-  const traderSignature = computeTraderSignature(masterPrivateKey);
-  return {
-    traderId,
-    traderSignature
-  };
+  return code.toHDPrivateKey();
+}
+
+export function computeHDPrivateKeySafe(mnemonic) {
+  try {
+    return computeHDPrivateKey(mnemonic);
+  } catch(ignore) {}
+  return null;
+}
+
+export function isSeedValid(mnemonic) {
+  return Mnemonic.isValid(mnemonic) && mnemonic.split(' ').length === 12;
 }
 
 export function sha256Base58(str) {
   const hash = createHash('sha256');
   hash.update(str, 'utf8');
   return bs58.encode(hash.digest());
+}
+
+export function aggregateFileHashes(fileHahes) {
+  return computeTextHash(sort(fileHahes).join(''));
+}
+
+export function computeFileHash(file) {
+  return readAsText(file).then(computeTextHash)
+}
+
+export function computeTextHash(text) {
+  const hash = createHash('sha512')
+  hash.update(text, 'utf8')
+  return hash.digest('hex')
+}
+
+export function readAsText(file) {
+  /* global Blob */
+  if (!(file instanceof Blob)) {
+    throw new TypeError('Must be a File or Blob')
+  }
+  return new Promise(function (resolve, reject) {
+    const reader = new window.FileReader()
+    reader.onload = function (e) {
+      resolve(e.target.result)
+    }
+    reader.onerror = function (e) {
+      reject('Error reading' + file.name + ': ' + e.target.result)
+    }
+    reader.readAsText(file)
+  });
 }
