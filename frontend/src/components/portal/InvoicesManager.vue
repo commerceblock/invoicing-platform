@@ -87,7 +87,6 @@ import {
   isEmpty
 } from 'lodash'
 import {
-  getCreds,
   getAccessToken,
 } from '../../lib/vault'
 

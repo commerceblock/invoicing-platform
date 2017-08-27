@@ -3,7 +3,7 @@
 import Mnemonic from 'bitcore-mnemonic';
 import bs58 from 'bs58';
 import { createHash } from 'crypto';
-import { sort } from 'lodash'
+import { sortBy } from 'lodash'
 import { derivePath } from 'pay-to-contract-lib/lib/contract'
 
 
@@ -30,7 +30,7 @@ export function computeTraderSignature(hdPrivateKey) {
 }
 
 export function computeCommitmentPK(hdPublicKey, hash) {
-  const path = derivePath(contractHash);
+  const path = derivePath(hash);
   return hdPublicKey.derive(`m/${path}`).toString();
 }
 
@@ -61,7 +61,7 @@ export function sha256Base58(str) {
 }
 
 export function aggregateFileHashes(fileHahes) {
-  return computeTextHash(sort(fileHahes).join(''));
+  return computeTextHash(sortBy(fileHahes).join(''));
 }
 
 export function computeFileHash(file) {

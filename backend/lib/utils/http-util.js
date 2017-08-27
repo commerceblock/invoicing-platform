@@ -6,6 +6,7 @@ import { map, filter } from 'lodash';
 
 // local imports
 import { event_columns } from '../../model/consts';
+import { isEventPredicate } from './item-util'
 
 // logging
 import { createLogger } from 'bunyan';
@@ -85,7 +86,7 @@ exports.parseEvent = (event) => {
       return {};
     }
   });
-  return filter(events, eventUtil.isEventPredicate);
+  return filter(events, isEventPredicate);
 };
 
 exports.executePromises = (promise, request_logger, callback) => promise

@@ -105,7 +105,9 @@
                 </div>
                 <div class="row">
                   <div v-for="item in seedWords" class="col-xs-2">
-                    <div class="empty-item" v-if="item.selected"><span></span></div>
+                    <div class="empty-item" v-if="item.selected">
+                      <span></span>
+                    </div>
                     <div class="seed-item" v-if="!item.selected" @click="selectWord(item.index)">{{ item.word }}</div>
                   </div>
                 </div>
@@ -136,11 +138,15 @@ import {
   remove,
 } from 'lodash'
 import {
-  computeAccessKey,
-  isValid,
+  isSeedValid,
+  computeTraderId,
+  computeTraderSignature,
+  computeHDPrivateKey,
+  computeHDPrivateKeySafe,
+  computeRootContractHDPrivateKey,
 } from '../../lib/credentials'
 import {
-  setCreds,
+  setRootContractHDPrivateKey,
   setAccessToken,
 } from '../../lib/vault'
 import endpoints from '../../lib/endpoints'
@@ -203,13 +209,15 @@ export default {
     },
     login: function() {
       // TODO:: toggle progress bar
-      const creds = computeCreds(this.mnemonic)
-      if (creds !== null) {
+      const hdPrvKey = computeHDPrivateKeySafe(this.mnemonic)
+      if (hdPrvKey !== null) {
         // access query
         this.errorResponse = null;
+        const traderId = computeTraderId(hdPrvKey);
+        const traderSignature = computeTraderSignature(hdPrvKey);
         const data = {
-          trader_id: creds.traderId,
-          trader_signature: creds.traderSignature
+          trader_id: traderId,
+          trader_signature: traderSignature
         };
         const that = this;
         fetch(endpoints.portalLogin(), {
@@ -221,15 +229,18 @@ export default {
         }).then(function(response) {
           if (response.status === 201) {
             return response.json();
-          } else {
+          } else if (response.status == 404) {
             that.errorResponse = "Unknown Seed, please verify your input.";
+          } else {
+            that.errorResponse = "Unexpected error occured, please try again.";
           }
         }, function(error) {
           console.log(error);
           that.errorResponse = "Failed to connect to server, please try again.";
         }).then(data => {
           if (data) {
-            setCreds(that.creds);
+            const rootContractHDPrivateKey = computeRootContractHDPrivateKey(hdPrvKey);
+            setRootContractHDPrivateKey(rootContractHDPrivateKey);
             setAccessToken(data.access_token_id);
             that.$router.push('/');
           }
@@ -237,12 +248,12 @@ export default {
       } else if (isEmpty(this.mnemonic)) {
         // empty phrase
         this.errorResponse = 'seed is empty';
-      } else if (!isValid(this.mnemonic)) {
+      } else if (!isSeedValid(this.mnemonic)) {
         // check phrase
         this.errorResponse = 'seed is not valid, seed must be 12 words.';
       }
     },
-    isSeedMatch: function () {
+    isSeedMatch: function() {
       return this.selectedWords.map(item => item.word).join(' ') === this.newMnemonic;
     },
     register: function() {
@@ -252,10 +263,12 @@ export default {
         this.verificationSeedError = 'Seed does not match';
         return;
       }
-      const creds = computeAccessKey(this.newMnemonic)
+      const hdPrvKey = computeHDPrivateKey(this.newMnemonic);
+      const traderId = computeTraderId(hdPrvKey);
+      const traderSignature = computeTraderSignature(hdPrvKey);
       const request = {
-        trader_id: creds.traderId,
-        trader_signature: creds.traderSignature
+        trader_id: traderId,
+        trader_signature: traderSignature
       };
       const that = this;
       fetch(endpoints.portalSignup(), {
@@ -296,26 +309,19 @@ export default {
         console.log(error)
       }).then(data => {
         if (data) {
-          setCreds(creds);
+          const rootContractHDPrivateKey = computeRootContractHDPrivateKey(hdPrvKey);
+          setRootContractHDPrivateKey(rootContractHDPrivateKey);
           setAccessToken(data.access_token_id);
-          this.$router.push('/');
+          that.$router.push('/');
         }
       });
     }
   },
   computed: {
     isValid: function() {
-      return this.mnemonic && isValid(this.mnemonic.trim())
+      return this.mnemonic && isSeedValid(this.mnemonic.trim())
     },
   },
-}
-
-export function computeCreds(mnemonic) {
-  if (mnemonic && isValid(mnemonic.trim())) {
-    return computeAccessKey(mnemonic.trim());
-  } else {
-    return null;
-  }
 }
 </script>
 
@@ -374,6 +380,7 @@ export function computeCreds(mnemonic) {
   text-align: center;
   margin-top: 40px;
 }
+
 
 
 

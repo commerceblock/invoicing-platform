@@ -17,6 +17,10 @@ const FileInputType = new GraphQLInputObjectType({
     fileType: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'The type of the file',
+    },
+    fileHash: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Tje sha256 hash of the file',
     }
   }),
 });

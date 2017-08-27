@@ -21,6 +21,10 @@ export default async (traderId, invoiceInput) => {
       file_ids: invoiceInput.fileIds,
       btc_amount: invoiceInput.btcAmount,
       external_reference_id: invoiceInput.externalReferenceId,
+      contract_hash: invoiceInput.contractHash,
+      contract_base_pk: invoiceInput.contractBasePK,
+      commitment_pk: invoiceInput.commitmentPK,
+      link_id: createId(),
     },
   };
   // TODO:: complete
@@ -31,9 +35,12 @@ export default async (traderId, invoiceInput) => {
       invoiceId: payload.data.invoice_id,
       fileIds: payload.data.file_ids,
       contractId: payload.contract_id,
-      contractBasePK: 'FOO_FIGHTER',
-      contractEncryptionKey: 'EAGLE_EYE',
       btcAmount: payload.data.btc_amount,
       externalReferenceId: payload.data.external_reference_id,
+      contractHash: payload.data.contract_hash,
+      contractBasePK: payload.data.contract_base_pk,
+      commitmentPK: payload.data.commitment_pk,
+      contractEncryptionKey: 'EAGLE_EYE',
+      linkId: payload.data.link_id,
     }));
 };

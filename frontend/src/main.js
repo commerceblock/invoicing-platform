@@ -8,17 +8,25 @@ import App from './App.vue';
 import router from './router';
 import endpoints from './lib/endpoints';
 import { getAccessToken } from './lib/vault';
+import VueClipboard from 'vue-clipboard2';
 
 // Create the apollo client
 if (!process.env.BASE_URL) {
   throw new Error('BASE_URL is not defined');
 }
 
+
+
+
+
 // init endpoints
 endpoints.initBaseUrl(process.env.BASE_URL);
 
-Vue.use(VueApollo);
 Vue.config.productionTip = false;
+
+Vue.use(VueClipboard)
+Vue.use(VueApollo);
+
 
 // portal gql
 const portalNetworkInterface = createNetworkInterface({ uri: endpoints.portalGQL() })

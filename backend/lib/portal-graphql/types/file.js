@@ -19,6 +19,10 @@ const FileType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'The name of the file',
     },
+    fileHash: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Tje sha256 hash of the file',
+    },
     fileS3Url: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'S3 URL of the file',

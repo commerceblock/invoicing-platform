@@ -38,11 +38,13 @@
     <div class="input-group form-group">
       <label>Contract Files</label>
       <div class="upload-files">
-          <div><i class="fa fa-file-text-o"></i></div>
-          <label class="btn btn-success btn-file">
-              Upload contract files <input class="form-control contract-id-input" type="file" multiple="multiple" ref="contractFiles" style="display: none;" />
-          </label>
-          <div>or drag the content here</div>
+        <div>
+          <i class="fa fa-file-text-o"></i>
+        </div>
+        <label class="btn btn-success btn-file">
+          Upload contract files <input class="form-control contract-id-input" type="file" multiple="multiple" ref="contractFiles" style="display: none;" />
+        </label>
+        <div>or drag the content here</div>
       </div>
     </div>
     <div class="ui form">
@@ -50,7 +52,9 @@
         <div class="btn-group pull-right" role="group">
           <button class="btn btn-success btn-lg forms-buttons continue-button" v-on:click="submit" v-bind:disabled="disableSubmit">Continue</button>
         </div>
-        <div class="btn-group pull-right" role="group"><a href="" v-on:click="reset">Reset</a></div>
+        <div class="btn-group pull-right" role="group">
+          <a href="" v-on:click="reset">Reset</a>
+        </div>
       </div>
     </div>
     </div>
@@ -63,15 +67,21 @@ import {
   random,
   map
 } from 'lodash';
-import gql from 'graphql-tag'
-import $ from 'jquery'
+import gql from 'graphql-tag';
+import $ from 'jquery';
 import {
-  getCreds
+  computeFileHash,
+  aggregateFileHashes,
+  computeContractBaseHDPublicKey,
+  computeCommitmentPK,
+} from '../../lib/credentials'
+import {
+  getRootContractHDPrivateKey
 } from '../../lib/vault'
 
 export default {
   name: 'InvoicesManager',
-  data: function () {
+  data: function() {
     return {
       contractId: null,
       externalReferenceId: null,
@@ -103,11 +113,15 @@ export default {
       // create event
       const invoiceCreated = allTasks.then(results => {
         // collect fileIds
-        const traderId = getCreds().traderId;
         const contractId = this.contractId;
-        const fileIds = map(results, res => res.data.saveFile.fileId);
         const btcAmount = this.btcAmount;
         const externalReferenceId = this.externalReferenceId;
+        const fileIds = map(results, res => res.data.saveFile.fileId);
+        const fileHashes = map(results, res => res.data.saveFile.fileHash);
+        const contractHash = aggregateFileHashes(fileHashes);
+        const contractBaseHDPublicKey = computeContractBaseHDPublicKey(getRootContractHDPrivateKey(), contractId);
+        const contractBasePK = contractBaseHDPublicKey.toString();
+        const commitmentPK = computeCommitmentPK(contractBaseHDPublicKey, contractHash);
         return apolloClient
           .mutate({
             mutation: gql`mutation {
@@ -115,9 +129,13 @@ export default {
               contractId: ${contractId},
               fileIds: ${JSON.stringify(fileIds)},
               btcAmount: "${btcAmount}",
-              externalReferenceId: "${externalReferenceId}"
+              externalReferenceId: "${externalReferenceId}",
+              contractHash: "${contractHash}",
+              contractBasePK: "${contractBasePK}",
+              commitmentPK: "${commitmentPK}"
             }) {
               invoiceId
+              linkId
             }
           }`})
       })
@@ -125,25 +143,31 @@ export default {
       // redirect to view
       invoiceCreated.then(result => {
         const invoiceId = result.data.createInvoice.invoiceId;
-        const location = `/portal/invoices/${invoiceId}?show-message`;
+        const linkId = result.data.createInvoice.linkId;
+        const location = `/portal/invoices/${invoiceId}?link_id=${linkId}`;
         router.push(location);
       });
     },
     uploadFiles() {
       const apolloClient = this.apolloClient;
       return map(this.$refs.contractFiles.files, file => {
-        return apolloClient
-          .mutate({
-            mutation: gql`mutation {
-            saveFile(file: {
-              fileName: "${file.name}",
-              fileType: "${file.type}"
-            }) {
-              fileId
-              fileName
-              fileS3Url
-            }
-          }`})
+        return computeFileHash(file)
+          .then(fileHash => {
+            return apolloClient
+              .mutate({
+                mutation: gql`mutation {
+                  saveFile(file: {
+                    fileName: "${file.name}",
+                    fileType: "${file.type}",
+                    fileHash: "${fileHash}"
+                  }) {
+                    fileId
+                    fileName
+                    fileHash
+                    fileS3Url
+                  }
+                }`});
+          })
           .then(result => {
             return $.ajax({
                 type: 'PUT',
@@ -154,7 +178,7 @@ export default {
               })
               // pass mutation response
               .then(() => result);
-          })
+          });
       });
     }
   },
@@ -162,7 +186,7 @@ export default {
     this.generateContractId();
   },
   computed: {
-    apolloClient: function () {
+    apolloClient: function() {
       return this.$apollo.provider.defaultClient;
     }
   }

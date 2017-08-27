@@ -41,13 +41,25 @@ const InvoiceType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLInt),
       description: 'The unique identifier of the contract',
     },
+    contractHash: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'contract sha256 hash',
+    },
     contractBasePK: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'invoice contract base public key',
+      description: 'contract base public key',
+    },
+    commitmentPK: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'commitment public key',
     },
     contractEncryptionKey: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'invoice contract encryption key',
+    },
+    linkId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'invoice public-facing unique identifier',
     }
   }),
 });

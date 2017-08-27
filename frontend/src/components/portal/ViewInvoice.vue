@@ -1,6 +1,6 @@
 <template>
   <section class="content wrapper">
-    <modal v-if="showMessageEnabled" @close="showMessageEnabled = false" />
+    <modal v-if="showMessageEnabled" @close="showMessageEnabled = false" :linkId="linkId"/>
     <div class="subnav">
       <div class="container">
         <div class="pull-left title">
@@ -35,7 +35,7 @@
         <input class="form-control" readonly="readonly" type="text" v-model="btcAmount" />
       </div>
     </div>
-    <div class="input-group form-group">
+    <!-- <div class="input-group form-group">
       <label>Invoice - Contract Files</label>
       <div>
       </div>
@@ -44,7 +44,7 @@
       <label>Receipt - Contract Files</label>
       <div>
       </div>
-    </div>
+    </div> -->
   </div>
   </section>
 </template>
@@ -56,13 +56,13 @@ import Modal from './ContractVerifiedModal.vue'
 
 export default {
   name: 'ViewInvoice',
-  props: ['invoiceId', 'showMessage'],
+  props: ['invoiceId', 'linkId'],
   components: {
     Modal
   },
   data: function () {
     return {
-      showMessageEnabled: !!this.showMessage
+      showMessageEnabled: !!this.linkId
     };
   },
   computed: {

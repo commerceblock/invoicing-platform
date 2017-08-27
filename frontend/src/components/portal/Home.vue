@@ -43,17 +43,11 @@ import {
   each,
 } from 'lodash'
 import {
-  getCreds,
   reset,
 } from '../../lib/vault'
 
 export default {
   name: 'home',
-  data: function () {
-    return {
-      traderId: null
-    }
-  },
   methods: {
     logout() {
       reset();
@@ -62,16 +56,9 @@ export default {
           child.reset();
         }
       });
-      this.traderId = null;
       this.$router.push('/login');
     }
   },
-  mounted: function () {
-    // TODO: we should use vuex as a proper store.
-    if (getCreds()) {
-      this.traderId = getCreds().traderId;
-    }
-  }
 }
 </script>
 

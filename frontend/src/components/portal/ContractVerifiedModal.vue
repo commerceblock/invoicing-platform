@@ -13,8 +13,8 @@
             <slot name="body">
               <p>Now that the contract has been verified and encrypted all you need to do is to send the invoice link to the other party.</p>
               <div>
-                <span><input class="form-control" readonly="readonly" type="text" v-model="invoiceId" /></span>
-                <span><a @click="copyLink"><i class="fa fa-files-o"></i> Copy Link</a></span>
+                <span><input class="form-control" readonly="readonly" type="text" v-model="invoiceLink" /></span>
+                <span><a v-clipboard:copy="invoiceLink" v-clipboard:success="onCopy" v-clipboard:error="onError"><i class="fa fa-files-o"></i> Copy Link</a></span>
               </div>
             </slot>
           </div>
@@ -34,20 +34,22 @@
 <script>
 export default {
   name: 'ContractVerifiedModal',
-  data: function () {
-    return {
-    }
-  },
+  props: ['linkId'],
   methods: {
     close: function (event) {
       this.$emit('close');
     },
-    copyLink: function() {
-      // TODO
-    }
+    onCopy: function(e) {
+      // TODO complete
+    },
+    onError: function(e) {
+      // TODO complete
+    },
   },
   computed: {
-
+    invoiceLink: function() {
+      return `https://trade.commerceblock.com/invoices/${this.linkId}`
+    }
   },
 }
 </script>
