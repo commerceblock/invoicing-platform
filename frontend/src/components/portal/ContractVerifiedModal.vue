@@ -3,24 +3,27 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="modal-header">
+          
+          <div class="modal-header center">
             <slot name="header">
-              <span class="title">Contract Verified</span>
+              <span class="tab-title">Contract Verified</span>
               <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
             </slot>
           </div>
+          
           <div class="modal-body">
             <slot name="body">
-              <p>Now that the contract has been verified and encrypted all you need to do is to send the invoice link to the other party.</p>
-              <div>
-                <span><input class="form-control" readonly="readonly" type="text" v-model="invoiceLink" /></span>
-                <span><a v-clipboard:copy="invoiceLink" v-clipboard:success="onCopy" v-clipboard:error="onError"><i class="fa fa-files-o"></i> Copy Link</a></span>
+              <img src="/static/assets/file-commerceblock.svg" />
+              <div class="contract-verified-description">Now that the contract has been verified and encrypted all you need to do is send the invoice link to the other party.</div>
+              <div class="row">
+                <div class="col-xs-9">
+                  <input class="form-control" readonly="readonly" type="text" v-model="invoiceLink" />
+                </div>
+                <div class="col-xs-3">
+                  <a v-clipboard:copy="invoiceLink" v-clipboard:success="onCopy" v-clipboard:error="onError"><i class="fa fa-files-o"></i> Copy Link</a>
+                </div>
               </div>
-            </slot>
-          </div>
-          <div class="modal-footer">
-            <slot name="footer">
-              <div class="text-center col-md-4 col-sm-offset-4">
+              <div class="done-btn">
                 <button class="btn btn-success btn-lg" type="submit" @click="close">Done</button>
               </div>
             </slot>
@@ -65,6 +68,7 @@ export default {
   background-color: rgba(0, 0, 0, .5);
   display: table;
   transition: opacity .3s ease;
+  text-align: center;
 }
 
 .modal-wrapper {
@@ -97,7 +101,14 @@ export default {
   float: right;
 }
 
-
+.tab-title {
+  color: #141414;
+  font-family: "Open Sans";
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+}
 
 
 /*
@@ -130,5 +141,23 @@ export default {
   font-weight: 600;
   line-height: 24px;
   text-align: center;
+}
+
+.contract-verified-description {
+	color: #141414;
+	font-family: "Open Sans";
+	font-size: 18px;
+	line-height: 24px;
+	text-align: center;
+  margin: 15px;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+  padding-top: 5px;
+  color: #258C42;
+}
+
+.done-btn {
+  margin: 20px;
 }
 </style>
