@@ -105,7 +105,7 @@
                 </div>
                 <div class="row">
                   <div v-for="item in seedWords" class="col-xs-2">
-                    <div class="seed-item" v-bind:class="{ hideseed: item.selected }" @click="selectWord(item.index)">{{ item.word }}</div>
+                    <div class="seed-item" v-bind:class="{ 'hidden-item': item.selected }" @click="selectWord(item.index)">{{ item.word }}</div>
                   </div>
                 </div>
               </slot>
@@ -486,14 +486,7 @@ textarea {
   cursor: pointer;
 }
 
-.empty-item {
-  padding: 3px;
-  border-radius: 2px;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.hideseed {
+.hidden-item {
   visibility: hidden;
 }
 
