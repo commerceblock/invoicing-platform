@@ -105,10 +105,7 @@
                 </div>
                 <div class="row">
                   <div v-for="item in seedWords" class="col-xs-2">
-                    <div class="empty-item" v-if="item.selected">
-                      <span></span>
-                    </div>
-                    <div class="seed-item" v-if="!item.selected" @click="selectWord(item.index)">{{ item.word }}</div>
+                    <div class="seed-item" v-bind:class="{ hideseed: item.selected }" @click="selectWord(item.index)">{{ item.word }}</div>
                   </div>
                 </div>
               </slot>
@@ -494,6 +491,10 @@ textarea {
   border-radius: 2px;
   text-align: center;
   margin-bottom: 20px;
+}
+
+.hideseed {
+  visibility: hidden;
 }
 
 .bottom-logo {
