@@ -42,7 +42,7 @@
           <i class="fa fa-file-text-o"></i>
         </div>
         <label class="btn btn-success btn-file">
-          Upload contract files <input class="form-control contract-id-input" type="file" multiple="multiple" ref="contractFiles" style="display: none;" />
+          Upload contract files <input class="form-control contract-files-input" type="file" multiple="multiple" ref="contractFiles" style="display: none;" />
         </label>
         <div>or drag the content here</div>
       </div>
@@ -105,52 +105,57 @@ export default {
       this.disableSubmit = true;
       const apolloClient = this.apolloClient;
       const router = this.$router;
+      const files = this.$refs.contractFiles.files;
 
       // upload files
-      const tasks = this.uploadFiles();
-      const allTasks = Promise.all(tasks);
+      Promise
+        .all(this.uploadFiles(files))
+        // create event
+        .then(result => this.createInvoice(result))
+        // redirect to view
+        .then(result => this.redirectToView(result));
+    },
+    redirectToView(result) {
+      const invoiceId = result.data.createInvoice.invoiceId;
+      const linkId = result.data.createInvoice.linkId;
+      const location = `/portal/invoices/${invoiceId}?link_id=${linkId}`;
 
-      // create event
-      const invoiceCreated = allTasks.then(results => {
-        // collect fileIds
-        const contractId = this.contractId;
-        const btcAmount = this.btcAmount;
-        const externalReferenceId = this.externalReferenceId;
-        const fileIds = map(results, res => res.data.saveFile.fileId);
-        const fileHashes = map(results, res => res.data.saveFile.fileHash);
-        const contractHash = aggregateFileHashes(fileHashes);
-        const contractBaseHDPublicKey = computeContractBaseHDPublicKey(getRootContractHDPrivateKey(), contractId);
-        const contractBasePK = contractBaseHDPublicKey.toString();
-        const commitmentPK = computeCommitmentPK(contractBaseHDPublicKey, contractHash);
-        return apolloClient
-          .mutate({
-            mutation: gql`mutation {
+      const router = this.$router;
+      router.push(location);
+    },
+    createInvoice(results) {
+      const apolloClient = this.apolloClient;
+      const contractId = this.contractId;
+      const btcAmount = this.btcAmount;
+      const externalReferenceId = this.externalReferenceId;
+      // collect fileIds
+      const fileIds = map(results, res => res.data.saveFile.fileId);
+      const fileHashes = map(results, res => res.data.saveFile.fileHash);
+      const payeeContractHash = aggregateFileHashes(fileHashes);
+      const contractBaseHDPublicKey = computeContractBaseHDPublicKey(getRootContractHDPrivateKey(), contractId);
+      const contractBasePK = contractBaseHDPublicKey.toString();
+      const payeeCommitmentPK = computeCommitmentPK(contractBaseHDPublicKey, payeeContractHash);
+      // extract to apollo directive
+      return apolloClient
+        .mutate({
+          mutation: gql`mutation {
             createInvoice(invoice: {
               contractId: ${contractId},
               fileIds: ${JSON.stringify(fileIds)},
               btcAmount: "${btcAmount}",
               externalReferenceId: "${externalReferenceId}",
-              contractHash: "${contractHash}",
+              payeeContractHash: "${payeeContractHash}",
               contractBasePK: "${contractBasePK}",
-              commitmentPK: "${commitmentPK}"
+              payeeCommitmentPK: "${payeeCommitmentPK}"
             }) {
               invoiceId
               linkId
             }
-          }`})
-      })
-
-      // redirect to view
-      invoiceCreated.then(result => {
-        const invoiceId = result.data.createInvoice.invoiceId;
-        const linkId = result.data.createInvoice.linkId;
-        const location = `/portal/invoices/${invoiceId}?link_id=${linkId}`;
-        router.push(location);
-      });
+        }`})
     },
-    uploadFiles() {
+    uploadFiles(files) {
       const apolloClient = this.apolloClient;
-      return map(this.$refs.contractFiles.files, file => {
+      return map(files, file => {
         return computeFileHash(file)
           .then(fileHash => {
             return apolloClient
@@ -242,4 +247,8 @@ export default {
   margin-top: -12px;
   margin-left: 15px;
 }
+
+.contract-files-input {
+    display: none;
+  }
 </style>

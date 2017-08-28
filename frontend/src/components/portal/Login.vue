@@ -19,7 +19,7 @@
                   Please ensure you are not being watched or that only people who should have access to the account are present.
                 </div>
                 <div v-bind:class="{ 'seed-input-red': !isValid, 'seed-input-green': isValid }">
-                  <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Log in with your Seed or generate a new Seed with the button below" v-model="mnemonic" rows="3" />
+                  <textarea class="form-control span6 prvKey" name="mnemonic" placeholder="Log in with your Seed or generate a new Seed with the button below" v-model="seedInput" rows="3" />
                 </div>
                 <div class="generate-new">
                   <a @click="showMessageTab">
@@ -151,11 +151,13 @@ import {
 } from '../../lib/vault'
 import endpoints from '../../lib/endpoints'
 
+const access_token_ttl = 30 * 60 * 1000;
+
 export default {
   name: 'Login',
   data: function() {
     return {
-      mnemonic: null,
+      seedInput: null,
       newMnemonic: null,
       errorResponse: null,
       showLogin: true,
@@ -207,120 +209,120 @@ export default {
       const selectedWord = find(this.seedWords, { index });
       selectedWord.selected = false;
     },
-    login: function() {
-      // TODO:: toggle progress bar
-      const hdPrvKey = computeHDPrivateKeySafe(this.mnemonic)
-      if (hdPrvKey !== null) {
-        // access query
-        this.errorResponse = null;
-        const traderId = computeTraderId(hdPrvKey);
-        const traderSignature = computeTraderSignature(hdPrvKey);
-        const data = {
-          trader_id: traderId,
-          trader_signature: traderSignature
-        };
-        const that = this;
-        fetch(endpoints.portalLogin(), {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: {
-            "Content-Type": "application/json"
-          },
-        }).then(function(response) {
-          if (response.status === 201) {
-            return response.json();
-          } else if (response.status == 404) {
-            that.errorResponse = "Unknown Seed, please verify your input.";
-          } else {
-            that.errorResponse = "Unexpected error occured, please try again.";
-          }
-        }, function(error) {
-          console.log(error);
-          that.errorResponse = "Failed to connect to server, please try again.";
-        }).then(data => {
-          if (data) {
-            const rootContractHDPrivateKey = computeRootContractHDPrivateKey(hdPrvKey);
-            setRootContractHDPrivateKey(rootContractHDPrivateKey);
-            setAccessToken(data.access_token_id);
-            that.$router.push('/');
-          }
-        });
-      } else if (isEmpty(this.mnemonic)) {
-        // empty phrase
-        this.errorResponse = 'seed is empty';
-      } else if (!isSeedValid(this.mnemonic)) {
-        // check phrase
-        this.errorResponse = 'seed is not valid, seed must be 12 words.';
-      }
-    },
     isSeedMatch: function() {
       return this.selectedWords.map(item => item.word).join(' ') === this.newMnemonic;
     },
-    register: function() {
-      this.verificationSeedError = null;
-      const result = this.isSeedMatch();
-      if (!result) {
-        this.verificationSeedError = 'Seed does not match';
-        return;
+    login: function() {
+      // TODO:: toggle progress bar
+      if (isEmpty(this.mnemonic())) {
+        // empty phrase
+        this.errorResponse = 'seed is empty.';
+      } else if (!isSeedValid(this.mnemonic())) {
+        // check phrase
+        this.errorResponse = 'seed is not valid, seed must be 12 words.';
+      } else {
+        this.errorResponse = null;
+        const that = this;
+        const hdPrvKey = computeHDPrivateKeySafe(this.mnemonic());
+        this.doLogin(hdPrvKey)
+          .then(response => that.parseResult(response))
+          .catch(error => that.handleError(error))
+          .then(data => {
+            const accessToken = data && data.access_token_id;
+            if (accessToken) {
+              that.enterApp(hdPrvKey, accessToken);
+            }
+          });
       }
-      const hdPrvKey = computeHDPrivateKey(this.newMnemonic);
+    },
+    enterApp (hdPrvKey, accessToken) {
+      const rootContractHDPrivateKey = computeRootContractHDPrivateKey(hdPrvKey);
+      setRootContractHDPrivateKey(rootContractHDPrivateKey);
+      setAccessToken(accessToken, access_token_ttl);
+      this.$router.push('/');
+    },
+    handleError (error) {
+      console.log(error);
+      this.errorResponse = "Failed to connect to server, please try again.";
+    },
+    parseResult (response) {
+      if (response.status === httpStatus.CREATED) {
+        return response.json();
+      } else if (response.status == httpStatus.NOT_FOUND) {
+        this.errorResponse = "Unknown Seed, please verify your input.";
+      } else {
+        this.errorResponse = "Unexpected error occured, please try again.";
+      }
+      return Promise.reject(this.errorResponse);
+    },
+    doLogin (hdPrvKey) {
+      const traderId = computeTraderId(hdPrvKey);
+      const traderSignature = computeTraderSignature(hdPrvKey);
+      const data = {
+        trader_id: traderId,
+        trader_signature: traderSignature
+      };
+      return fetch(endpoints.portalLogin(), {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        },
+      });
+    },
+    doSignup (hdPrvKey) {
       const traderId = computeTraderId(hdPrvKey);
       const traderSignature = computeTraderSignature(hdPrvKey);
       const request = {
         trader_id: traderId,
         trader_signature: traderSignature
       };
-      const that = this;
-      fetch(endpoints.portalSignup(), {
+      return fetch(endpoints.portalSignup(), {
         method: "POST",
         body: JSON.stringify(request),
         headers: {
           "Content-Type": "application/json"
         },
-      }).then(function(response) {
-        if (response.status === 201) {
-          return response.json();
-        } else {
-          // TODO handle error
-        }
-      }, function(error) {
-        // TODO handle error
-        console.log(error)
-      }).then((data) => {
-        if (data) {
-          return fetch(endpoints.portalLogin(), {
-            method: "POST",
-            body: JSON.stringify(request),
-            headers: {
-              "Content-Type": "application/json"
-            },
-          });
-        }
-      }).then(function(response) {
-        if (response) {
-          if (response.status === 201) {
-            return response.json();
-          } else {
-            // TODO handle error
-          }
-        }
-      }, function(error) {
-        // TODO handle error
-        console.log(error)
-      }).then(data => {
-        if (data) {
-          const rootContractHDPrivateKey = computeRootContractHDPrivateKey(hdPrvKey);
-          setRootContractHDPrivateKey(rootContractHDPrivateKey);
-          setAccessToken(data.access_token_id);
-          that.$router.push('/');
-        }
       });
+    },
+    handleSignupError () {
+      this.verificationSeedError = 'Failed to register, please try again later.';
+      return;
+    },
+    register () {
+      this.verificationSeedError = null;
+      const result = this.isSeedMatch();
+      if (!result) {
+        this.verificationSeedError = 'Seed does not match.';
+        return;
+      }
+
+      const that = this;
+      const hdPrvKey = computeHDPrivateKeySafe(this.newMnemonic);
+
+      this.doSignup(hdPrvKey)
+        .then(() => {
+          that.doLogin(hdPrvKey)
+            .then(response => that.parseResult(response))
+            .then(data => {
+              const accessToken = data && data.access_token_id;
+              if (accessToken) {
+                that.enterApp(hdPrvKey, accessToken);
+              }
+            })
+            .catch(error => that.handleSignupError(error));
+        })
+        .catch(error => that.handleSignupError(error));
+    },
+    mnemonic () {
+      return this.seedInput && this.seedInput.replace(/\s+/g, ' ').trim();
     }
   },
   computed: {
-    isValid: function() {
-      return this.mnemonic && isSeedValid(this.mnemonic.trim())
+    isValid () {
+      return this.mnemonic() && isSeedValid(this.mnemonic());
     },
+
   },
 }
 </script>
@@ -380,6 +382,7 @@ export default {
   text-align: center;
   margin-top: 40px;
 }
+
 
 
 

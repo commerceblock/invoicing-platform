@@ -45,6 +45,9 @@ export function buildInvoice(events) {
       contractId: data.contract_id,
       contractBasePK: data.contract_base_pk,
       contractEncryptionKey: data.contract_encryption_key,
+      payeeContractHash: data.payee_contract_hash,
+      payeeCommitmentPK: data.payee_commitment_pk,
+      linkId: data.link_id,
     };
   }
   // TODO:: revisit, maybe option instead

@@ -4,23 +4,23 @@
       <div class="container">
         <div class="pull-left title">
           <router-link to="/">Invoices</router-link> /
-          <span class="text-muted">Contract ID {{contractId}}</span>
+          <span class="text-muted">Contract ID {{ contractId }}</span>
         </div>
       </div>
     </div>
     <div>
       <div class="invoice-wrapper">
         <form-wizard title="" subtitle="" class="invoice" color="#538C46">
-          <tab-content title="Upload Contract" icon="fa fa-cloud-upload">
+          <tab-content title="Upload Contract" icon="fa fa-cloud-upload" :before-change="processReceipt">
             <div class="invoice-box">
-              <invoice-header></invoice-header>
-              <upload-contract></upload-contract>
+              <invoice-header :invoiceId="invoiceId" :date="date"></invoice-header>
+              <upload-contract ref="uploadContract"></upload-contract>
             </div>
           </tab-content>
           <tab-content title="Complete Transaction" icon="fa fa-qrcode">
             <div class="invoice-box">
-              <invoice-header></invoice-header>
-              <complete-transaction></complete-transaction>
+              <invoice-header :invoiceId="invoiceId" :date="date"></invoice-header>
+              <complete-transaction :accountBIP32Path="accountBIP32Path"></complete-transaction>
             </div>
           </tab-content>
         </form-wizard>
@@ -31,7 +31,10 @@
 
 <script>
 import gql from 'graphql-tag'
-import { isEmpty } from 'lodash'
+import {
+  isEmpty,
+  map,
+} from 'lodash'
 import {
   FormWizard,
   TabContent
@@ -39,7 +42,11 @@ import {
 import InvoiceHeader from './InvoiceHeader.vue'
 import CompleteTransaction from './CompleteTransaction.vue'
 import UploadContract from './UploadContract.vue'
-
+import {
+  computeFileHash,
+  computeWalletPath,
+  aggregateFileHashes,
+} from '../../../lib/credentials'
 
 export default {
   name: 'RedeemInvoice',
@@ -52,43 +59,119 @@ export default {
     UploadContract,
   },
   methods: {
+    processReceipt () {
+      if (!isEmpty(this.contractFiles)) {
+        this.accountBIP32Path = this.computeWalletPath();
+
+        Promise
+          .all(this.uploadFiles())
+          .then(results => this.redeemReceipt(results));
+
+        return true;
+      } else {
+        // show error
+        this.errorResponseParent.errorResponse = "No files provided."
+        return 'error!';
+      }
+    },
+    computeWalletPath () {
+      const fileHashes = map(this.contractFiles, file => computeFileHash(file));
+      const payerContractHash = aggregateFileHashes(fileHashes);
+      return computeWalletPath(this.contractId, this.payeeContractHash, payerContractHash);
+    },
+    redeemReceipt(results) {
+      const apolloClient = this.apolloClient;
+      // collect fileIds
+      const fileIds = map(results, res => res.data.saveFile.fileId);
+      // extract to apollo directive
+      return apolloClient
+        .mutate({
+          mutation: gql`mutation {
+            redeemReceipt(receipt: {
+              invoiceId: "${this.invoiceId}"
+              receiptFileIds: "${JSON.stringify(fileIds)}"
+            }) {
+              invoiceId
+            }
+        }`});
+    },
+    uploadFiles() {
+      const apolloClient = this.apolloClient;
+      return map(this.contractFiles, file => {
+        return computeFileHash(file)
+          .then(fileHash => {
+            return apolloClient
+              .mutate({
+                mutation: gql`mutation {
+                  saveFile(file: {
+                    fileName: "${file.name}",
+                    fileType: "${file.type}",
+                    fileHash: "${fileHash}"
+                  }) {
+                    fileId
+                    fileName
+                    fileHash
+                    fileS3Url
+                  }
+                }`});
+          })
+          .then(result => {
+            return $.ajax({
+                type: 'PUT',
+                url: result.data.saveFile.fileS3Url,
+                contentType: file.type,
+                processData: false,
+                data: file
+              })
+              // pass mutation response
+              .then(() => result);
+          });
+      });
+    },
   },
   computed: {
-    traderId: function () {
-      return this.$parent.traderId
+    contractFiles () {
+      return this.$refs.uploadContract.$refs.contractFiles.files;
     },
-    contractId: function () {
-      return this.invoice && this.invoice.contractId
+    errorResponseParent () {
+      return this.$refs.uploadContract.$refs;
     },
-    externalReferenceId: function () {
-      return this.invoice && this.invoice.externalReferenceId;
+    contractId () {
+      return this.invoice && this.invoice.contractId;
     },
-    btcAmount: function () {
-      return this.invoice && this.invoice.btcAmount;
+    date () {
+      return this.invoice && this.invoice.date;
+    },
+    payeeContractHash () {
+      return this.invoice && this.invoice.payeeContractHash;
+    },
+    apolloClient () {
+      return this.$apollo.provider.defaultClient;
+    },
+    accountBIP32Path () {
+      return !isEmpty(this.contractFiles) && this.computeWalletPath();
     },
   },
   apollo: {
     invoice: {
-      query: function () {
-        return gql`query ListInvoice($traderId: String!, $invoiceId: String!) {
-          invoice(traderId: $traderId, invoiceId: $invoiceId) {
+      query: function() {
+        return gql`query ListInvoice($invoiceId: String!) {
+          invoice(invoiceId: $invoiceId) {
               invoiceId
               date
               contractId
-              externalReferenceId
               btcAmount
               status
-              fileIds
+              payeeContractHash
           }}`;
       },
       variables() {
         return {
-          traderId: this.traderId,
           invoiceId: this.invoiceId,
         };
       },
       skip() {
-        return isEmpty(this.traderId) || isEmpty(this.invoiceId);
+        return isEmpty(this.invoiceId);
       }
     }
   },

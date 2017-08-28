@@ -133,9 +133,6 @@ export default {
     },
   },
   computed: {
-    traderId: function () {
-      return this.$parent.traderId;
-    },
     apolloClient: function () {
       return this.$apollo.provider.defaultClient;
     },

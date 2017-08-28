@@ -3,7 +3,10 @@
 import { isEmpty } from 'lodash';
 
 // local imports
-import { getAccessToken } from '../lib/vault';
+import {
+  getAccessToken,
+  isAccessTokenValid,
+} from '../lib/vault';
 
 export function requireAuth(to, from, next) {
   if (!isLoggedIn()) {
@@ -16,5 +19,5 @@ export function requireAuth(to, from, next) {
 }
 
 export function isLoggedIn() {
-  return !isEmpty(getAccessToken());
+  return !isEmpty(getAccessToken()) && isAccessTokenValid();
 }

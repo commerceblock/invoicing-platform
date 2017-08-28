@@ -29,7 +29,7 @@ const InvoiceInputType = new GraphQLInputObjectType({
       type: GraphQLString,
       description: 'external reference identifier',
     },
-    contractHash: {
+    payeeContractHash: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'contract sha256 hash',
     },
@@ -37,7 +37,7 @@ const InvoiceInputType = new GraphQLInputObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'contract base public key',
     },
-    commitmentPK: {
+    payeeCommitmentPK: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'commitment public key',
     },

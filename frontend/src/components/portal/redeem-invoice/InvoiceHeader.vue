@@ -19,23 +19,8 @@
 <script>
 export default {
   name: 'InvoiceHeader',
+  props: ['invoiceId', 'date'],
   computed: {
-    grandParent: function () {
-      // TODO: find a better way to do this.
-      return this.$parent.$parent.$parent;
-    },
-    traderId: function () {
-      return this.grandParent && this.grandParent.traderId
-    },
-    invoice: function () {
-      return this.grandParent && this.grandParent.invoice;
-    },
-    invoiceId: function () {
-      return this.invoice && this.invoice.invoiceId
-    },
-    date: function () {
-      return this.invoice && this.invoice.date;
-    },
   },
 }
 </script>

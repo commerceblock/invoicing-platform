@@ -16,6 +16,8 @@ import { createLogger } from 'bunyan';
 
 const log = createLogger({ name: 'graphql-api' });
 
+const access_token_ttl = 30 * 60 * 1000;
+
 export function post (event, context, callback) {
   const request_id = createOrderedId();
   log.info({ request_id, event }, 'start');
@@ -76,5 +78,5 @@ export function isTokenInvalid(accessToken) {
 
 export function isTokenExpired(accessToken) {
   const diffInMills = new Date().getTime() - new Date(accessToken.timestamp).getTime()
-  return diffInMills >= 1800000; // 30 min
+  return diffInMills >= access_token_ttl; // 30 min
 }

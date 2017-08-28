@@ -21,15 +21,12 @@ export default async (traderId, invoiceInput) => {
       file_ids: invoiceInput.fileIds,
       btc_amount: invoiceInput.btcAmount,
       external_reference_id: invoiceInput.externalReferenceId,
-      contract_hash: invoiceInput.contractHash,
-      contract_base_pk: invoiceInput.contractBasePK,
-      commitment_pk: invoiceInput.commitmentPK,
       link_id: createId(),
+      payee_contract_hash: invoiceInput.payeeContractHash,
+      contract_base_pk: invoiceInput.contractBasePK,
+      payee_commitment_pk: invoiceInput.payeeCommitmentPK,
     },
   };
-  // TODO:: complete
-  // contractBasePK
-  // contractEncryptionKey
   return saveEvent(payload)
     .then(payload => ({
       invoiceId: payload.data.invoice_id,
@@ -37,9 +34,9 @@ export default async (traderId, invoiceInput) => {
       contractId: payload.contract_id,
       btcAmount: payload.data.btc_amount,
       externalReferenceId: payload.data.external_reference_id,
-      contractHash: payload.data.contract_hash,
+      payeeContractHash: payload.data.payee_contract_hash,
       contractBasePK: payload.data.contract_base_pk,
-      commitmentPK: payload.data.commitment_pk,
+      payeeCommitmentPK: payload.data.payee_commitment_pk,
       contractEncryptionKey: 'EAGLE_EYE',
       linkId: payload.data.link_id,
     }));

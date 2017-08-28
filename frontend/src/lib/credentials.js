@@ -60,6 +60,12 @@ export function sha256Base58(str) {
   return bs58.encode(hash.digest());
 }
 
+export function computeWalletPath(contractId, payeeContractHash, payerContractHash) {
+  const payeePath = derivePath(payeeContractHash);
+  const payerPath = derivePath(payerContractHash);
+  return `m/${purpose}'/${coin_type}'/${contractId}'/${payeePath}/${payerPath}`;
+}
+
 export function aggregateFileHashes(fileHahes) {
   return computeTextHash(sortBy(fileHahes).join(''));
 }

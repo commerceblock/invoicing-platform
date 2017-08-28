@@ -1,14 +1,9 @@
 import {
   GraphQLObjectType,
-  GraphQLString,
-  GraphQLList,
-  GraphQLInt,
   GraphQLID,
   GraphQLNonNull,
 } from 'graphql';
-import ProfileType from '../types/profile';
-import InvoiceType from '../types/invoice';
-import FileType from '../types/file';
+import InvoiceSummaryType from './invoice-summary'
 import db from '../../database';
 
 /**
