@@ -2,7 +2,7 @@
   <div class="content">
     <div class="description">In order to complete the transaction please upload the signed contract</div>
     <div class="input-group form-group">
-      <div v-if=errorResponse class="alert alert-danger" role="alert" ref="errorResponse">
+      <div v-if=errorResponse class="alert alert-danger" role="alert">
         <p>{{ errorResponse }}</p>
       </div>
       <div class="upload-files col-md-2 col-md-offset-2">
@@ -21,12 +21,8 @@
 
 <script>
 export default {
-  name: 'InvoiceHeader',
-  data () {
-    return {
-      errorResponse: null
-    }
-  }
+  name: 'UploadContract',
+  props: ['errorResponse'],
 }
 </script>
 

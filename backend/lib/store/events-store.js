@@ -71,6 +71,7 @@ export function loadGenesisEvent(trader_id) {
     Event.query(columns.trader_id)
       .eq(trader_id)
       .consistent()
+      .ascending()
       .limit(1)
       .exec((error, events) => {
         if (error) {

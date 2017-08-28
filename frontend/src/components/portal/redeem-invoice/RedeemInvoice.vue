@@ -14,13 +14,13 @@
           <tab-content title="Upload Contract" icon="fa fa-cloud-upload" :before-change="processReceipt">
             <div class="invoice-box">
               <invoice-header :invoiceId="invoiceId" :date="date"></invoice-header>
-              <upload-contract ref="uploadContract"></upload-contract>
+              <upload-contract ref="uploadContract" :errorResponse="errorResponse"></upload-contract>
             </div>
           </tab-content>
           <tab-content title="Complete Transaction" icon="fa fa-qrcode">
             <div class="invoice-box">
               <invoice-header :invoiceId="invoiceId" :date="date"></invoice-header>
-              <complete-transaction :accountBIP32Path="accountBIP32Path"></complete-transaction>
+              <complete-transaction ref="completeTransaction" :accountBIP32Path="accountBIP32Path" :btcAmount="btcAmount"></complete-transaction>
             </div>
           </tab-content>
         </form-wizard>
@@ -51,6 +51,12 @@ import {
 export default {
   name: 'RedeemInvoice',
   props: ['invoiceId'],
+  data() {
+    return {
+      accountBIP32Path: null,
+      errorResponse: null,
+    }
+  },
   components: {
     FormWizard,
     TabContent,
@@ -59,23 +65,22 @@ export default {
     UploadContract,
   },
   methods: {
-    processReceipt () {
-      if (!isEmpty(this.contractFiles)) {
+    processReceipt() {
+      this.errorResponse = null;
+      if (!isEmpty(this.getContractFiles())) {
         this.accountBIP32Path = this.computeWalletPath();
-
         Promise
           .all(this.uploadFiles())
           .then(results => this.redeemReceipt(results));
 
         return true;
       } else {
-        // show error
-        this.errorResponseParent.errorResponse = "No files provided."
+        this.errorResponse = "No files provided."
         return 'error!';
       }
     },
-    computeWalletPath () {
-      const fileHashes = map(this.contractFiles, file => computeFileHash(file));
+    computeWalletPath() {
+      const fileHashes = map(this.getContractFiles(), file => computeFileHash(file));
       const payerContractHash = aggregateFileHashes(fileHashes);
       return computeWalletPath(this.contractId, this.payeeContractHash, payerContractHash);
     },
@@ -88,8 +93,8 @@ export default {
         .mutate({
           mutation: gql`mutation {
             redeemReceipt(receipt: {
-              invoiceId: "${this.invoiceId}"
-              receiptFileIds: "${JSON.stringify(fileIds)}"
+              invoiceId: "${this.invoiceId}",
+              receiptFileIds: ${JSON.stringify(fileIds)}
             }) {
               invoiceId
             }
@@ -97,7 +102,7 @@ export default {
     },
     uploadFiles() {
       const apolloClient = this.apolloClient;
-      return map(this.contractFiles, file => {
+      return map(this.getContractFiles(), file => {
         return computeFileHash(file)
           .then(fileHash => {
             return apolloClient
@@ -117,40 +122,40 @@ export default {
           })
           .then(result => {
             return $.ajax({
-                type: 'PUT',
-                url: result.data.saveFile.fileS3Url,
-                contentType: file.type,
-                processData: false,
-                data: file
-              })
+              type: 'PUT',
+              url: result.data.saveFile.fileS3Url,
+              contentType: file.type,
+              processData: false,
+              data: file
+            })
               // pass mutation response
               .then(() => result);
           });
       });
     },
+    getContractFiles() {
+      if (this.$refs && this.$refs.uploadContract) {
+        return this.$refs.uploadContract.$refs.contractFiles.files;
+      }
+      return null;
+    },
   },
   computed: {
-    contractFiles () {
-      return this.$refs.uploadContract.$refs.contractFiles.files;
-    },
-    errorResponseParent () {
-      return this.$refs.uploadContract.$refs;
-    },
-    contractId () {
+    contractId() {
       return this.invoice && this.invoice.contractId;
     },
-    date () {
+    date() {
       return this.invoice && this.invoice.date;
     },
-    payeeContractHash () {
+    payeeContractHash() {
       return this.invoice && this.invoice.payeeContractHash;
     },
-    apolloClient () {
+    apolloClient() {
       return this.$apollo.provider.defaultClient;
     },
-    accountBIP32Path () {
-      return !isEmpty(this.contractFiles) && this.computeWalletPath();
-    },
+    btcAmount() {
+      return this.invoice && this.invoice.btcAmount;
+    }
   },
   apollo: {
     invoice: {

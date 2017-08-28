@@ -48,15 +48,14 @@
           <tbody v-for="invoice in invoices" :key="invoice.invoiceId">
             <tr>
               <td>
-                <i class="fa fa-circle text-warning"></i>
+                <i class="fa fa-circle" v-bind:class="{ 'text-warning': invoice.status === 'pending', 'text-success': invoice.status === 'redeemed' }"></i>
               </td>
               <td>{{ invoice.invoiceId }}</td>
               <td>{{ invoice.date }}</td>
               <td>{{ invoice.externalReferenceId }}</td>
               <td>{{ invoice.btcAmount }}</td>
               <td>
-                <span class="text-warning" v-if="invoice.status === 'pending'">{{ invoice.status }}</span>
-                <span class="text-success" v-if="invoice.status === 'redeemed'">{{ invoice.status }}</span>
+                <span v-bind:class="{ 'text-warning': invoice.status === 'pending', 'text-success': invoice.status === 'redeemed' }">{{ invoice.status }}</span>
               </td>
               <td>
                 <div class="dropdown">

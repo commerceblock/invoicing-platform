@@ -12,6 +12,8 @@ if (process.env.IS_OFFLINE) {
   s3 = new AWS.S3({
     s3ForcePathStyle: true,
     endpoint: new AWS.Endpoint('http://localhost:8000'),
+    accessKeyId: 'DUMMY',
+    secretAccessKey: 'DUMMY'
   });
 } else {
   // TODO: workaround - refresh manually

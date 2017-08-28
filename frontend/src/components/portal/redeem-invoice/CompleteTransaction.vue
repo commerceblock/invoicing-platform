@@ -2,9 +2,9 @@
   <div class="content">
     <div class="pay">Account balance</div>
     <div class="btc-amount">
-      <i class="fa fa-btc"></i> 0.0000435153 BTC</div>
+      <i class="fa fa-btc"></i> {{ btcAmount }}</div>
     <!-- <div class="usd-amount">10.00 USD</div> -->
-    <div class="scan">Scan QR and import account with your Bitcoin wallet</div>
+    <div class="scan">Scan QR to import account with your Bitcoin wallet</div>
     <img class="qr" src="/static/assets/qr-temp.jpg" />
     <div class="pay">OR Import using BIP32 path</div>
     <div class="row">
@@ -21,8 +21,8 @@
 
 <script>
 export default {
-  name: 'ContractVerifiedModal',
-  props: ['accountBIP32Path'],
+  name: 'CompleteTransaction',
+  props: ['accountBIP32Path', 'btcAmount'],
   methods: {
     close: function (event) {
       this.$emit('close');

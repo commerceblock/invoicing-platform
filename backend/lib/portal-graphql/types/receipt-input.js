@@ -5,7 +5,6 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLID,
-  GraphQLInt,
   GraphQLList,
 } from 'graphql';
 
@@ -14,7 +13,7 @@ const ReceiptInputType = new GraphQLInputObjectType({
   description: 'A receipt input object',
   fields: () => ({
     invoiceId: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: new GraphQLNonNull(GraphQLID),
       description: 'The unique identifier of the invoice',
     },
     receiptFileIds: {

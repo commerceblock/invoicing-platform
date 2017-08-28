@@ -23,11 +23,12 @@ export function post (event, context, callback) {
   log.info({ request_id, event }, 'start');
   // authz token
   const headers = event.headers || {};
-  const authorizationToken = headers.Authorization || '';
+  const authorizationToken = headers.Authorization || headers.authorization || '';
   const token = authorizationToken.split(' ');
   if (token.length !== 2 ||
       token[0] !== 'Bearer' ||
-      token[1].length !== 22) {
+      isEmpty(token[1]) ||
+      token[1].length >= 100) {
     const response = toResponse(httpStatus.FORBIDDEN);
     log.error({ request_id, authorizationToken, http_response: response }, 'malformed token - end');
     return callback(null, response);

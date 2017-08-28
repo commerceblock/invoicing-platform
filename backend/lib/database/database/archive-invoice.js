@@ -10,16 +10,15 @@ import {
   createOrderedId,
 } from '../../utils/uuid';
 
-export default async (trader_id, invoice_id) => {
+export default async (traderId, invoiceId) => {
   // TODO:: check if there is invoice first.
-  const event_id = createOrderedId();
   const payload = {
-    trader_id,
-    event_id,
+    trader_id: traderId,
+    event_id: createOrderedId(),
     type: event_type.invoice_archived,
     timestamp: new Date().toISOString(),
     data: {
-      invoice_id
+      invoice_id: invoiceId
     },
   };
   return saveEvent(payload)

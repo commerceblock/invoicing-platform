@@ -12,8 +12,7 @@ export function createId() {
 }
 
 export function createOrderedId() {
+  // TODO: fix later
   // time ordered uuid
-  // const orderedId = uuid.v1();
-  // return uuidToBase58(orderedId);
-  return uuid.v1();
+  return new Date().toISOString();
 }

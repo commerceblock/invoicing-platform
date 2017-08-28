@@ -52,6 +52,11 @@ export function post(event, context, callback) {
         return saveToken(accessToken);
       }
     })
+    .catch(error => {
+      const response = toResponse(httpStatus.INTERNAL_SERVER_ERROR);
+      log.error({ request_id, error, http_response: response }, 'failed to load token - end');
+      callback(null, response);
+    })
     .then(accessToken => {
       if (accessToken) {
         // TODO:: complete
