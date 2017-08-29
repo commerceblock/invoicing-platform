@@ -1,18 +1,30 @@
 <template>
   <div class="content">
-    <div class="pay">Account balance</div>
+    <div class="acount-title">Account balance</div>
     <div class="btc-amount">
-      <i class="fa fa-btc"></i> {{ btcAmount }}</div>
+      <i class="fa fa-btc"></i> {{ btcAmount }}
+    </div>
     <!-- <div class="usd-amount">10.00 USD</div> -->
-    <div class="scan">Scan QR to import account with your Bitcoin wallet</div>
-    <img class="qr" src="/static/assets/qr-temp.jpg" />
-    <div class="pay">OR Import using BIP32 path</div>
-    <div class="row">
-      <div class="col-xs-9">
+    <!-- <div class="scan">Scan QR to import account with your Bitcoin wallet</div>
+    <img class="qr" src="/static/assets/qr-temp.jpg" /> -->
+    <div class="import-title">Import using BIP32 path</div>
+    <div class="row account-path">
+      <div class="col-xs-10 col-xs-offset-1">
         <input class="form-control" readonly="readonly" type="text" v-model="accountBIP32Path" />
       </div>
-      <div class="col-xs-3">
-        <a v-clipboard:copy="accountBIP32Path" v-clipboard:success="onCopy" v-clipboard:error="onError"><i class="fa fa-files-o"></i> Copy Link</a>
+    </div>
+    <div class="row copy-button">
+      <div class="col-xs-4 col-xs-offset-4">
+        <!-- <label class="pure-button btn-file">
+          <i class="fa fa-files-o"></i> Copy Link
+        </label> -->
+
+        <a href="javascript:;"
+          v-clipboard:copy="accountBIP32Path"
+          v-clipboard:success="onCopy"
+          v-clipboard:error="onError">
+          <i class="fa fa-files-o"></i> Copy Link
+        </a>
       </div>
     </div>
   </div>
@@ -69,17 +81,30 @@ export default {
     width: 150px;
   }
 
-  .pay {
+  .import-title .account-path {
     font-size: 18px;
     line-height: 24px;
   }
 
-  .btc-address {
-    font-size: 14px;
-    line-height: 19px;
-    a:link, a:visited, a:hover, a:active {
-      color: #258C42;
-    }
+  .import-title {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  .account-path {
+    margin-bottom: 30px;
+  }
+
+  .account-path {
+    margin-bottom: 30px;
+  }
+
+  .copy-button {
+    margin-bottom: 80px;
+  }
+
+  .btc-amount {
+    margin-bottom: 10px;
   }
 }
 </style>
