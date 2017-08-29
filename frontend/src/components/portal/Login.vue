@@ -250,8 +250,10 @@ export default {
         return response.json();
       } else if (response.status == httpStatus.NOT_FOUND) {
         this.errorResponse = "Unknown Seed, please verify your input.";
+        return null;
       } else {
         this.errorResponse = "Unexpected error occured, please try again.";
+        return null;
       }
       return Promise.reject(this.errorResponse);
     },
