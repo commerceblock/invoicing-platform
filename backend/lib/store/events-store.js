@@ -66,6 +66,27 @@ export function loadEvents(trader_id) {
   });
 }
 
+export function loadInvoiceEvents(trader_id, invoice_id) {
+  return new Promise((resolve, reject) => {
+    Event.query(columns.trader_id)
+      .eq(trader_id)
+      .filter(columns.invoice_id)
+      .eq(invoice_id)
+      .consistent()
+      .exec((error, events) => {
+        if (error) {
+          reject({
+            order_id,
+            error,
+          });
+        } else {
+          const sorted_events = sortBy(events, [columns.timestamp]);
+          resolve(sorted_events);
+        }
+      });
+  });
+}
+
 export function loadGenesisEvent(trader_id) {
   return new Promise((resolve, reject) => {
     Event.query(columns.trader_id)
@@ -82,6 +103,30 @@ export function loadGenesisEvent(trader_id) {
         } else {
           const firstEvent = first(events);
           resolve(firstEvent);
+        }
+      });
+  });
+}
+
+export function loadInvoiceEventsByLinkId(linkId) {
+  return new Promise((resolve, reject) => {
+    Event.query(columns.link_id)
+      .eq(linkId)
+      .exec((error, events) => {
+        if (error) {
+          reject({
+            order_id,
+            error,
+          });
+        } else {
+          const firstItem = first(events);
+          if (firstItem) {
+            const trader_id = firstItem.trader_id;
+            const invoice_id = firstItem.invoice_id;
+            resolve(loadInvoiceEvents(trader_id, invoice_id))
+          } else {
+            resolve(null);
+          }
         }
       });
   });

@@ -10,18 +10,22 @@ import {
 export default async (traderId, invoiceInput) => {
   const trader_id = traderId;
   const event_id = createOrderedId();
+  const link_id = createId();
+  const invoice_id = createId();
   const payload = {
     trader_id,
     event_id,
     type: event_type.invoice_created,
     timestamp: new Date().toISOString(),
+    invoice_id,
+    link_id,
     data: {
-      invoice_id: createId(),
+      invoice_id,
       contract_id: invoiceInput.contractId,
       file_ids: invoiceInput.fileIds,
       btc_amount: invoiceInput.btcAmount,
       external_reference_id: invoiceInput.externalReferenceId,
-      link_id: createId(),
+      link_id,
       payee_contract_hash: invoiceInput.payeeContractHash,
       contract_base_pk: invoiceInput.contractBasePK,
       payee_commitment_pk: invoiceInput.payeeCommitmentPK,

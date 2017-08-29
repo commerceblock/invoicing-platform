@@ -39,6 +39,7 @@ export const columns = {
   external_reference_id: 'external_reference_id',
   access_token_id: 'access_token_id',
   root_contract_base_pk_signature: 'root_contract_base_pk_signature',
+  link_id: 'link_id'
 };
 
 // event types

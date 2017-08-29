@@ -34,6 +34,11 @@ export function computeCommitmentPK(hdPublicKey, hash) {
   return hdPublicKey.derive(`m/${path}`).toString();
 }
 
+export function computeCommitmentAddress(hdPublicKey, hash) {
+  const path = derivePath(hash);
+  return hdPublicKey.derive(`m/${path}`).publicKey.toAddress().toString();
+}
+
 export function computeRootContractHDPrivateKey(hdPrivateKey) {
   return hdPrivateKey.derive(root_contract_key_path);
 }

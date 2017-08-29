@@ -10,15 +10,19 @@
       <img class="icon-lock-green" src="/static/assets/icon-lock-green.svg" />
     </div>
     <div class="invoice-data">
-      <div class="invoice-id">Inovice #ID-000004</div>
-      <div class="invoice-date">Date: 29/7/17</div>
+      <div class="invoice-id">Invoice #{{ invoiceId }}</div>
+      <div class="invoice-date">Date: {{ date }}</div>
     </div>
   </div>
 </template>
 
 <script>
-
-
+export default {
+  name: 'InvoiceHeader',
+  props: ['invoiceId', 'date'],
+  computed: {
+  },
+}
 </script>
 
 <style scoped lang="scss">

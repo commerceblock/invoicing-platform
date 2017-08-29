@@ -2,20 +2,25 @@
   <div class="content">
     <div class="pay">Please pay</div>
     <div class="btc-amount">
-      <i class="fa fa-btc"></i> 0.0000435153 BTC</div>
-    <div class="usd-amount">10.00 USD</div>
+      <i class="fa fa-btc"></i> {{ btcAmount }}</div>
+    <!-- <div class="usd-amount">10.00 USD</div> -->
     <div class="scan">Scan QR with your Bitcoin wallet</div>
     <img class="qr" src="/static/assets/qr-temp.jpg" />
     <div class="pay">OR Pay using a Bitcoin address</div>
     <div class="btc-address">
-      <a href="http://www.google.com">12A1MyfXbW6RhdRAZEqofac5jCQQjwEPBu</a>
+      <a href="#">{{bitcoinAddress}}</a>
     </div>
   </div>
 </template>
 
 
 <script>
-
+export default {
+  name: 'DownloadContract',
+  props: ['btcAmount', 'bitcoinAddress'],
+  computed: {
+  },
+}
 </script>
 
 <style scoped lang="scss">

@@ -25,6 +25,17 @@ const EventSchema = new Schema({
   [columns.data]: {
     type: Object,
   },
+  [columns.invoice_id]: {
+    type: String,
+  },
+  [columns.link_id]: {
+    type: String,
+    index: {
+      global: true,
+      name: 'InvoiceSummaryIndex',
+      project: [columns.trader_id, columns.invoice_id]
+    }
+  }
 });
 
 const Event = dynamoose.model('events', EventSchema);

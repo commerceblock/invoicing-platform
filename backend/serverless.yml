@@ -10,7 +10,7 @@ plugins:
 
 provider:
   name: aws
-  stage: prod003
+  stage: prod004
   region: eu-west-2
   runtime: nodejs6.10
   memorySize: 256
@@ -171,6 +171,9 @@ resources:
           -
             AttributeName: event_id
             AttributeType: S
+          -
+            AttributeName: link_id
+            AttributeType: S
         KeySchema:
           -
             AttributeName: trader_id
@@ -183,6 +186,17 @@ resources:
           WriteCapacityUnits: ${self:custom.dynamodbThroughput.events.write}
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+        GlobalSecondaryIndexes:
+          - IndexName: InvoiceSummaryIndex
+            KeySchema:
+             - AttributeName: link_id
+               KeyType: HASH
+            Projection:
+              ProjectionType: INCLUDE
+              NonKeyAttributes: [invoice_id, trader_id]
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.dynamodbThroughput.events.read}
+              WriteCapacityUnits: ${self:custom.dynamodbThroughput.events.write}
     AccessTokensDynamoDbTable:
       Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain

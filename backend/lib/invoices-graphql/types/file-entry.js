@@ -15,9 +15,9 @@ const FileEntryType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'The name of the file',
     },
-    fileS3Url: {
+    fileUrl: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'S3 URL of the file',
+      description: 'URL of the file',
     },
   }),
 });

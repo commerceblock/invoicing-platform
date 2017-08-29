@@ -2,17 +2,22 @@
   <div class="content">
     <p>Copy about the origin of this document</p>
     <img src="/static/assets/file-commerceblock.svg" />
-    <h2>Filename.pdf</h2>
-    <button class="pure-button">Download Contact</button>
+    <h2>{{ fileName }}</h2>
+    <a :href="fileUrl" class="pure-button" target="_blank">Download Contact</a>
     <div class="backup-invoice">
-      <a href="http://www.google.com">Backup Invoice</a>
+      <a href="#">Backup Invoice</a>
     </div>
   </div>
 </template>
 
 
 <script>
-
+export default {
+  name: 'DownloadContract',
+  props: ['fileName', 'fileUrl'],
+  computed: {
+  },
+}
 </script>
 
 <style scoped lang="scss">

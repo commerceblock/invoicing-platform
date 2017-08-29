@@ -19,6 +19,10 @@ const InvoiceSummaryType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLID),
       description: 'The unique identifier of the invoice',
     },
+    linkId: {
+      type: new GraphQLNonNull(GraphQLID),
+      description: 'invoice shareable link identifier',
+    },
     date: {
       type: new GraphQLNonNull(GraphQLID),
       description: 'invoice creation date (e.g. 30-07-17)',
@@ -27,7 +31,7 @@ const InvoiceSummaryType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'invoice btc amount in satoshis',
     },
-    fileEntries: {
+    files: {
       type: new GraphQLNonNull(new GraphQLList(FileEntryType)),
       description: 'invoice attached files',
     },

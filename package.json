@@ -9,7 +9,7 @@
     "build:backend": "NODE_ENV=production babel --out-dir='build/backend' --ignore='__tests__/*' ./backend && cp ./backend/kms-secrets.*.yml ./backend/package.json ./backend/yarn.lock ./backend/serverless.yml ./build/backend",
     "build:backend:node_modules": "cd build/backend && yarn && cd ../../",
     "deploy": "npm run deploy:backend && npm run deploy:frontend",
-    "deploy:frontend": "npm run build:frontend && aws s3 sync build/frontend/ s3://cb-invoices-prod003-website/",
+    "deploy:frontend": "npm run build:frontend && aws s3 sync build/frontend/ s3://cb-invoices-prod004-website/",
     "deploy:backend": "npm run build:backend && npm run build:backend:node_modules && cd build/backend && serverless deploy",
     "lint": "npm run lint:eslint && npm run lint:css",
     "lint:eslint": "eslint .",
@@ -20,7 +20,7 @@
     "test:watch": "NODE_ENV=test jest --watch",
     "test:coverage": "npm test -- --coverage --collectCoverageFrom 'frontend/**/*.js' --collectCoverageFrom 'backend/**/*.js' --collectCoverageFrom 'deployment/**/*.js'",
     "dev:frontend": "NODE_ENV=development env-cmd deployment/environment/security.env.local babel-watch deployment/dev-server/server.js",
-    "dev:backend": "NODE_ENV=development npm run dev:build:backend && npm run dev:build:backend:node_modules && cd build/backend-dev && serverless dynamodb install && serverless offline start --migrate true --stage prod003",
+    "dev:backend": "NODE_ENV=development npm run dev:build:backend && npm run dev:build:backend:node_modules && cd build/backend-dev && serverless dynamodb install && serverless offline start --migrate true --stage prod004",
     "dev:build:backend": "NODE_ENV=development babel --out-dir='build/backend-dev' --ignore='__tests__/*' ./backend && cp -R ./backend/kms-secrets.*.yml ./backend/serverless.yml ./backend/data ./package.json ./yarn.lock ./build/backend-dev",
     "dev:build:backend:node_modules": "cd build/backend-dev && yarn && cd ../../"
   },
