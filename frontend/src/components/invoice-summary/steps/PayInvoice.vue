@@ -5,7 +5,7 @@
       <i class="fa fa-btc"></i> {{ btcAmount }}</div>
     <!-- <div class="usd-amount">10.00 USD</div> -->
     <div class="scan">Scan QR with your Bitcoin wallet</div>
-    <img class="qr" src="/static/assets/qr-temp.jpg" />
+    <qrcode :value="bitcoinAddress" :size="150" :type="image" :padding="10" v-if="bitcoinAddress" />
     <div class="pay">OR Pay using a Bitcoin address</div>
     <div class="btc-address">
       <a href="#">{{bitcoinAddress}}</a>
@@ -15,9 +15,14 @@
 
 
 <script>
+import Qrcode from 'v-qrcode'
+
 export default {
-  name: 'DownloadContract',
+  name: 'PayInvoice',
   props: ['btcAmount', 'bitcoinAddress'],
+  components: {
+    Qrcode
+  },
   computed: {
   },
 }
