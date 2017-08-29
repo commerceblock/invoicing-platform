@@ -5,7 +5,7 @@
     <h2>{{ fileName }}</h2>
     <a :href="fileUrl" class="pure-button" target="_blank">Download Contact</a>
     <div class="backup-invoice">
-      <a href="#">Backup Invoice</a>
+      <!-- <a href="#">Backup Invoice</a> -->
     </div>
   </div>
 </template>

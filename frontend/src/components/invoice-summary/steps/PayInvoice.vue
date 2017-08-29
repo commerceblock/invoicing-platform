@@ -8,7 +8,10 @@
     <qrcode :value="bitcoinAddress" :size="150" :type="image" :padding="10" v-if="bitcoinAddress" />
     <div class="pay">OR Pay using a Bitcoin address</div>
     <div class="btc-address">
-      <a href="#">{{bitcoinAddress}}</a>
+      <a href="javascript:;"
+          v-clipboard:copy="bitcoinAddress"
+          v-clipboard:success="onCopy"
+          v-clipboard:error="onError">{{bitcoinAddress}}</a>
     </div>
   </div>
 </template>
@@ -25,6 +28,14 @@ export default {
   },
   computed: {
   },
+  methods: {
+    onCopy: function(e) {
+      // TODO complete
+    },
+    onError: function(e) {
+      // TODO complete
+    },
+  }
 }
 </script>
 
