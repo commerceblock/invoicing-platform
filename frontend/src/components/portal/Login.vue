@@ -324,7 +324,6 @@ export default {
     isValid () {
       return this.mnemonic() && isSeedValid(this.mnemonic());
     },
-
   },
 }
 </script>
