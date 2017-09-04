@@ -182,4 +182,13 @@ export default {
     color: rgba(20, 20, 20, 0.5);
   }
 }
+
+@media (max-width: 650px), (max-height: 500px) {
+  .invoice {
+    width: 100vw;
+    margin: 0;
+    padding-bottom: 1em;
+  }
+}
+
 </style>

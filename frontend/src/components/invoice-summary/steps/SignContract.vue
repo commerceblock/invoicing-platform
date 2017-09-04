@@ -57,4 +57,9 @@
 .contract-files-input {
   display: none;
 }
+@media (max-width: 650px), (max-height: 500px) {
+  .content {
+    padding: 1em 10px;
+  }
+}
 </style>
