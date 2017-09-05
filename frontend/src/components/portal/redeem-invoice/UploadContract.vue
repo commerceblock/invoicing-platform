@@ -51,7 +51,8 @@ export default {
 
   .upload-files {
     padding: 40px;
-    width: 400px;
+    max-width: 400px;
+    width: calc(100vw - 30px);
     text-align: center;
     border: 2px dotted #979797;
 
@@ -71,6 +72,11 @@ export default {
 
   .contract-files-input {
     display: none;
+  }
+}
+@media (max-width: 650px), (max-height: 500px) {
+  .content {
+    padding: 1em 10px;
   }
 }
 </style>

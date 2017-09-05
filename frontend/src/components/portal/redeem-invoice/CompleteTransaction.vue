@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="row copy-button">
-      <div class="col-xs-4 col-xs-offset-4">
+      <div class="col-xs-8 col-sm-4 col-xs-offset-2 col-sm-offset-4">
         <!-- <label class="pure-button btn-file">
           <i class="fa fa-files-o"></i> Copy Link
         </label> -->
@@ -105,6 +105,11 @@ export default {
 
   .btc-amount {
     margin-bottom: 10px;
+  }
+}
+@media (max-width: 650px), (max-height: 500px) {
+  .content .copy-button {
+    margin-bottom: 1em;
   }
 }
 </style>

@@ -4,7 +4,8 @@
       <div class="container">
         <div class="pull-left title">
           <router-link to="/">Invoices</router-link> /
-          <span class="text-muted">Contract ID {{ contractId }}</span>
+          <span class="text-muted hidden-xs">Contract ID</span>
+          <span class="text-muted">{{ contractId }}</span>
         </div>
       </div>
     </div>
@@ -218,5 +219,13 @@ export default {
   border-radius: 3px;
   background-color: #FFFFFF;
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 650px), (max-height: 500px) {
+  .invoice {
+    width: 100vw;
+    margin: 0;
+    padding-bottom: 1em;
+  }
 }
 </style>
