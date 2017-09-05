@@ -207,10 +207,15 @@ export default {
 }
 
 .subnav .title {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: #36373A;
   font-family: "Open Sans";
   font-size: 20px;
   font-weight: bold;
+
 }
 
 .subnav .new-invoice-btn {
