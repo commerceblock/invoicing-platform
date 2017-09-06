@@ -4,8 +4,8 @@
       <div class="container">
         <div class="pull-left title">
           <router-link to="/">Invoices</router-link> /
-          <span class="text-muted hidden-xs">Contract ID</span>
-          <span class="text-muted">{{ contractId }}</span>
+          <span class="hidden-xs text-muted">Contract ID</span>
+          <span class="text-muted">{{contractId}}</span>
         </div>
       </div>
     </div>

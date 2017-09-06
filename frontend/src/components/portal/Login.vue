@@ -97,14 +97,12 @@
                   Please ensure you are not being watched or that only people who should have access to the account are present.
                 </div>
                 <div class="seed-box">
-                  <div class="row">
-                    <div v-for="item in selectedWords" class="col-xs-2">
-                      <div class="seed-item" @click="deselectWord(item.index)">{{ item.word }}</div>
-                    </div>
+                  <div v-for="item in selectedWords" class="seed-box-item">
+                    <div class="seed-item" @click="deselectWord(item.index)">{{ item.word }}</div>
                   </div>
                 </div>
                 <div class="row">
-                  <div v-for="item in seedWords" class="col-xs-2">
+                  <div v-for="item in seedWords" class="col-sm-2 col-xs-6">
                     <div class="seed-item" v-bind:class="{ 'hidden-item': item.selected }" @click="selectWord(item.index)">{{ item.word }}</div>
                   </div>
                 </div>
@@ -357,7 +355,6 @@ export default {
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
-
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
@@ -474,12 +471,15 @@ textarea {
 }
 
 .seed-box {
-  height: 80px;
+  height: 68px;
   margin-bottom: 20px;
   border: 1px solid #979797;
   padding: 10px;
 }
-
+.seed-box-item {
+  display: inline-block;
+  margin: 0 .2em;
+}
 .seed-item {
   background-color: #258C42;
   color: #fff;
@@ -488,6 +488,9 @@ textarea {
   text-align: center;
   margin-bottom: 20px;
   cursor: pointer;
+}
+.seed-box .seed-item {
+  margin-bottom: .2em;
 }
 
 .hidden-item {
@@ -499,5 +502,31 @@ textarea {
   z-index: -1;
   bottom: 0;
   right: 0;
+}
+
+@media (max-width: 650px), (max-height: 500px) {
+  .modal-container {
+    width: 100vw;
+    height: 100vh;
+    padding: 2em;
+    overflow-y: auto;
+  }
+  .modal-header {
+    padding: 0;
+  }
+  .modal-body {
+    margin: 1em 0;
+    padding: 0;
+  }
+  .seed-description {
+    margin: 0 0 1em 0;
+  }
+  .seed-box {
+    height: 96px;
+  }
+  .seed-item {
+    margin-bottom: .2em;
+  }
+
 }
 </style>

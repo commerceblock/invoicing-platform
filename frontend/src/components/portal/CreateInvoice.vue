@@ -4,7 +4,8 @@
       <div class="container">
         <div class="pull-left title">
           <router-link to="/">Invoices</router-link> /
-          <span class="text-muted">Contract ID {{contractId}}</span>
+          <span class="hidden-xs text-muted">Contract ID</span>
+          <span class="text-muted">{{contractId}}</span>
         </div>
       </div>
     </div>
@@ -224,7 +225,8 @@ export default {
 
 .upload-files {
   padding: 40px;
-  width: 400px;
+  max-width: 400px;
+  width: calc(100vw - 30px);
   text-align: center;
   border: 2px dotted #979797;
 
@@ -244,7 +246,8 @@ export default {
 
 .btn-toolbar {
   border-top: 1px solid #000;
-  width: 400px;
+  max-width: 400px;
+  width: calc(100vw - 30px);
   padding: 30px 0;
 }
 

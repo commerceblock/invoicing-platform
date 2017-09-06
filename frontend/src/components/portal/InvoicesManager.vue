@@ -217,20 +217,26 @@ export default {
 }
 
 .create-title {
-	color: #141414;
-	font-family: "Open Sans";
-	font-size: 22px;
-	font-weight: 600;
+  color: #141414;
+  font-family: "Open Sans";
+  font-size: 22px;
+  font-weight: 600;
   margin: 15px 0;
 }
 
 .create-subtitle {
-	opacity: 0.5;
-	color: #141414;
-	font-family: "Open Sans";
-	font-size: 18px;
-	line-height: 24px;
-	text-align: center;
+  opacity: 0.5;
+  color: #141414;
+  font-family: "Open Sans";
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
   margin: 15px 0;
+}
+
+@media (max-width: 650px), (max-height: 500px) {
+  .empty-table {
+    margin-top: 20px;
+  }
 }
 </style>
