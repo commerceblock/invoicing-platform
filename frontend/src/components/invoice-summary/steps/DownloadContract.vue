@@ -45,4 +45,9 @@ export default {
     }
   }
 }
+@media (max-width: 650px), (max-height: 500px) {
+  .content {
+    padding: 1em 0;
+  }
+}
 </style>
