@@ -4,7 +4,9 @@
     <div class="subnav">
       <div class="container">
         <div class="pull-left title">
-          <router-link to="/">Invoices</router-link> / <span class="text-muted">Contract ID {{ contractId }}</span>
+          <router-link to="/">Invoices</router-link> /
+          <span class="text-muted hidden-xs">Contract ID</span>
+          <span class="text-muted">{{ contractId }}</span>
         </div>
       </div>
     </div>
@@ -112,6 +114,10 @@ export default {
 }
 
 .subnav .title {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: #36373A;
   font-family: "Open Sans";
   font-size: 20px;

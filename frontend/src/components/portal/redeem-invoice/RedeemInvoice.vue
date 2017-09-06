@@ -193,6 +193,10 @@ export default {
 }
 
 .subnav .title {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: #36373A;
   font-family: "Open Sans";
   font-size: 20px;
@@ -219,5 +223,13 @@ export default {
   border-radius: 3px;
   background-color: #FFFFFF;
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 650px), (max-height: 500px) {
+  .invoice {
+    width: 100vw;
+    margin: 0;
+    padding-bottom: 1em;
+  }
 }
 </style>
