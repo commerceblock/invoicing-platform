@@ -40,3 +40,16 @@ brew install awscli
 # install terraform -- https://www.terraform.io/
 brew install terraform
 ```
+
+
+### Run frontend in development box ###
+
+```bash
+npm run dev:frontend
+```
+
+### Run backend in development box ###
+
+```bash
+npm run dev:backend
+```
