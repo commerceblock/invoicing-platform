@@ -1,9 +1,9 @@
 <template>
   <div class="content">
-    <p>Copy about the origin of this document</p>
+    <!-- <p>Copy about the origin of this document</p> -->
     <img src="/static/assets/file-commerceblock.svg" />
     <h2>{{ fileName }}</h2>
-    <a :href="fileUrl" class="pure-button" target="_blank">Download Contact</a>
+    <a :href="fileUrl" class="pure-button" target="_blank">Download Invoice</a>
     <div class="backup-invoice">
       <!-- <a href="#">Backup Invoice</a> -->
     </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="content">
-    <div class="title">copy about how you need to </div>
-    <div class="description">In order to complete the transaction please upload the signed contract</div>
+    <div class="title">Please upload your contract below</div>
+    <div class="description">By uploading the contract you are agreeing to the terms</div>
     <div class="upload-files">
         <div><i class="fa fa-file-text-o"></i></div>
         <label class="pure-button btn-file">
