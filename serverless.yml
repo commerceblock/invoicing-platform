@@ -1,23 +1,49 @@
-service: cb-invoices
+service: invoices
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
 plugins:
+  - serverless-single-page-app-plugin
   - serverless-kms-secrets
   - serverless-dynamodb-local
   - serverless-offline
   - serverless-s3-local
 
+custom:
+  defaultStage: sand
+  accounts:
+    prod:
+      stage: prod010
+      domainName: trade.commerceblock.com
+    sand:
+      stage: sand010
+      domainName: trade.commerceblock.ninja
+  selectedStage: ${opt:stage, self:custom.defaultStage}
+  stage: ${self:custom.accounts.${self:custom.selectedStage}.stage}
+  externalEnv: ${file(env.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
+  kmsSecrets: ${file(kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
+  cors: ${self:custom.externalEnv.cors}
+  dynamodbThroughput: ${self:custom.externalEnv.dynamodbThroughput}
+  s3Bucket: cb-${self:provider.environment.CB_ENV_NAME}-website
+  localWebsiteDestination: build/frontend/
+  remoteWebsiteDestination: s3://${self:custom.s3Bucket}/
+  domainName: ${self:custom.accounts.${self:custom.selectedStage}.domainName}
+  # dev env
+  dynamodb: ${self:custom.externalEnv.dynamodb}
+  s3: ${self:custom.externalEnv.s3}
+  serverless-offline: ${self:custom.externalEnv.serverless-offline}
+
+
 provider:
   name: aws
-  stage: prod004
-  region: eu-west-2
+  stage: ${self:custom.stage}
+  region: eu-west-1
   runtime: nodejs6.10
   memorySize: 256
   timeout: 5
   versionFunctions: true
   environment:
-    CB_ENV_NAME: ${self:service}-${self:custom.stage}
+    CB_ENV_NAME: ${self:custom.stage}-${self:service}
     CB_STORAGE_ACCESS_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_ACCESS_KEY}
     CB_STORAGE_SECRET_KEY: ${self:custom.kmsSecrets.secrets.CB_STORAGE_SECRET_KEY}
   iamRoleStatements:
@@ -33,40 +59,6 @@ provider:
       Action:
         - KMS:Decrypt
       Resource: ${self:custom.kmsSecrets.keyArn}
-
-custom:
-  stage: ${opt:stage, self:provider.stage}
-  kmsSecrets: ${file(kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
-  cors:
-    allowOrigin: "*"
-    allowHeaders: ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
-  dynamodbThroughput:
-    events:
-      read: 50
-      write: 10
-    storage:
-      read: 50
-      write: 10
-    accessTokens:
-      read: 50
-      write: 10
-  dynamodb:
-    start:
-      port: 8000
-      inMemory: true
-      migrate: true
-      seed: true
-    seed:
-      domain:
-        sources:
-          - table: ${self:provider.environment.CB_ENV_NAME}-events
-            sources: [./data/events.json]
-  s3:
-    port: 8001
-    directory: /tmp
-    cors: false
-  serverless-offline:
-    port: 9000
 
 functions:
 
@@ -107,7 +99,7 @@ resources:
     WebsiteS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.CB_ENV_NAME}-website
+        BucketName: ${self:custom.s3Bucket}
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
@@ -134,7 +126,7 @@ resources:
       Type: "AWS::S3::Bucket"
       DeletionPolicy: Retain
       Properties:
-        BucketName: ${self:provider.environment.CB_ENV_NAME}-storage
+        BucketName: cb-${self:provider.environment.CB_ENV_NAME}-storage
         CorsConfiguration:
           CorsRules:
           - AllowedHeaders: ["*"]
@@ -213,3 +205,39 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.dynamodbThroughput.accessTokens.read}
           WriteCapacityUnits: ${self:custom.dynamodbThroughput.accessTokens.write}
+    WebAppCloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Origins:
+            - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
+              ## An identifier for the origin which must be unique within the distribution
+              Id: WebApp
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
+          Enabled: 'true'
+          DefaultRootObject: index.html
+          CustomErrorResponses:
+            - ErrorCode: 404
+              ResponseCode: 200
+              ResponsePagePath: /index.html
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - HEAD
+              - GET
+              - OPTIONS
+            TargetOriginId: WebApp
+            ForwardedValues:
+              QueryString: 'false'
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: redirect-to-https
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: 'true'
+
+  Outputs:
+    WebAppCloudFrontDistributionOutput:
+      Value:
+        'Fn::GetAtt': [ WebAppCloudFrontDistribution, DomainName ]

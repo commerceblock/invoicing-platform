@@ -5,12 +5,22 @@
     "start": "MOCKED_DATABASE=true env-cmd deployment/environment/security.env.local nodemon ./deployment/devServer --ignore frontend --exec babel-node",
     "start:remote": "MOCKED_DATABASE=false env-cmd deployment/environment/security.env.local nodemon ./deployment/devServer --ignore frontend --exec babel-node",
     "update-schema": "babel-node deployment/graphql/updateSchema.js",
-    "build:frontend": "env-cmd deployment/environment/security.env.prod node deployment/website/build.js",
-    "build:backend": "NODE_ENV=production babel --out-dir='build/backend' --ignore='__tests__/*' ./backend && cp ./backend/kms-secrets.*.yml ./backend/package.json ./backend/yarn.lock ./backend/serverless.yml ./build/backend",
-    "build:backend:node_modules": "cd build/backend && yarn && cd ../../",
-    "deploy": "npm run deploy:backend && npm run deploy:frontend",
-    "deploy:frontend": "npm run build:frontend && aws s3 sync build/frontend/ s3://cb-invoices-prod004-website/",
-    "deploy:backend": "npm run build:backend && npm run build:backend:node_modules && cd build/backend && serverless deploy",
+    "build:frontend": "env-cmd deployment/environment/security.env.$CB_ENV node deployment/website/build.js",
+    "build:backend": "NODE_ENV=production babel --out-dir=build/backend-$CB_ENV --ignore='__tests__/*' ./backend && cp ./kms-secrets.*.yml ./env*.yml ./serverless.yml ./backend/package.json ./backend/yarn.lock ./build/backend-$CB_ENV",
+    "build:backend:node_modules": "cd build/backend-$CB_ENV && yarn && cd ../../",
+    "deploy:frontend": "npm run build:frontend && serverless syncToS3 --stage $CB_ENV",
+    "deploy:backend": "npm run build:backend && npm run build:backend:node_modules && cd build/backend-$CB_ENV && serverless deploy",
+    "deploy": "npm run deploy:backend:$CB_ENV && npm run deploy:frontend:$CB_ENV",
+    "deploy:sand": "NODE_ENV=production CB_ENV=sand npm run deploy",
+    "deploy:frontend:sand": "NODE_ENV=production CB_ENV=sand npm run deploy:frontend",
+    "deploy:backend:sand": "NODE_ENV=production CB_ENV=sand npm run deploy:backend",
+    "deploy:prod": "NODE_ENV=production CB_ENV=prod npm run deploy",
+    "deploy:frontend:prod": "NODE_ENV=production CB_ENV=prod npm run deploy:frontend",
+    "deploy:backend:prod": "NODE_ENV=production CB_ENV=prod npm run deploy:backend",
+    "dev:frontend": "NODE_ENV=development env-cmd deployment/environment/security.env.local babel-watch deployment/dev-server/server.js",
+    "dev:backend": "NODE_ENV=development CB_ENV=test npm run dev:build:backend && cd build/backend-$CBT_ENV && serverless dynamodb install && serverless offline start --migrate true --stage $CB_ENV",
+    "dev:build:backend": "NODE_ENV=development babel --out-dir='build/backend-dev' --ignore='__tests__/*' ./backend && cp -R ./kms-secrets.*.yml ./env*.yml ./serverless.yml ./backend/data ./package.json ./yarn.lock ./build/backend-$CB_ENV",
+    "dev:build:backend:node_modules": "cd build/backend-dev && yarn && cd ../../",
     "lint": "npm run lint:eslint && npm run lint:css",
     "lint:eslint": "eslint .",
     "lint:eslint:fix": "eslint . --fix",
@@ -18,11 +28,7 @@
     "lint:staged": "lint-staged",
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch",
-    "test:coverage": "npm test -- --coverage --collectCoverageFrom 'frontend/**/*.js' --collectCoverageFrom 'backend/**/*.js' --collectCoverageFrom 'deployment/**/*.js'",
-    "dev:frontend": "NODE_ENV=development env-cmd deployment/environment/security.env.local babel-watch deployment/dev-server/server.js",
-    "dev:backend": "NODE_ENV=development npm run dev:build:backend && npm run dev:build:backend:node_modules && cd build/backend-dev && serverless dynamodb install && serverless offline start --migrate true --stage prod004",
-    "dev:build:backend": "NODE_ENV=development babel --out-dir='build/backend-dev' --ignore='__tests__/*' ./backend && cp -R ./backend/kms-secrets.*.yml ./backend/serverless.yml ./backend/data ./package.json ./yarn.lock ./build/backend-dev",
-    "dev:build:backend:node_modules": "cd build/backend-dev && yarn && cd ../../"
+    "test:coverage": "npm test -- --coverage --collectCoverageFrom 'frontend/**/*.js' --collectCoverageFrom 'backend/**/*.js' --collectCoverageFrom 'deployment/**/*.js'"
   },
   "lint-staged": {
     "lint:eslint": "*.js",
@@ -114,7 +120,8 @@
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.18.2",
     "webpack-md5-hash": "0.0.5",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^2.0.3",
+    "serverless-single-page-app-plugin": "git://github.com/commerceblock/serverless-single-page-app-plugin.git#5140a247b4eb7a292720243190d341e372eb9c7c"
   },
   "jest": {
     "moduleNameMapper": {
