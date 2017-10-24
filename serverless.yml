@@ -20,8 +20,8 @@ custom:
       domainName: trade.commerceblock.ninja
   selectedStage: ${opt:stage, self:custom.defaultStage}
   stage: ${self:custom.accounts.${self:custom.selectedStage}.stage}
-  externalEnv: ${file(env.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
-  kmsSecrets: ${file(kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
+  externalEnv: ${file(env.${self:custom.stage}.${opt:region, self:provider.region}.yml)}
+  kmsSecrets: ${file(kms-secrets.${self:custom.stage}.${opt:region, self:provider.region}.yml)}
   cors: ${self:custom.externalEnv.cors}
   dynamodbThroughput: ${self:custom.externalEnv.dynamodbThroughput}
   s3Bucket: cb-${self:provider.environment.CB_ENV_NAME}-website
@@ -209,8 +209,10 @@ resources:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
+          Aliases:
+            - ${self:custom.domainName}
           Origins:
-            - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
+            - DomainName: ${self:custom.s3Bucket}.s3-website-${self:provider.region}.amazonaws.com
               ## An identifier for the origin which must be unique within the distribution
               Id: WebApp
               CustomOriginConfig:
@@ -235,7 +237,8 @@ resources:
                 Forward: none
             ViewerProtocolPolicy: redirect-to-https
           ViewerCertificate:
-            CloudFrontDefaultCertificate: 'true'
+            AcmCertificateArn: ${self:custom.kmsSecrets.certificateArn}
+            SslSupportMethod: sni-only
 
   Outputs:
     WebAppCloudFrontDistributionOutput:
