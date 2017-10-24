@@ -13,12 +13,12 @@ custom:
   defaultStage: sand
   accounts:
     prod:
-      stage: prod010
+      stage: prod011
       domainName: trade.commerceblock.com
     sand:
       stage: sand010
       domainName: trade.commerceblock.ninja
-  selectedStage: ${opt:stage, self:custom.defaultStage}
+  selectedStage: ${env:CB_ENV, self:custom.defaultStage}
   stage: ${self:custom.accounts.${self:custom.selectedStage}.stage}
   externalEnv: ${file(env.${self:custom.stage}.${opt:region, self:provider.region}.yml)}
   kmsSecrets: ${file(kms-secrets.${self:custom.stage}.${opt:region, self:provider.region}.yml)}

@@ -8,7 +8,7 @@
     "build:frontend": "env-cmd deployment/environment/security.env.$CB_ENV node deployment/website/build.js",
     "build:backend": "NODE_ENV=production babel --out-dir=build/backend-$CB_ENV --ignore='__tests__/*' ./backend && cp ./kms-secrets.*.yml ./env*.yml ./serverless.yml ./backend/package.json ./backend/yarn.lock ./build/backend-$CB_ENV",
     "build:backend:node_modules": "cd build/backend-$CB_ENV && yarn && cd ../../",
-    "deploy:frontend": "npm run build:frontend && serverless syncToS3 --stage $CB_ENV",
+    "deploy:frontend": "npm run build:frontend && serverless syncToS3",
     "deploy:backend": "npm run build:backend && npm run build:backend:node_modules && cd build/backend-$CB_ENV && serverless deploy",
     "deploy": "npm run deploy:backend:$CB_ENV && npm run deploy:frontend:$CB_ENV",
     "deploy:sand": "NODE_ENV=production CB_ENV=sand npm run deploy",
